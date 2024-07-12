@@ -5,25 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class WinController : MonoBehaviour
 {
-    public void changePlayScene()
+
+    public void loadPlayScene()
     {
         SceneManager.LoadScene("PlayScene");
     }
 
-    public void changeMainScene()
+    public void loadMainScene()
     {
         SceneManager.LoadScene("MainScene");
     }
 
-    // Start is called before the first frame update
-    //void Start()
-    //{
-
-    //}
-
-    //// Update is called once per frame
-    //void Update()
-    //{
-
-    //}
 }

@@ -57,17 +57,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\ConstructSet\GameConstructSet.cs" />
+    <Compile Include="Assets\StageManager.cs" />
     <Compile Include="Assets\Enemy.cs" />
-    <Compile Include="Assets\Spawner.cs" />
+    <Compile Include="Assets\UIManager.cs" />
     <Compile Include="Assets\Controller.cs" />
     <Compile Include="Assets\Player.cs" />
     <Compile Include="Assets\CollisionTest.cs" />
-    <Compile Include="Assets\LightSet.cs" />
     <Compile Include="Assets\CameraController.cs" />
-    <Compile Include="Assets\GameSet.cs" />
+    <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\WinController.cs" />
     <Compile Include="Assets\ConstructSet\LevelConstructSet.cs" />
-    <Compile Include="Assets\TextController.cs" />
+    <Compile Include="Assets\EventManager.cs" />
+    <Compile Include="Assets\GameSet.cs" />
+    <Compile Include="Assets\LightObstacle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

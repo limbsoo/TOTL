@@ -7,6 +7,12 @@ using UnityEngine;
 
 public class LevelConstructSet : ScriptableObject
 {
+    public GameObject map;
+
+    public List<GameObject> player;
+    public List<GameObject> enemy;
+    public List<GameObject> lightObstacle;
+
     //[SerializeField]
     public int stageNumber;
     public int difficulty;
