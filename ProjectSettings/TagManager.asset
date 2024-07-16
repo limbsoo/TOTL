@@ -9,6 +9,8 @@ TagManager:
   - LightRange
   - EnemySensor
   - AttackRange
+  - Fire
+  - wall
   layers:
   - Default
   - TransparentFX
@@ -17,7 +19,7 @@ TagManager:
   - Water
   - UI
   - FloorLayer
-  - 
+  - wall
   - 
   - 
   - 

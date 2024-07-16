@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoadingScene.unity
     guid: aa729813e00058b47afb9f35d02afac8
+  - enabled: 1
+    path: Assets/Scenes/prepartionScene.unity
+    guid: 0764a66675696dc498ebca3f93d63d7d
   m_configObjects: {}

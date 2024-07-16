@@ -20,8 +20,23 @@ public class EventManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public static event Action<float> OnSkillUsed; // 스킬 사용 이벤트
-    public static event Action OnCooldownFinished; // 쿨타임 종료 이벤트
+    private void Start()
+    {
+    }
+
+    //플레이어 스킬
+    public static event Action<float> OnSkillUsed;
+    public static event Action OnCooldownFinished;
+
+
+    //public static event Action OnStageStart;
+    public event Action OnStageStart;
+
+    public void TriggerOnStageStart()
+    {
+        if (OnStageStart != null) OnStageStart();
+    }
+
 
     public static void TriggerSkillUsed(float cooldownDuration)
     {
@@ -38,9 +53,12 @@ public class EventManager : MonoBehaviour
 
 
 
+    public event Action OnGameReStart;
 
-
-
+    public void TriggerOnGameReStart()
+    {
+        OnGameReStart?.Invoke();
+    }
 
 
 

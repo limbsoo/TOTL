@@ -8,27 +8,41 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class StageManager : MonoBehaviour
 {
-    //프리팹 플레이어를 어디에 넣어야 좋을까
     public static StageManager instance { get; private set; }
-    public GameConstructSet GCS;
-
-    public static List<GameObject> players = new List<GameObject>();
-    public static List<GameObject> enemies = new List<GameObject>();
-    public static List<GameObject> lightObstacles = new List<GameObject>();
-
-    public int currentScore;
-    public static int currentPlayerIdx;
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
 
         else Destroy(gameObject);
     }
+
+    // 적이 배회하게
+
+
+
+    //프리팹 플레이어를 어디에 넣어야 좋을까
+
+    public GameConstructSet GCS;
+
+    public static List<GameObject> players;
+    public static List<GameObject> enemies;
+    public static List<GameObject> lightObstacles;
+
+    public int currentScore;
+    public static int currentPlayerIdx;
+
+
+
+    public void Start()
+    {
+        LoadStage();
+    }
+
 
     public void Update()
     {
@@ -38,24 +52,16 @@ public class StageManager : MonoBehaviour
         {
             EventManager.instance.gameEnd();
         }
-
-
-
-
-        //for(int i = 0; i < lc.enemyCnt;i++)
-        //{
-        //    if (enemies[i] != null)
-        //    {
-        //        Enemy enemy = enemies[i].GetComponent<Enemy>();
-        //        enemy.updateDestination(players[0].transform);
-        //        //enemies[i].transform.position = enemy.nmAgent.transform.position;
-        //    }
-        //}
     }
 
 
     public void LoadStage()
     {
+        players = new List<GameObject>();
+        enemies = new List<GameObject>();
+        lightObstacles = new List<GameObject>();
+
+
         InitializePlayer(GCS.levelConstructSets[GCS.targetIdx]);
         players[0].SetActive(true);
         currentPlayerIdx = 0;
@@ -68,6 +74,26 @@ public class StageManager : MonoBehaviour
         //currentPlayer = players[0];
     }
 
+
+
+    private void OnEnable()
+    {
+        EventManager.instance.OnGameReStart += reLoadStage;
+
+
+        EventManager.instance.OnStageStart += LoadStage;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.instance.OnGameReStart -= reLoadStage;
+        EventManager.instance.OnStageStart -= LoadStage;
+    }
+
+    void reLoadStage()
+    {
+        LoadStage();
+    }
 
 
     private void InitializePlayer(LevelConstructSet LC)
@@ -116,15 +142,33 @@ public class StageManager : MonoBehaviour
         GameObject lightObstacleObject;
         LightObstacle lightObstacle;
 
-        for (int i = 0; i < LC.lightObstacle.Count; i++)
+        Vector3 mapSize = GetMapSize();
+
+        for (int i = 0; i < LC.obstacleCnt; i++)
+        //for (int i = 0; i < LC.lightObstacle.Count; i++)
         {
+            Vector3 randomPosition = GetRandomPositionInMap(mapSize);
+
+            randomPosition.y = LC.lightObstacle[0].transform.position.y;
+
             lightObstacleObject = null;
-            lightObstacleObject = Instantiate(LC.lightObstacle[i], LC.lightObstacle[i].transform.position, LC.lightObstacle[i].transform.rotation);
+            //enemyObject = Instantiate(LC.enemy[i], LC.enemy[i].transform.position, LC.enemy[i].transform.rotation);
+            lightObstacleObject = Instantiate(LC.lightObstacle[0], randomPosition, LC.lightObstacle[0].transform.rotation);
 
             lightObstacle = null;
             lightObstacle = lightObstacleObject.GetComponent<LightObstacle>();
             lightObstacle.Initialize(100, "lightObstacle");
             lightObstacles.Add(lightObstacleObject);
+
+
+
+            //lightObstacleObject = null;
+            //lightObstacleObject = Instantiate(LC.lightObstacle[i], LC.lightObstacle[i].transform.position, LC.lightObstacle[i].transform.rotation);
+
+            //lightObstacle = null;
+            //lightObstacle = lightObstacleObject.GetComponent<LightObstacle>();
+            //lightObstacle.Initialize(100, "lightObstacle");
+            //lightObstacles.Add(lightObstacleObject);
         }
     }
 

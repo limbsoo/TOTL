@@ -9,34 +9,72 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance { get; private set; }
 
+
+
+    public Slider cooldownSlider; // 쿨타임을 표시할 UI 슬라이더
+
+    //public Text scoreText;
+    public TMP_Text timeLimit;
+    public TMP_Text score;
+    public TMP_Text countdownText;
+    public TMP_Text teleport;
+
+    public GameObject gameOver;
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
 
         else Destroy(gameObject);
     }
 
-    public Slider cooldownSlider; // 쿨타임을 표시할 UI 슬라이더
 
-    //private void OnEnable()
-    //{
-    //    EventManager.OnSkillUsed += StartCooldown;
-    //    EventManager.OnCooldownFinished += OnCooldownFinished;
-    //}
+    private void OnEnable()
+    {
+        //플레이어 이벤트
+        EventManager.OnSkillUsed += StartCooldown;
+        EventManager.OnCooldownFinished += OnCooldownFinished;
 
-    //private void OnDisable()
-    //{
-    //    EventManager.OnSkillUsed -= StartCooldown;
-    //    EventManager.OnCooldownFinished -= OnCooldownFinished;
-    //}
 
+        EventManager.instance.OnScoreChanged += UpdateScore;
+        EventManager.instance.OnPlayerDied += ShowGameOverScreen;
+        EventManager.instance.OnGameEnd += showGameEndScreen;
+        EventManager.instance.OnUseTeleport += teleportCoolDown;
+
+
+    }
+
+    private void OnDisable()
+    {
+        //플레이어 이벤트
+        EventManager.OnSkillUsed -= StartCooldown;
+        EventManager.OnCooldownFinished -= OnCooldownFinished;
+
+
+
+        EventManager.instance.OnScoreChanged -= UpdateScore;
+        EventManager.instance.OnPlayerDied -= ShowGameOverScreen;
+        EventManager.instance.OnGameEnd -= showGameEndScreen;
+        EventManager.instance.OnUseTeleport -= teleportCoolDown;
+
+
+    }
+
+
+    //플레이어 이벤트
     private void StartCooldown(float duration)
     {
         StartCoroutine(CooldownCoroutine(duration));
+    }
+
+    private void OnCooldownFinished()
+    {
+        // 쿨타임 종료 후 UI에서 추가적인 작업을 수행할 수 있습니다.
+        Debug.Log("Cooldown finished, ready to use skill again.");
     }
 
     private IEnumerator CooldownCoroutine(float duration)
@@ -56,11 +94,6 @@ public class UIManager : MonoBehaviour
         EventManager.TriggerCooldownFinished();
     }
 
-    private void OnCooldownFinished()
-    {
-        // 쿨타임 종료 후 UI에서 추가적인 작업을 수행할 수 있습니다.
-        Debug.Log("Cooldown finished, ready to use skill again.");
-    }
 
 
 
@@ -74,16 +107,9 @@ public class UIManager : MonoBehaviour
 
 
 
-    //public Text scoreText;
-    public TMP_Text timeLimit;
-    public TMP_Text score;
-    public TMP_Text countdownText;
-    public TMP_Text teleport;
-
-    public GameObject gameOver;
 
 
-    void Start()
+    public void Start()
     {
         if (countdownText != null)
         {
@@ -122,21 +148,7 @@ public class UIManager : MonoBehaviour
     }
 
 
-    private void OnEnable()
-    {
-        EventManager.instance.OnScoreChanged += UpdateScore;
-        EventManager.instance.OnPlayerDied += ShowGameOverScreen;
-        EventManager.instance.OnGameEnd += showGameEndScreen;
-        EventManager.instance.OnUseTeleport += teleportCoolDown;
-    }
 
-    private void OnDisable()
-    {
-        EventManager.instance.OnScoreChanged -= UpdateScore;
-        EventManager.instance.OnPlayerDied -= ShowGameOverScreen;
-        EventManager.instance.OnGameEnd -= showGameEndScreen;
-        EventManager.instance.OnUseTeleport -= teleportCoolDown;
-    }
 
     public void teleportCoolDown()
     {
@@ -159,9 +171,14 @@ public class UIManager : MonoBehaviour
         gameOver.SetActive(true);
     }
 
-    void UpdateScore(int newScore)
+    public void UpdateScore(int newScore)
     {
-        score.text = "Score : " + newScore;
+        if (score != null)
+        {
+            score.text = "Score: " + newScore;
+        }
+
+        //score.text = "Score : " + newScore;
 
         //scoreText.text = "Score: " + newScore;
     }

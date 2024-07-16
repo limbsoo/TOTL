@@ -25,4 +25,4 @@ MonoBehaviour:
   timeConstrain: 30
   targetScore: 1
   enemyCnt: 2
-  obstacleCnt: 1
+  obstacleCnt: 2

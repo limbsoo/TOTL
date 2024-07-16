@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c422e901fe87943a7f812d8f38ae6a, type: 3}
   m_Name: GCS
   m_EditorClassIdentifier: 
-  targetIdx: 0
+  targetIdx: 1
   levelConstructSets:
   - {fileID: 11400000, guid: 2da15464197de9341b257919dd4e444c, type: 2}
+  - {fileID: 11400000, guid: b2a005474248bb843b5abc502d8761ca, type: 2}

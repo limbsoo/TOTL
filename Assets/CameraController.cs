@@ -20,10 +20,6 @@ public class CameraController : MonoBehaviour
 
 
 
-
-
-
-
     static public Vector3 Vector3;
     public float smoothSpeed = 0.125f;
 
@@ -45,6 +41,9 @@ public class CameraController : MonoBehaviour
     public void Update()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel") * speed;
+
+        this.transform.position = new Vector3(Vector3.x, Vector3.y + 50, Vector3.z - 30);
+
 
         //√÷¥Î ¡‹¿Œ
         if (thisCamera.fieldOfView <= 20.0f && scroll < 0)
@@ -78,23 +77,10 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public void FixedUpdate()
+    void LateUpdate()
     {
-        //this.transform.position = new Vector3(Vector3.x, Vector3.y + 50, Vector3.z - 30);
-        //this.rb.position = transform.position;
-        //moveCamera();
+        transform.position = new Vector3(Vector3.x, Vector3.y + 50, Vector3.z - 30);
     }
-
-    public void moveCamera()
-    {
-        //transform.position = new Vector3(Vector3.x, Vector3.y + 50, Vector3.z - 30);
-        //rb.MovePosition(transform.position);
-
-        //this.transform.position = new Vector3(Vector3.x, Vector3.y + 50, Vector3.z - 30);
-    }
-        
-
-
 
 }
   
