@@ -5,16 +5,23 @@ using UnityEngine;
 
 public class LightObstacle : MonoBehaviour
 {
+    private GameObject obj;
     public int health { get; private set; }
     public string name { get; private set; }
 
-    public void Initialize(int health, string name)
+    private void Awake()
     {
-        this.health = health;
-        this.name = name;
-        Debug.Log("Player initialized with health: " + health + " and name: " + name);
+
     }
 
+
+    //public void Initialize(LevelConstructSet LC, int idx, Vector3 vec)
+    //{
+    //    obj = Instantiate(LC.lightObstacle[idx], vec, LC.lightObstacle[idx].transform.rotation);
+    //    obj.SetActive(false);
+    //}
+
+    // 적이 배회하게
 
 
     //public static event Action<bool> inPlayerShotLight;

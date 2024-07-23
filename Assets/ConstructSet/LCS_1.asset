@@ -12,17 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254372c9f2dedc247b4b1ef188e4d4ce, type: 3}
   m_Name: LCS_1
   m_EditorClassIdentifier: 
-  map: {fileID: 5472328324384206574, guid: e726f0a6d0449fa4d8c394269ab65a7c, type: 3}
+  map:
+  - obj: {fileID: 7778858998701265200, guid: fe6dbbf6b172a88479fa52cd44b06531, type: 3}
+    cnt: 1
+  prePlayer:
+  - obj: {fileID: 1009873531629474668, guid: 73cec767922a4624bb4ff1a86da6c0d6, type: 3}
+    cnt: 1
   player:
-  - {fileID: 3611464337938485484, guid: 2d08473536ed6df4f8d3351b557b9843, type: 3}
-  - {fileID: 6935845241787381535, guid: 611045d676c2dc44f8eedf7e3a3421fc, type: 3}
-  enemy:
-  - {fileID: 7995540149897995788, guid: 21f6a09eb86026243b515929d6740c73, type: 3}
-  lightObstacle:
-  - {fileID: 2454931024795340689, guid: d80eb1c48750b684b99cca375ab1d73b, type: 3}
-  stageNumber: 1
-  difficulty: 0
-  timeConstrain: 30
+  - obj: {fileID: 3611464337938485484, guid: 2d08473536ed6df4f8d3351b557b9843, type: 3}
+    cnt: 1
+  preEnemies:
+  - obj: {fileID: 8966089980715475670, guid: 19c9c67120629244da8440ef0b4bbb7a, type: 3}
+    cnt: 1
+  enemies:
+  - obj: {fileID: 7995540149897995788, guid: f25ad04244ad9e24a9f8bdf0b8b338c7, type: 3}
+    cnt: 2
+  lightObstacles:
+  - obj: {fileID: 3301909162799466181, guid: 1a63c935327e7e24193f6eef7cbcbc3f, type: 3}
+    cnt: 2
   targetScore: 1
-  enemyCnt: 2
-  obstacleCnt: 2
+  timeConstrain: 60

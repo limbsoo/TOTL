@@ -8,19 +8,6 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance { get; private set; }
-
-
-
-    public Slider cooldownSlider; // 쿨타임을 표시할 UI 슬라이더
-
-    //public Text scoreText;
-    public TMP_Text timeLimit;
-    public TMP_Text score;
-    public TMP_Text countdownText;
-    public TMP_Text teleport;
-
-    public GameObject gameOver;
-
     private void Awake()
     {
         if (instance == null)
@@ -28,13 +15,78 @@ public class UIManager : MonoBehaviour
             instance = this;
             //DontDestroyOnLoad(gameObject);
         }
-
         else Destroy(gameObject);
     }
 
 
+    public Slider cooldownSlider; // 쿨타임을 표시할 UI 슬라이더
+    public TMP_Text timeLimit;
+    public TMP_Text score;
+    public TMP_Text countdownText;
+    public TMP_Text teleport;
+
+    public GameObject gameOver;
+
+    //public Text newCountDown;
+
+    public void Start()
+    {
+        if (countdownText != null)
+        {
+            Time.timeScale = 0f; //게임 정지
+            StartCoroutine(StartGame());
+        }
+    }
+
+    private IEnumerator StartGame()
+    {
+        timeLimit.text = "";
+        countdownText.text = "3";
+
+        //newCountDown.text = "2";
+
+        float startTime = Time.realtimeSinceStartup;
+        yield return new WaitForSecondsRealtime(1);
+        countdownText.text = "2";
+        yield return new WaitForSecondsRealtime(1);
+        countdownText.text = "1";
+        yield return new WaitForSecondsRealtime(1);
+        countdownText.text = "GO!";
+        yield return new WaitForSecondsRealtime(1);
+        countdownText.gameObject.SetActive(false);
+        Time.timeScale = 1f; // 게임 시작
+
+        for (int i = 0; i < 59; i++)
+        {
+            yield return new WaitForSecondsRealtime(1);
+            timeLimit.text = (59 - i).ToString();
+        }
+    }
+
+    public void StartCount()
+    {
+        if (countdownText != null)
+        {
+            Time.timeScale = 0f; //게임 정지
+            StartCoroutine(StartGame());
+        }
+    }
+
+
+
     private void OnEnable()
     {
+        EventManager.instance.OnLoadPreparationScene += StartCount;
+        EventManager.instance.OnLoadPlayScene += StartCount;
+
+        EventManager.instance.OnMainStageReady += setMainUI;
+
+
+
+
+
+
+
         //플레이어 이벤트
         EventManager.OnSkillUsed += StartCooldown;
         EventManager.OnCooldownFinished += OnCooldownFinished;
@@ -50,6 +102,13 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
+        EventManager.instance.OnLoadPreparationScene -= StartCount;
+        EventManager.instance.OnLoadPlayScene -= StartCount;
+
+        EventManager.instance.OnMainStageReady -= setMainUI;
+
+
+
         //플레이어 이벤트
         EventManager.OnSkillUsed -= StartCooldown;
         EventManager.OnCooldownFinished -= OnCooldownFinished;
@@ -63,6 +122,24 @@ public class UIManager : MonoBehaviour
 
 
     }
+
+
+    public void setMainUI()
+    {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //플레이어 이벤트
@@ -109,43 +186,7 @@ public class UIManager : MonoBehaviour
 
 
 
-    public void Start()
-    {
-        if (countdownText != null)
-        {
-            Time.timeScale = 0f; //게임 정지
-            StartCoroutine(StartGame());
-        }
-    }
 
-
-    //public GameObject mainButton;
-
-
-    private IEnumerator StartGame()
-    {
-        timeLimit.text = "";
-        countdownText.text = "3";
-        float startTime = Time.realtimeSinceStartup;
-        yield return new WaitForSecondsRealtime(1);
-        countdownText.text = "2";
-        yield return new WaitForSecondsRealtime(1);
-        countdownText.text = "1";
-        yield return new WaitForSecondsRealtime(1);
-        countdownText.text = "GO!";
-        yield return new WaitForSecondsRealtime(1);
-        countdownText.gameObject.SetActive(false);
-        Time.timeScale = 1f; // 게임 시작
-
-        for(int i = 0; i < 59; i++)
-        {
-            yield return new WaitForSecondsRealtime(1);
-            timeLimit.text = (59 - i).ToString();
-        }
-
-        
-
-    }
 
 
 

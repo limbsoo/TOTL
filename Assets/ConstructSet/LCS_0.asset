@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254372c9f2dedc247b4b1ef188e4d4ce, type: 3}
+  m_Name: LCS_0
+  m_EditorClassIdentifier: 
+  map:
+  - obj: {fileID: 7778858998701265200, guid: fe6dbbf6b172a88479fa52cd44b06531, type: 3}
+    cnt: 1
+  prePlayer:
+  - obj: {fileID: 1009873531629474668, guid: 73cec767922a4624bb4ff1a86da6c0d6, type: 3}
+    cnt: 1
+  player:
+  - obj: {fileID: 3611464337938485484, guid: 2d08473536ed6df4f8d3351b557b9843, type: 3}
+    cnt: 1
+  preEnemies:
+  - obj: {fileID: 8966089980715475670, guid: 19c9c67120629244da8440ef0b4bbb7a, type: 3}
+    cnt: 1
+  enemies:
+  - obj: {fileID: 7995540149897995788, guid: f25ad04244ad9e24a9f8bdf0b8b338c7, type: 3}
+    cnt: 2
+  lightObstacles:
+  - obj: {fileID: 3301909162799466181, guid: 1a63c935327e7e24193f6eef7cbcbc3f, type: 3}
+    cnt: 2
+  targetScore: 1
+  timeConstrain: 60

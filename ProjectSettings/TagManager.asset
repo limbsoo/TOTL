@@ -11,6 +11,7 @@ TagManager:
   - AttackRange
   - Fire
   - wall
+  - preEnemy
   layers:
   - Default
   - TransparentFX

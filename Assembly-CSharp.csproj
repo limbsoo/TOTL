@@ -57,24 +57,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\ConstructSet\GameConstructSet.cs" />
-    <Compile Include="Assets\ProjecterClass.cs" />
     <Compile Include="Assets\StageManager.cs" />
     <Compile Include="Assets\Enemy.cs" />
     <Compile Include="Assets\UIManager.cs" />
     <Compile Include="Assets\Prepartion.cs" />
-    <Compile Include="Assets\PreStageManager.cs" />
     <Compile Include="Assets\InterfacesEnums.cs" />
     <Compile Include="Assets\etc\Controller.cs" />
     <Compile Include="Assets\Player.cs" />
-    <Compile Include="Assets\CollisionTest.cs" />
+    <Compile Include="Assets\PlayerCollisionHandler.cs" />
     <Compile Include="Assets\CameraController.cs" />
     <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\etc\WinController.cs" />
     <Compile Include="Assets\ConstructSet\LevelConstructSet.cs" />
     <Compile Include="Assets\EventManager.cs" />
-    <Compile Include="Assets\Skill.cs" />
+    <Compile Include="Assets\etc\Skill.cs" />
     <Compile Include="Assets\etc\GameSet.cs" />
+    <Compile Include="Assets\ConstructSet\UIConstructSet.cs" />
     <Compile Include="Assets\LightObstacle.cs" />
+    <Compile Include="Assets\PlayerController.cs" />
+    <Compile Include="Assets\JsonDataManager.cs" />
+    <Compile Include="Assets\PlayerData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -83,11 +85,11 @@
     <None Include="Assets\GameObject\Projectors\Shaders\ProjectorMultiply.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\GameObject\Projectors\Guidelines.txt" />
-    <None Include="Assets\test.shader" />
+    <None Include="Assets\GameObject\tmp\test.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
-    <None Include="Assets\NewSurfaceShader.shader" />
+    <None Include="Assets\GameObject\tmp\NewSurfaceShader.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
@@ -97,6 +99,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\FadeInShader.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
@@ -854,6 +857,15 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.CacheServer">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.CacheServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline">
+      <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,62 @@ public class EventManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+
+    //æ¿ »£√‚
+    public event Action OnLoadMainScene;
+    public event Action OnLoadPreparationScene;
+    public event Action OnLoadPlayScene;
+
+    public void TriggerOnLoadMainScene()
+    {
+        if (OnLoadMainScene != null) OnLoadMainScene();
+    }
+    public void TriggerOnLoadPreparationScene()
+    {
+        if (OnLoadPreparationScene != null) OnLoadPreparationScene();
+    }
+    public void TriggerOnLoadPlayScene()
+    {
+        if (OnLoadPlayScene != null) OnLoadPlayScene();
+    }
+
+
+
+    public event Action OnPreparationStageReady;
+    public event Action OnMainStageReady;
+    public void TriggerOnPreparationStageReady()
+    {
+        if (OnPreparationStageReady != null) OnPreparationStageReady();
+    }
+    public void TriggerOnMainStageReady()
+    {
+        if (OnMainStageReady != null) OnMainStageReady();
+    }
+
+
+
+    public event Action<GameObject> OnPrePlayerCollisionPreEnemy;
+
+    public void prePlayerCollisionPreEnemy(GameObject g)
+    {
+        if (OnPrePlayerCollisionPreEnemy != null) OnPrePlayerCollisionPreEnemy(g);
+    }
+
+    public event Action<GameObject> OnEnemyInAttackRange;
+
+    public void EnemyInAttackRange(GameObject g)
+    {
+        if (OnEnemyInAttackRange != null) OnEnemyInAttackRange(g);
+    }
+
+
+
+
+
+
+
+
+
     private void Start()
     {
     }

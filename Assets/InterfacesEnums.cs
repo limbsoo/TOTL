@@ -8,5 +8,7 @@
 //}
 
 
-public enum StageState { Iddle, Start, End  }
+public enum StageState { Preparation, Play }
 public enum PlayerState { Original, Transformed }
+
+public enum PlayingState { Wait, Playing }

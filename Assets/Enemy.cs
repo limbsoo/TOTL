@@ -10,20 +10,43 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class Enemy : MonoBehaviour
 {
-    public int health { get; private set; }
-    public string name { get; private set; }
-    NavMeshAgent nmAgent;
-    public Transform target;
-
-    public void Initialize(int health, string name)
+    public static Enemy instance { get; private set; }
+    private void Awake()
     {
-        this.health = health;
-        this.name = name;
-        Debug.Log("Player initialized with health: " + health + " and name: " + name);
-        nmAgent = GetComponent<NavMeshAgent>();
+        if (instance == null)
+        {
+            instance = this;
+            nmAgent = GetComponent<NavMeshAgent>();
+            DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    //private GameObject obj;
+    public int health { get; private set; }
+    public string name { get; private set; }
+
+
+    NavMeshAgent nmAgent;
+    public Transform target;
+
+    //private void Awake()
+    //{
+    //    nmAgent = GetComponent<NavMeshAgent>();
+    //}
 
     public void updateDestination(Transform tf)
     {
@@ -42,15 +65,13 @@ public class Enemy : MonoBehaviour
 
     public void chasePlayer(GameObject detectObject)
     {
-        if (StageManager.currentPlayerIdx != 0) return;
+        //if (StageManager.currentPlayerIdx != 0) return;
 
         Enemy enemy = detectObject.transform.parent.GetComponent<Enemy>();
-        enemy.updateDestination(StageManager.players[0].transform);
 
-
-
-        //detectObject.GetComponent<Enemy>();
-        
+        //Rigidbody rb = StageManager.player.GetComponent<Rigidbody>();
+        //enemy.updateDestination(rb.transform);
+        enemy.updateDestination(StageManager.player.transform);
     }
 
 
