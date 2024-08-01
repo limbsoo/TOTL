@@ -40,9 +40,15 @@ public class EventManager : MonoBehaviour
     }
 
 
-
+    public event Action OnStageEnd;
     public event Action OnPreparationStageReady;
     public event Action OnMainStageReady;
+
+    public void TriggerOnOnStageEnd()
+    {
+        if (OnStageEnd != null) OnStageEnd();
+    }
+
     public void TriggerOnPreparationStageReady()
     {
         if (OnPreparationStageReady != null) OnPreparationStageReady();
@@ -128,7 +134,7 @@ public class EventManager : MonoBehaviour
     public event Action OnPlayerDied;
     public event Action<int> OnScoreChanged;
 
-    //public event Action OnPlayerEnterTherLight;
+    public event Action OnPlayerEnterTherLight;
     public event Action<GameObject> OnCollisionResult;
 
     public event Action OnGameEnd;
@@ -181,10 +187,10 @@ public class EventManager : MonoBehaviour
 
 
 
-    //public void playerEnterTherLight()
-    //{
-    //    if (OnPlayerEnterTherLight != null) OnPlayerEnterTherLight();
-    //}
+    public void playerEnterTherLight()
+    {
+        if (OnPlayerEnterTherLight != null) OnPlayerEnterTherLight();
+    }
 
     public void PlayerDied()
     {

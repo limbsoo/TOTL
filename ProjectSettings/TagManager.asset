@@ -12,6 +12,7 @@ TagManager:
   - Fire
   - wall
   - preEnemy
+  - Bloom
   layers:
   - Default
   - TransparentFX

@@ -26,9 +26,9 @@ MonoBehaviour:
     cnt: 1
   enemies:
   - obj: {fileID: 7995540149897995788, guid: f25ad04244ad9e24a9f8bdf0b8b338c7, type: 3}
-    cnt: 2
+    cnt: 4
   lightObstacles:
   - obj: {fileID: 3301909162799466181, guid: 1a63c935327e7e24193f6eef7cbcbc3f, type: 3}
-    cnt: 2
+    cnt: 3
   targetScore: 1
   timeConstrain: 60

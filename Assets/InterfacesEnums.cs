@@ -8,7 +8,11 @@
 //}
 
 
-public enum StageState { Preparation, Play }
+public enum SceneState { Preparation, Play }
 public enum PlayerState { Original, Transformed }
 
-public enum PlayingState { Wait, Playing }
+public enum PlayState { Wait, Playing }
+
+public enum GameResult {Proceeding, Win, Lose}
+
+public enum LightCondition { Usual, Blink, Shadow, Disable, LessPenealty }

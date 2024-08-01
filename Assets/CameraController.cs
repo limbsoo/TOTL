@@ -40,26 +40,22 @@ public class CameraController : MonoBehaviour
 
     public void Update()
     {
+        rb = GetComponent<Rigidbody>();
+        thisCamera = GetComponent<Camera>();
+        worldDefalutForward = transform.forward;
+
+
+
         float scroll = Input.GetAxis("Mouse ScrollWheel") * speed;
 
         this.transform.position = new Vector3(Vector3.x, Vector3.y + 50, Vector3.z - 30);
 
 
-        //최대 줌인
-        if (thisCamera.fieldOfView <= 20.0f && scroll < 0)
-        {
-            thisCamera.fieldOfView = 20.0f;
-        }
-        // 최대 줌 아웃
-        else if (thisCamera.fieldOfView >= 60.0f && scroll > 0)
-        {
-            thisCamera.fieldOfView = 60.0f;
-        }
-        // 줌인 아웃 하기.
-        else
-        {
-            thisCamera.fieldOfView += scroll;
-        }
+        
+        if (thisCamera.fieldOfView <= 20.0f && scroll < 0) thisCamera.fieldOfView = 20.0f; //최대 줌인
+        else if (thisCamera.fieldOfView >= 60.0f && scroll > 0) thisCamera.fieldOfView = 60.0f; // 최대 줌 아웃
+        else thisCamera.fieldOfView += scroll; // 줌인 아웃 하기.
+
 
         // 일정 구간 줌으로 들어가면 캐릭터를 바라보도록 한다.
         if (cameraTarget && thisCamera.fieldOfView <= 30.0f)

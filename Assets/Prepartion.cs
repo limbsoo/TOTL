@@ -25,7 +25,7 @@ public class Prepartion : MonoBehaviour
     public float chargeRate;         // 충전 속도
     public float turnSpeed;          // 회전 속도
 
-    private Rigidbody rb;
+    //private Rigidbody rb;
     private Vector3 movementDirection;
     private float chargeAmount = 0f;
     private bool isCharging = false;
@@ -71,7 +71,7 @@ public class Prepartion : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        //rb = GetComponent<Rigidbody>();
         collisionLayer = LayerMask.GetMask("wall");
         ball = transform;
         cueDirection = transform.forward;
@@ -83,7 +83,7 @@ public class Prepartion : MonoBehaviour
 
     void Update()
     {
-        if (StageManager.instance.Sstate == StageState.Play) return;
+        if (StageManager.instance.Sstate == SceneState.Play) return;
 
         HandleInput();
 

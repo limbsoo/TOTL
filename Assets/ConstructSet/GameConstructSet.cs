@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameConstructSet : ScriptableObject
 {
-    public int idx;
+    //public int idx;
     public List<LevelConstructSet> levelConstructSets;
 
     //public string monsterName;

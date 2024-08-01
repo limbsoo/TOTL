@@ -9,12 +9,12 @@ using UnityEngine.SceneManagement;
 
 
 // 씬 로딩 전체적인 게임
+// 구독 정리
 
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
-
 
     private void Awake()
     {
@@ -25,6 +25,30 @@ public class GameManager : MonoBehaviour
         }
         else Destroy(gameObject);
     }
+
+    public PlayerData playerData;
+
+    private void Start()
+    {
+        //playerData = new PlayerData();
+        //if (PlayerPrefs.HasKey("PlayerData")) LoadPlayerData();
+        SavePlayerData();
+    }
+
+    private void LoadPlayerData()
+    {
+        string jsonData = PlayerPrefs.GetString("PlayerData");
+        playerData = JsonUtility.FromJson<PlayerData>(jsonData);
+    }
+
+    private void SavePlayerData()
+    {
+        string jsonData = JsonUtility.ToJson(playerData);
+        PlayerPrefs.SetString("PlayerData", jsonData);
+        PlayerPrefs.Save();
+    }
+
+
 
     // 컨티뉴 시 플레이어 데이터 읽어오기
     public void loadMainScene()
@@ -38,18 +62,13 @@ public class GameManager : MonoBehaviour
 
     public void loadPrepartionScene()
     {
-        SceneManager.LoadScene("prepartionScene");
-
-        
-
         EventManager.instance.TriggerOnLoadPreparationScene();
+        SceneManager.LoadScene("prepartionScene");
     }
     public void loadPlayScene()
     {
-        SceneManager.LoadScene("PlayScene");
-
-
         EventManager.instance.TriggerOnLoadPlayScene();
+        SceneManager.LoadScene("PlayScene");
     }
 
     //public void loadLoadingScene()

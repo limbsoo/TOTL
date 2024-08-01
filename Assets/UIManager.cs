@@ -18,20 +18,56 @@ public class UIManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-
-    public Slider cooldownSlider; // 쿨타임을 표시할 UI 슬라이더
+    public TMP_Text countDown;
     public TMP_Text timeLimit;
-    public TMP_Text score;
-    public TMP_Text countdownText;
-    public TMP_Text teleport;
+    public TMP_Text target;
+    public TMP_Text curScore;
 
-    public GameObject gameOver;
+
+    public TMP_Text playerHealth;
+    public TMP_Text playerDamage;
+    public TMP_Text playerSpeed;
+    public TMP_Text playerCoolDown;
+
+    public TMP_Text playerPenealtyCoolDown;
+
+    public Slider cooldownSlider;
+
+    public TMP_Text gameEnd;
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //public TMP_Text score;
+
+    //public TMP_Text teleport;
+
+    
 
     //public Text newCountDown;
 
     public void Start()
     {
-        if (countdownText != null)
+        PlayerData playerData = GameManager.instance.playerData;
+
+        playerHealth.text = "Health : " + playerData.health.ToString();
+        playerDamage.text = "Damage : " + playerData.damamge.ToString();
+        playerSpeed.text = "Speed : " + playerData.moveSpeed.ToString();
+        playerCoolDown.text = "CoolDown : " + playerData.coolDown.ToString();
+        playerPenealtyCoolDown.text = "Penealty : ";
+        target.text = "Target : " + StageManager.LCS.targetScore.ToString();
+
+
+        if (countDown != null)
         {
             Time.timeScale = 0f; //게임 정지
             StartCoroutine(StartGame());
@@ -41,19 +77,19 @@ public class UIManager : MonoBehaviour
     private IEnumerator StartGame()
     {
         timeLimit.text = "";
-        countdownText.text = "3";
+        countDown.text = "3";
 
         //newCountDown.text = "2";
 
         float startTime = Time.realtimeSinceStartup;
         yield return new WaitForSecondsRealtime(1);
-        countdownText.text = "2";
+        countDown.text = "2";
         yield return new WaitForSecondsRealtime(1);
-        countdownText.text = "1";
+        countDown.text = "1";
         yield return new WaitForSecondsRealtime(1);
-        countdownText.text = "GO!";
+        countDown.text = "GO!";
         yield return new WaitForSecondsRealtime(1);
-        countdownText.gameObject.SetActive(false);
+        countDown.gameObject.SetActive(false);
         Time.timeScale = 1f; // 게임 시작
 
         for (int i = 0; i < 59; i++)
@@ -65,7 +101,7 @@ public class UIManager : MonoBehaviour
 
     public void StartCount()
     {
-        if (countdownText != null)
+        if (countDown != null)
         {
             Time.timeScale = 0f; //게임 정지
             StartCoroutine(StartGame());
@@ -132,7 +168,17 @@ public class UIManager : MonoBehaviour
 
 
 
+    public void Update()
+    {
+        playerHealth.text = "Health : " + Player.instance.health.ToString();
+        playerDamage.text = "Damage : " + Player.instance.damamge.ToString();
+        playerSpeed.text = "Speed : " + Player.instance.moveSpeed.ToString();
+        playerCoolDown.text = "CoolDown : " + Player.instance.coolDown.ToString();
 
+        curScore.text = "Score: " + StageManager.currentScore.ToString();
+
+        playerPenealtyCoolDown.text = "Penealty : " + Player.instance.PenealtyTime.ToString();
+    }
 
 
 
@@ -193,30 +239,30 @@ public class UIManager : MonoBehaviour
 
     public void teleportCoolDown()
     {
-        StartCoroutine(CoolDown());
+        //StartCoroutine(CoolDown());
     }
 
-    private IEnumerator CoolDown()
-    {
-        yield return new WaitForSecondsRealtime(1);
-        teleport.text = "2";
-        yield return new WaitForSecondsRealtime(1);
-        teleport.text = "1";
-        yield return new WaitForSecondsRealtime(1);
-        teleport.text = "Ready";
-    }
+    //private IEnumerator CoolDown()
+    //{
+    //    yield return new WaitForSecondsRealtime(1);
+    //    teleport.text = "2";
+    //    yield return new WaitForSecondsRealtime(1);
+    //    teleport.text = "1";
+    //    yield return new WaitForSecondsRealtime(1);
+    //    teleport.text = "Ready";
+    //}
 
 
     void showGameEndScreen()
     {
-        gameOver.SetActive(true);
+        //gameEnd.SetActive(true);
     }
 
     public void UpdateScore(int newScore)
     {
-        if (score != null)
+        if (curScore != null)
         {
-            score.text = "Score: " + newScore;
+            curScore.text = "Score: " + newScore;
         }
 
         //score.text = "Score : " + newScore;

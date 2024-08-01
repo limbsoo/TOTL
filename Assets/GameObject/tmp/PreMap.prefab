@@ -625,6 +625,50 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[0].y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[0].z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[1].x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[1].y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[1].z
+      value: 49
+      objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[2].x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[2].y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[2].z
+      value: -48.999996
+      objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[3].x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[3].y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 892437121143610506, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
+      propertyPath: m_Positions.Array.data[3].z
+      value: 49
+      objectReference: {fileID: 0}
     - target: {fileID: 892437121143610507, guid: 39e534355d66ec74ab865c68bfb10e26, type: 3}
       propertyPath: m_RootOrder
       value: 4
