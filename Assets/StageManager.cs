@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
@@ -21,8 +22,6 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         if (instance == null)
         {
             instance = this;
-            //animator = GetComponent<Animator>();
-            //animator.SetBool("isRotate", false);
             DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);
@@ -31,18 +30,10 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     public GameConstructSet GCS;
     public static LevelConstructSet LCS;
 
+    public GameObject preMap;
     public static GameObject map;
     public static GameObject prePlayer;
     public static GameObject player;
-
-
-    public GameObject preMap;
-    //public GameObject map;
-    //public GameObject prePlayer;
-    //public GameObject player;
-
-
-
     public static List<GameObject> preEnemies;
     public static List<GameObject> enemies;
     public static List<GameObject> lightObstacles;
@@ -51,51 +42,15 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     public static int timeConstrain;
     public static int enemyCnt;
     public static int currentScore;
-    public static Vector3 mapSize;
+    //public static Vector3 mapSize;
     public static Transform mapTransform;
 
 
+    public GameResult Gresult;
+    public SceneState Sstate; // 초기값 지정해서 사전을 할건지 안할 건지
+    public static PlayState Pstate = PlayState.Wait;
+    Vector3[] gridCenters;
 
-
-
-    //public static StageManager instance;
-    //public static StageManager Instance
-    //{
-    //    get
-    //    {
-    //        if (instance == null)
-    //        {
-    //            instance = FindObjectOfType<StageManager>();
-    //            if (instance == null)
-    //            {
-    //                GameObject singletonObject = new GameObject(typeof(StageManager).ToString());
-    //                instance = singletonObject.AddComponent<StageManager>();
-    //                DontDestroyOnLoad(singletonObject);
-    //            }
-    //        }
-    //        return instance;
-    //    }
-    //}
-
-    //private void Awake()
-    //{
-    //    if (instance == null)
-    //    {
-    //        instance = this;
-    //        DontDestroyOnLoad(gameObject);
-    //    }
-    //    else if (instance != this)
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //}
-
-    // 메인화면으로 돌아왔을 때 인스턴스를 제거하는 메서드
-    //public void ResetInstance()
-    //{
-    //    instance = null;
-    //    Destroy(gameObject);
-    //}
 
 
     public GameObject initializeObjectPos (GameObject go, List<ObjectPool> list)
@@ -104,51 +59,104 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         go.transform.rotation = list[0].obj.transform.rotation;
         return go;
     }
-    //private Animator animator;
 
 
     public void EndStage()
     {
-        DestoryObjects(lightObstacles);
-        DestoryObjects(preEnemies);
-        DestoryObjects(enemies);
+        //DestoryObjects(lightObstacles);
+        //DestoryObjects(preEnemies);
+        //DestoryObjects(enemies);
         
-        player = initializeObjectPos(player, LCS.player);
-        initializeObjects();
+        //player = initializeObjectPos(player, LCS.player);
+        //initializeObjects();
     }
 
+    public List<List<int>>lightObstacleGrid;
 
-    public GameResult Gresult;
-
-    public SceneState Sstate; // 초기값 지정해서 사전을 할건지 안할 건지
-    public static PlayState Pstate = PlayState.Wait;
-
+    
 
     public void Start()
     {
-        
+        GenerateGrid(); // 구역 생성
 
-
-        GenerateGrid();
 
         LCS = GCS.levelConstructSets[GameManager.instance.playerData.curStage];
+
+        targetScore = LCS.targetScore;
+
         map = new GameObject();
         map = LCS.map[0].obj;
-        mapSize = GetMapSize();
+        //mapSize = GetMapSize();
         mapTransform = map.transform;
 
-        prePlayer = InstantiateObject<Prepartion>(LCS.prePlayer);
+        lightObstacleGrid = new List<List<int>>();
+        lightObstacleGrid.Add(new List<int> {3 });
+        lightObstacleGrid.Add(new List<int> { 2, 3 });
+
+
+        lightObstacles = InstantiateLightObstacle<LightObstacle>(LCS.lightObstacles);
+        enemies = InstantiateObjectsInLightRange<Enemy>(LCS.enemies);
+        //preEnemies = InstantiateObjects<Enemy>(LCS.preEnemies);
+
+
+        //prePlayer = InstantiateObject<Prepartion>(LCS.prePlayer);
         player = InstantiateObject<Player>(LCS.player);
 
-        initializeObjects();
+        //initializeObjects();
 
-        
+        //switchPreparationObjects(false);
+        switchPlayObjects(true);
+
+        Pstate = PlayState.Playing;
 
     }
 
-    //Vector3[,] gridCenters;
 
-    Vector3[] gridCenters;
+
+    public void initializeStage()
+    {
+        Debug.Log("적 삭제");
+
+        for (int i = 0; i < enemies.Count;i++)
+        {
+            if (enemies[i] != null) Destroy(enemies[i]);
+        }
+
+        Debug.Log("적 삭제완료");
+
+        for (int i = 0; i < lightObstacles.Count; i++)
+        {
+            if (lightObstacles[i] != null) Destroy(lightObstacles[i]);
+        }
+
+        enemies = new List<GameObject>();
+        lightObstacles = new List<GameObject>();
+
+        
+        currentScore = 0;
+
+        lightObstacles = InstantiateLightObstacle<LightObstacle>(LCS.lightObstacles);
+        Debug.Log("적 생성 전");
+        enemies = InstantiateObjectsInLightRange<Enemy>(LCS.enemies);
+        //preEnemies = InstantiateObjects<Enemy>(LCS.preEnemies);
+        Debug.Log("적 생성 완료");
+        switchPlayObjects(false);
+        //switchPreparationObjects(false);
+
+
+
+        StartCoroutine(Function.instance.CountDown(2, () => {
+            switchPlayObjects(true);
+        }));
+
+        //switchPlayObjects(true);
+        Pstate = PlayState.Playing;
+    }
+
+
+
+
+
 
     void GenerateGrid()
     {
@@ -175,52 +183,64 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         }
     }
 
+    public UnityEvent OnStageClear;
+
     public void Update()
     {
-        
-
-        switch (Sstate) //현재 상황 판단 본게임인지 사전게임인지
+        if (Pstate == PlayState.Playing)
         {
-            case SceneState.Preparation:
-                switchPlayObjects(false);
-                switchPreparationObjects(true);
+            if (targetScore <= currentScore)
+            {
+                Debug.Log("목표달성");
+                Pstate = PlayState.Wait;
+                OnStageClear?.Invoke();
+            }
 
-                //Sstate = StageState.Play;
-                break;
 
-            case SceneState.Play:
-                switchPreparationObjects(false);
-                switchPlayObjects(true);
-                //Sstate = StageState.Preparation;
-                break;
+
+
+            //switch (Sstate) //현재 상황 판단 본게임인지 사전게임인지
+            //{
+            //    case SceneState.Preparation:
+            //        switchPlayObjects(false);
+            //        switchPreparationObjects(true);
+
+            //        //Sstate = StageState.Play;
+            //        break;
+
+            //    case SceneState.Play:
+            //        switchPreparationObjects(false);
+            //        switchPlayObjects(true);
+            //        //Sstate = StageState.Preparation;
+            //        break;
+            //}
+
+            //Pstate = PlayState.Playing;
         }
 
-        Pstate = PlayState.Playing;
     }
-
-
 
     public void changeState()
     {
-        switch (Sstate) //현재 상황 판단 본게임인지 사전게임인지
-        {
-            case SceneState.Preparation:
-                switchPlayObjects(true);
-                switchPreparationObjects(false);
-                Sstate = SceneState.Play;
-                break;
+        //switch (Sstate) //현재 상황 판단 본게임인지 사전게임인지
+        //{
+        //    case SceneState.Preparation:
+        //        switchPlayObjects(true);
+        //        switchPreparationObjects(false);
+        //        Sstate = SceneState.Play;
+        //        break;
 
-            case SceneState.Play:
-                switchPreparationObjects(true);
-                switchPlayObjects(false);
-                Sstate = SceneState.Preparation;
-                break;
-        }
+        //    case SceneState.Play:
+        //        switchPreparationObjects(true);
+        //        switchPlayObjects(false);
+        //        Sstate = SceneState.Preparation;
+        //        break;
+        //}
     }
 
     public void switchPlayObjects(bool b)
     {
-        player.SetActive(b);
+        //player.SetActive(b);
         //player.GetComponent<Player>();
 
         for (int i = 0; i < enemies.Count; i++)
@@ -290,8 +310,10 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         {
             for (int j = 0; j < list[i].cnt; j++)
             {
+                Vector3 randomPos = GetRandomPositionInLightRange(lightObstacles[UnityEngine.Random.Range(0, lightObstacles.Count)]);
+                randomPos.y = 1;
 
-                GameObject go = Instantiate(list[i].obj, GetRandomPositionInLightRange(lightObstacles[UnityEngine.Random.Range(0, lightObstacles.Count)]), list[i].obj.transform.rotation);
+                GameObject go = Instantiate(list[i].obj, randomPos, list[i].obj.transform.rotation);
                 T p = go.GetComponent<T>();
                 lgo.Add(go);
             }
@@ -334,31 +356,6 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
         } while (!IsInsideCircle(randomPosition, new Vector3(trans.position.x, 0, trans.position.z), radius));
 
-
-        //// 랜덤 각도
-        //float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2);
-
-        //// 원 안의 랜덤 반지름 거리
-        //float distance = UnityEngine.Random.Range(0f, radius);
-
-        //// 원주 좌표 계산
-        //float x = Mathf.Cos(angle) * distance + trans.position.x;
-        //float z = Mathf.Sin(angle) * distance + trans.position.z;
-
-        //// 원기둥 기준으로 랜덤 위치 생성
-        //Vector3 randomPosition = new Vector3(x, 0, z);
-
-
-        //randomPosition.x = Mathf.Clamp(randomPosition.x, map.transform.position.x - mapWidth / 2, map.transform.position.x + mapWidth / 2);
-        //randomPosition.z = Mathf.Clamp(randomPosition.z, map.transform.position.z - mapHeight / 2, map.transform.position.z + mapHeight / 2);
-
-
-
-        //Transform trans = go.transform.GetChild(0);
-        //float x = UnityEngine.Random.Range(-trans.localScale.x, trans.localScale.x) + trans.position.x;
-        //float z = UnityEngine.Random.Range(-trans.localScale.z, trans.localScale.z) + trans.position.z;
-
-
         return randomPosition;
     }
 
@@ -373,11 +370,14 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     {
         List<GameObject> lgo = new List<GameObject>();
 
+        
+
         for (int i = 0; i < list.Count; i++)
         {
-            for (int j = 0; j < list[i].cnt; j++)
+            for (int j = 0; j < lightObstacleGrid[GameManager.instance.playerData.curStage].Count; j++)
+            //for (int j = 0; j < list[i].cnt; j++)
             {
-                Vector3 newPos = new(gridCenters[7].x, list[0].obj.transform.position.y, gridCenters[7].z);
+                Vector3 newPos = new(gridCenters[lightObstacleGrid[GameManager.instance.playerData.curStage][j]].x, list[0].obj.transform.position.y, gridCenters[lightObstacleGrid[GameManager.instance.playerData.curStage][j]].z);
 
                 GameObject go = Instantiate(list[i].obj, newPos, list[i].obj.transform.rotation);
                 //GameObject go = Instantiate(list[i].obj, GetRandomPositionInMap(mapSize), list[i].obj.transform.rotation);
@@ -389,33 +389,30 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     }
 
 
-    public void initializeObjects()
-    {
-        //lightObstacles = InstantiateObjects<LightObstacle>(LCS.lightObstacles);
-        lightObstacles = InstantiateLightObstacle<LightObstacle>(LCS.lightObstacles);
-        
+    //public void initializeObjects()
+    //{
+    //    //lightObstacles = InstantiateObjects<LightObstacle>(LCS.lightObstacles);
+    //    lightObstacles = InstantiateLightObstacle<LightObstacle>(LCS.lightObstacles);
+    //    preEnemies = InstantiateObjects<Enemy>(LCS.preEnemies);
+    //    enemies = InstantiateObjectsInLightRange<Enemy>(LCS.enemies);
+    //}
 
-        preEnemies = InstantiateObjects<Enemy>(LCS.preEnemies);
-        enemies = InstantiateObjectsInLightRange<Enemy>(LCS.enemies);
-        
-    }
+    //Vector3 GetMapSize()
+    //{
+    //    Transform transform = map.transform;
+    //    float width = transform.localScale.x * 10f; // Plane의 너비 (Unity 기본 Plane의 크기는 10x10 단위)
+    //    float height = transform.localScale.z * 10f; // Plane의 높이
+    //    return new Vector3(width, 0, height);
+    //}
 
-    Vector3 GetMapSize()
-    {
-        Transform transform = map.transform;
-        float width = transform.localScale.x * 10f; // Plane의 너비 (Unity 기본 Plane의 크기는 10x10 단위)
-        float height = transform.localScale.z * 10f; // Plane의 높이
-        return new Vector3(width, 0, height);
-    }
-
-    Vector3 GetRandomPositionInMap(Vector3 mapSize)
-    {
-        Transform transform = map.transform;
-        // 맵의 크기를 기준으로 랜덤한 위치 생성
-        float x = UnityEngine.Random.Range(-mapSize.x / 2, mapSize.x / 2) + transform.position.x;
-        float z = UnityEngine.Random.Range(-mapSize.z / 2, mapSize.z / 2) + transform.position.z;
-        return new Vector3(x, 0, z);
-    }
+    //Vector3 GetRandomPositionInMap(Vector3 mapSize)
+    //{
+    //    Transform transform = map.transform;
+    //    // 맵의 크기를 기준으로 랜덤한 위치 생성
+    //    float x = UnityEngine.Random.Range(-mapSize.x / 2, mapSize.x / 2) + transform.position.x;
+    //    float z = UnityEngine.Random.Range(-mapSize.z / 2, mapSize.z / 2) + transform.position.z;
+    //    return new Vector3(x, 0, z);
+    //}
 
 
 

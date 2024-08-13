@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 
 public class EventManager : MonoBehaviour
@@ -16,28 +16,99 @@ public class EventManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-
         else Destroy(gameObject);
     }
 
 
-    //씬 호출
-    public event Action OnLoadMainScene;
-    public event Action OnLoadPreparationScene;
-    public event Action OnLoadPlayScene;
+    public void UseTeleport()
+    {
+        Player.instance.UseTeleport();
+        UIManager.instance.StartCooldown(Player.instance.coolDown);
+    }
 
-    public void TriggerOnLoadMainScene()
+    public void UseAttack()
     {
-        if (OnLoadMainScene != null) OnLoadMainScene();
+        Player.instance.UseAttack();
     }
-    public void TriggerOnLoadPreparationScene()
+
+    public void playerUnderAttack()
     {
-        if (OnLoadPreparationScene != null) OnLoadPreparationScene();
+        Player.instance.underAttack();
     }
-    public void TriggerOnLoadPlayScene()
+
+    public void stageClear()
     {
-        if (OnLoadPlayScene != null) OnLoadPlayScene();
+        GameManager.instance.playerData.curStage = 1;
+        StageManager.instance.initializeStage();
+        UIManager.instance.stageClear();
+
+
+
+
+        //Player.instance.underAttack();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //플레이어 스킬
+    //public static event Action<float> OnSkillUsed;
+    //public static void TriggerSkillUsed(float cooldownDuration)
+    //{
+    //    OnSkillUsed?.Invoke(cooldownDuration);
+    //}
+
+
+
+
+    public static event Action OnCooldownFinished;
+
+
+    //public static event Action OnStageStart;
+    public event Action OnStageStart;
+
+    public void TriggerOnStageStart()
+    {
+        if (OnStageStart != null) OnStageStart();
+    }
+
+
+
+
+
+    public static void TriggerCooldownFinished()
+    {
+        OnCooldownFinished?.Invoke();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public event Action OnStageEnd;
@@ -82,37 +153,6 @@ public class EventManager : MonoBehaviour
 
 
 
-    private void Start()
-    {
-    }
-
-    //플레이어 스킬
-    public static event Action<float> OnSkillUsed;
-    public static event Action OnCooldownFinished;
-
-
-    //public static event Action OnStageStart;
-    public event Action OnStageStart;
-
-    public void TriggerOnStageStart()
-    {
-        if (OnStageStart != null) OnStageStart();
-    }
-
-
-    public static void TriggerSkillUsed(float cooldownDuration)
-    {
-        OnSkillUsed?.Invoke(cooldownDuration);
-    }
-
-    public static void TriggerCooldownFinished()
-    {
-        OnCooldownFinished?.Invoke();
-    }
-
-
-
-
 
 
     public event Action OnGameReStart;
@@ -147,12 +187,12 @@ public class EventManager : MonoBehaviour
     public event Action OnPlayerTeleportCoolDown;
 
 
-    public event Action OnUseTeleport;
+    //public event Action OnUseTeleport;
 
-    public void UseTeleport()
-    {
-        if (OnUseTeleport != null) OnUseTeleport();
-    }
+    //public void UseTeleport()
+    //{
+    //    if (OnUseTeleport != null) OnUseTeleport();
+    //}
 
 
     public void PlayerTeleportCoolDown()
@@ -203,31 +243,50 @@ public class EventManager : MonoBehaviour
     }
 
 
-    ////public GameSet gs { get; private set; }
 
-    //// Start is called before the first frame update
-    //void Start()
+
+
+
+    //private void OnEnable()
     //{
-    //    gs.GameOverEvent += gameoverResultHandler;
+    //    EventManager.instance.OnPlayerEnterTheLightRange += changeFigure;
+    //    EventManager.instance.OnCollisionResult += HandleCollisionResult;
+    //    EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
     //}
 
-    //// Update is called once per frame
-    //void Update()
+    //private void OnDisable()
     //{
-
+    //    EventManager.instance.OnPlayerEnterTheLightRange -= changeFigure;
+    //    EventManager.instance.OnCollisionResult -= HandleCollisionResult;
+    //    EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
     //}
 
 
-    //void gameoverResultHandler()
-    //{
-    //    //게임오버창등등등
-    //}
 
 
-    //void OnEnable()
-    //{
-    //    gs.GameOverEvent += gameoverResultHandler; // CollisionHandler의 이벤트에 대한 구독
-    //}
+
+
+    // 씬 호출 ------------------------------------------------------------------------------------------------------------------------- //
+    public event Action OnLoadMainScene;
+    public event Action OnLoadPreparationScene;
+    public event Action OnLoadPlayScene;
+
+    public void TriggerOnLoadMainScene()
+    {
+        if (OnLoadMainScene != null) OnLoadMainScene();
+    }
+    public void TriggerOnLoadPreparationScene()
+    {
+        if (OnLoadPreparationScene != null) OnLoadPreparationScene();
+    }
+    public void TriggerOnLoadPlayScene()
+    {
+        if (OnLoadPlayScene != null) OnLoadPlayScene();
+    }
+
+
+
+
 
 }
 

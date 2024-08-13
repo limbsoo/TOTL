@@ -38,8 +38,8 @@ public class UIManager : MonoBehaviour
 
 
 
-
-
+    public TMP_Text curStage;
+    public TMP_Text waveClear;
 
 
 
@@ -51,7 +51,7 @@ public class UIManager : MonoBehaviour
 
     //public TMP_Text teleport;
 
-    
+
 
     //public Text newCountDown;
 
@@ -65,6 +65,7 @@ public class UIManager : MonoBehaviour
         playerCoolDown.text = "CoolDown : " + playerData.coolDown.ToString();
         playerPenealtyCoolDown.text = "Penealty : ";
         target.text = "Target : " + StageManager.LCS.targetScore.ToString();
+        curStage.text = "CurStage : " + GameManager.instance.playerData.curStage.ToString();
 
 
         if (countDown != null)
@@ -109,6 +110,16 @@ public class UIManager : MonoBehaviour
     }
 
 
+    public void stageClear()
+    {
+        UIManager.instance.waveClear.text = "Wave Clear";
+
+        StartCoroutine(Function.instance.CountDown(1, () => {
+            UIManager.instance.waveClear.text = "";
+        }));
+    }
+
+
 
     private void OnEnable()
     {
@@ -124,14 +135,14 @@ public class UIManager : MonoBehaviour
 
 
         //플레이어 이벤트
-        EventManager.OnSkillUsed += StartCooldown;
+        //EventManager.OnSkillUsed += StartCooldown;
         EventManager.OnCooldownFinished += OnCooldownFinished;
 
 
         EventManager.instance.OnScoreChanged += UpdateScore;
         EventManager.instance.OnPlayerDied += ShowGameOverScreen;
         EventManager.instance.OnGameEnd += showGameEndScreen;
-        EventManager.instance.OnUseTeleport += teleportCoolDown;
+        //EventManager.instance.OnUseTeleport += teleportCoolDown;
 
 
     }
@@ -146,7 +157,7 @@ public class UIManager : MonoBehaviour
 
 
         //플레이어 이벤트
-        EventManager.OnSkillUsed -= StartCooldown;
+        //EventManager.OnSkillUsed -= StartCooldown;
         EventManager.OnCooldownFinished -= OnCooldownFinished;
 
 
@@ -154,7 +165,7 @@ public class UIManager : MonoBehaviour
         EventManager.instance.OnScoreChanged -= UpdateScore;
         EventManager.instance.OnPlayerDied -= ShowGameOverScreen;
         EventManager.instance.OnGameEnd -= showGameEndScreen;
-        EventManager.instance.OnUseTeleport -= teleportCoolDown;
+        //EventManager.instance.OnUseTeleport -= teleportCoolDown;
 
 
     }
@@ -176,7 +187,7 @@ public class UIManager : MonoBehaviour
         playerCoolDown.text = "CoolDown : " + Player.instance.coolDown.ToString();
 
         curScore.text = "Score: " + StageManager.currentScore.ToString();
-
+        curStage.text = "CurStage : " + GameManager.instance.playerData.curStage.ToString();
         playerPenealtyCoolDown.text = "Penealty : " + Player.instance.PenealtyTime.ToString();
     }
 
@@ -189,7 +200,7 @@ public class UIManager : MonoBehaviour
 
 
     //플레이어 이벤트
-    private void StartCooldown(float duration)
+    public void StartCooldown(float duration)
     {
         StartCoroutine(CooldownCoroutine(duration));
     }

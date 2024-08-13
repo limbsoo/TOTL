@@ -13,6 +13,7 @@ TagManager:
   - wall
   - preEnemy
   - Bloom
+  - TimeLine
   layers:
   - Default
   - TransparentFX
@@ -20,10 +21,10 @@ TagManager:
   - 
   - Water
   - UI
+  - object
   - FloorLayer
   - wall
-  - 
-  - 
+  - effect
   - 
   - 
   - 
@@ -49,4 +50,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: FloorLayer
+    uniqueID: 1623659623
+    locked: 0
+  - name: object
+    uniqueID: 603712195
+    locked: 0
+  - name: effect
+    uniqueID: 1553568061
     locked: 0

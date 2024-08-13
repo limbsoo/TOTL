@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
         else Destroy(gameObject);
     }
 
-
+    public Vector3 playerCameraDistance;
 
     static public Vector3 Vector3;
     public float smoothSpeed = 0.125f;
@@ -48,10 +48,10 @@ public class CameraController : MonoBehaviour
 
         float scroll = Input.GetAxis("Mouse ScrollWheel") * speed;
 
-        this.transform.position = new Vector3(Vector3.x, Vector3.y + 50, Vector3.z - 30);
+        //this.transform.position = new Vector3(Vector3.x, Vector3.y + 50, Vector3.z - 30);
+        //this.transform.position = new Vector3(Vector3.x, Vector3.y + 60, Vector3.z - 35);
+        this.transform.position = new Vector3(Vector3.x - playerCameraDistance.x, Vector3.y - playerCameraDistance.y, Vector3.z - playerCameraDistance.z); 
 
-
-        
         if (thisCamera.fieldOfView <= 20.0f && scroll < 0) thisCamera.fieldOfView = 20.0f; //√÷¥Î ¡‹¿Œ
         else if (thisCamera.fieldOfView >= 60.0f && scroll > 0) thisCamera.fieldOfView = 60.0f; // √÷¥Î ¡‹ æ∆øÙ
         else thisCamera.fieldOfView += scroll; // ¡‹¿Œ æ∆øÙ «œ±‚.

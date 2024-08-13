@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   threshold:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 4.18
   intensity:
     m_OverrideState: 1
-    m_Value: 0.12
+    m_Value: 8.94
   scatter:
     m_OverrideState: 0
     m_Value: 0.7
@@ -26,8 +26,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 65472
   tint:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 0.3254717, b: 0.3254717, a: 1}
   highQualityFiltering:
     m_OverrideState: 0
     m_Value: 0

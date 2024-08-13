@@ -6,11 +6,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
+using UnityEngine.Events;
+using UnityEngine.Rendering.VirtualTexturing;
 
 
 public class Player : MonoBehaviour
 {
-    //private GameObject obj;
+    public UnityEvent OnUseTeleport;
+    public UnityEvent OnUseAttack;
+    public UnityEvent OnPlayerUnderAttack;
+
+
+
     public float health { get; private set; }
     public float moveSpeed { get; private set; }
 
@@ -18,11 +25,14 @@ public class Player : MonoBehaviour
     public float coolDown { get; private set; }
 
 
+    public static bool useAttack = false;
+
+
     public float teleportLength = 10;
-    private bool canUseSkill = true; // 스킬 사용 가능 여부
 
+    public static bool canUseTeleport = true; // 스킬 사용 가능 여부
 
-    //public string name { get; private set; }
+    public static bool playerDamaged = false;
 
     private Vector3 movement;
     
@@ -35,14 +45,20 @@ public class Player : MonoBehaviour
 
     private PlayerState pState;
 
-    private bool playerDamaged = false;
+    
 
 
     public float PenealtyTime { get; private set; }
 
-   
+
+    public Animator animator;
+
+    Material[] mat = new Material[2];
 
     //prePlayer꺼
+
+
+    public static float inputThreshold = 0.1f; // 임계값 설정
 
     public static Player instance { get; private set; }
     private void Awake()
@@ -50,7 +66,6 @@ public class Player : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-
             PlayerData playerData = GameManager.instance.playerData;
             health = playerData.health;
             moveSpeed = playerData.moveSpeed;
@@ -60,94 +75,100 @@ public class Player : MonoBehaviour
             animator = GetComponent<Animator>();
             rb = GetComponent<Rigidbody>();
             pState = PlayerState.Original;
-            
-
             DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);
     }
 
+    private float attackDuration;
 
-    private Animator animator;
+    
 
-    //private void Awake()
-    //{
-    //    rb = GetComponent<Rigidbody>();
-    //    pState = PlayerState.Original;
-    //}
-
-
-    void Update()
+    private void Start()
     {
         
 
-        //if (StageManager.instance.Sstate == StageState.Preparation) return;
+        mat = this.GetComponent<Renderer>().materials;
 
+        //gameObject.GetComponent<MeshRenderer>().material = mat[1];
+        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+
+        foreach (AnimationClip clip in clips)
+        {
+            if (clip.name == "Attack")
+            {
+                attackDuration = clip.length;
+                break;
+            }
+        }
+    }
+
+    void Update()
+    {
         HandleInput();
         CameraController.Vector3 = transform.position;
     }
-
-    public static float inputThreshold = 0.1f; // 임계값 설정
-
     void FixedUpdate()
     {
-        //if (StageManager.instance.Sstate == StageState.Preparation) return;
-
-        //rb = GetComponent<Rigidbody>();
-
-
-
         Move();
-
-        Debug.Log($"Movement: {movement}, LastRotation: {lastRotation.eulerAngles}");
-
-        //Move();
-
-
-        //rb = StageManager.players[StageManager.currentPlayerIdx].GetComponent<Rigidbody>();
-
+        //Debug.Log($"Movement: {movement}, LastRotation: {lastRotation.eulerAngles}");
     }
 
     public void destoryEnemy(GameObject g)
     {
+        if (!useAttack) return;
+
         Enemy e = g.gameObject.GetComponent<Enemy>();
 
         if (e.onceDamaged) return;
 
-        if(e.health - damamge <= 0)
-        {
-            StageManager.currentScore++;
-            Destroy(g.gameObject);
-        }
-         
-        else
-        {
-            e.health -= damamge;
-            e.transform.position += new Vector3(transform.forward.x * 2, 0, transform.forward.z * 2);
+        e.damaged(damamge, transform.forward);
 
-            e.updateDestination(e.transform);
-
-            //e.transform.position -= new Vector3(5, 0, 0);
-
-            e.onceDamaged = true;
-            StartCoroutine(Dameged(e));
-        }
-
-        //if (g.gameObject.GetComponent<Enemy>() != null)
+        //StageManager.instance.psystem.transform.position = rb.position;
 
 
-        
+
+        //if (e.health - damamge <= 0)
+        //{
+        //    //e.startEffect();
+        //    StageManager.currentScore++;
+        //    Debug.Log("Destroy");
+
+        //    e.setNullNMagent();
+        //    //Destroy(g.gameObject);
+        //    Debug.Log("적 하나 삭제완료");
+        //}
+
+        //else
+        //{
+        //    e.startEffect();
+        //    e.health -= damamge;
+        //    e.transform.position += new Vector3(transform.forward.x * 2, 0, transform.forward.z * 2);
+
+        //    e.updateDestination(e.transform);
+
+        //    //e.transform.position -= new Vector3(5, 0, 0);
+
+        //    e.onceDamaged = true;
+        //    StartCoroutine(Dameged(e));
+
+
+
+        //}
+
+
+
     }
 
-    private IEnumerator Dameged(Enemy e)
-    {
-        //나중에 콤봊ㅁ
-        yield return new WaitForSecondsRealtime(1);
+    //private IEnumerator Dameged(Enemy e)
+    //{
+    //    //나중에 콤봊ㅁ
+    //    yield return new WaitForSecondsRealtime(1);
 
-        e.onceDamaged = false;
+    //    e.onceDamaged = false;
 
-        //transform.GetChild(0).gameObject.SetActive(false);
-    }
+    //    //transform.GetChild(0).gameObject.SetActive(false);
+    //}
 
 
     // 이벤트
@@ -169,29 +190,15 @@ public class Player : MonoBehaviour
 
     private void HandleInput()
     {
-        //float moveHorizontal = Input.GetAxis("Horizontal");
-        //float moveVertical = Input.GetAxis("Vertical");
-        //movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * moveSpeed;
-        //movement = new Vector3(moveHorizontal * moveSpeed, 0.0f, moveVertical * moveSpeed).normalized;
-        //movement.normalized;
-
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        // 입력 값이 임계값보다 작으면 0으로 처리
-        if (Mathf.Abs(moveHorizontal) < inputThreshold)
-        {
-            moveHorizontal = 0;
-        }
-        if (Mathf.Abs(moveVertical) < inputThreshold)
-        {
-            moveVertical = 0;
-        }
-
+        if (Mathf.Abs(moveHorizontal) < inputThreshold) moveHorizontal = 0;
+        if (Mathf.Abs(moveVertical) < inputThreshold) moveVertical = 0;
 
         movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * moveSpeed;
 
-        Debug.Log($"Horizontal: {moveHorizontal}, Vertical: {moveVertical}");
+        //Debug.Log($"Horizontal: {moveHorizontal}, Vertical: {moveVertical}");
 
         // 이동 중 여부를 체크
         //isMoving = movement != Vector3.zero;
@@ -203,56 +210,40 @@ public class Player : MonoBehaviour
         }
 
 
-
-
-
-
-
-
-
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            if (pState == PlayerState.Original)
+            //if (pState == PlayerState.Original)
             {
-                if(CanUseSkills())
-                {
-                    UseSkill();
-                    Teleport(teleportLength);
-                }
+                if(canUseTeleport) OnUseTeleport?.Invoke();
             }
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (pState == PlayerState.Original)
+            if (!useAttack)
             {
-                transform.GetChild(0).gameObject.SetActive(true);
-
-                animator.SetBool("isRotate", true);
-
-                if (attackCoroutine != null) StopCoroutine(attackCoroutine);
-                attackCoroutine = StartCoroutine(attack());
-
-                Vector3 newPos = rb.position + rb.transform.forward;
-                rb.MovePosition(newPos);
+                useAttack = true;
+                OnUseAttack?.Invoke();
             }
         }
     }
 
-
-    void Teleport(float length)
+    public void UseAttack()
     {
-        Vector3 teleportPosition = rb.position + rb.transform.forward * length;
-        rb.MovePosition(teleportPosition);
-    }
-
-    private IEnumerator attack()
-    {
-        //나중에 콤봊ㅁ
-        yield return new WaitForSecondsRealtime(0.2f);
-        transform.GetChild(0).gameObject.SetActive(false);
         animator.SetBool("isRotate", true);
+        animator.Play("rotatePlayer");
+        //transform.GetChild(0).gameObject.SetActive(true);
+
+        //animator.SetTrigger("Attack");
+
+
+        if (attackCoroutine != null) StopCoroutine(attackCoroutine);
+        attackCoroutine = StartCoroutine(Function.instance.CountDown(attackDuration, () => { 
+            animator.SetBool("isRotate", false);
+            useAttack = false;
+        }));
     }
+
 
     private bool isMoving;
     private Quaternion lastRotation;
@@ -267,31 +258,12 @@ public class Player : MonoBehaviour
             newPos.x = Mathf.Clamp(newPos.x, StageManager.mapTransform.position.x - width / 2, StageManager.mapTransform.position.x + width / 2);
             newPos.z = Mathf.Clamp(newPos.z, StageManager.mapTransform.position.z - height / 2, StageManager.mapTransform.position.z + height / 2);
             rb.MovePosition(newPos); // 물리적 이동 처리
-            //rb.MoveRotation(lastRotation);
 
-            // 움직이는 방향으로 회전
-            //if (movement != Vector3.zero)
-            {
-                Quaternion newRotation = Quaternion.LookRotation(movement);
-                rb.MoveRotation(newRotation);
-
-            }
-
-            // 움직이는 방향으로 회전
-            //lastRotation = Quaternion.LookRotation(movement);
-
-
+            Quaternion newRotation = Quaternion.LookRotation(movement);
+            rb.MoveRotation(newRotation);
         }
-
-        else
-        {
-            rb.velocity = Vector3.zero; // 키 입력이 없을 때 속도를 0으로 설정하여 움직임을 멈춤
-            //rb.MoveRotation(lastRotation); // 마지막 회전 값 유지
-        }
-
-        //rb.MoveRotation(lastRotation);
-
-        //else rb.velocity = Vector3.zero;  // 키 입력이 없을 때 속도를 0으로 설정하여 움직임을 멈춤
+         
+        else rb.velocity = Vector3.zero; // 키 입력이 없을 때 속도를 0으로 설정하여 움직임을 멈춤
     }
 
     //void TakeDamage(int damage)
@@ -300,20 +272,11 @@ public class Player : MonoBehaviour
     //    if (health <= 0) Die();
     //}
 
-    void Die()
-    {
-        Debug.Log("Player Died.");
-        EventManager.instance.PlayerDied();
-    }
-
-
-    private IEnumerator playerDamage()
-    {
-
-        yield return new WaitForSecondsRealtime(1f);
-        playerDamaged = false;
-        //transform.GetChild(0).gameObject.SetActive(false);
-    }
+    //void Die()
+    //{
+    //    Debug.Log("Player Died.");
+    //    EventManager.instance.PlayerDied();
+    //}
 
 
 
@@ -325,73 +288,51 @@ public class Player : MonoBehaviour
 
         if(!playerDamaged)
         {
-            //iskientic으로?
-            playerDamaged = true;
-            health--;
-            transform.position += new Vector3(collidedObject.transform.forward.x * 2, 0, collidedObject.transform.forward.z * 2);
-            StartCoroutine(playerDamage());
+            OnPlayerUnderAttack?.Invoke();
         }
-
-        
-
-
-
-       
-
-
-        ////if (StageManager.currentPlayerIdx == 1) return;
-
-        ////playerInstance.ChangePrefab();
-
-        //Destroy(collidedObject.gameObject);
-        ////textInstance.cnt++;
-
-        //StageManager.instance.currentScore++;
-
-        //EventManager.instance.ScoreChanged(StageManager.instance.currentScore);
-
-        ////if (textInstance.cnt == gcs.levelConstructSets[gcs.targetIdx].enemyCnt)
-        ////{
-        ////    endButton.SetActive(true);
-        ////    Time.timeScale = 0f;
-        ////    GameOverEvent?.Invoke();
-        ////}
-
     }
 
-
-
-
-
-
-    public bool CanUseSkills()
+    public void underAttack()
     {
-        return canUseSkill;
+        playerDamaged = true;
+
+        gameObject.GetComponent<MeshRenderer>().material = mat[1];
+        //gameObject.GetComponent<BoxCollider>().enabled = false;
+
+        health--;
+        StartCoroutine(Function.instance.CountDown(1f, () => { 
+            playerDamaged = false;
+            gameObject.GetComponent<MeshRenderer>().material = mat[0];
+            //gameObject.GetComponent<BoxCollider>().enabled = true;
+        }));
+
+        //iskientic으로?
+        //transform.position += new Vector3(collidedObject.transform.forward.x * 2, 0, collidedObject.transform.forward.z * 2);
     }
 
-    private IEnumerator ResetSkillAvailability(float cooldown)
+
+
+    public void UseTeleport()
     {
-        yield return new WaitForSeconds(cooldown);
-        canUseSkill = true;
+        Vector3 teleportPosition = rb.position + rb.transform.forward * teleportLength;
+        rb.MovePosition(teleportPosition);
+
+        Debug.Log("Teleport used!");
+
+        canUseTeleport = false;
+        StartCoroutine(Function.instance.CountDown(coolDown, () => { canUseTeleport = !canUseTeleport; }));
+        //Function.instance.ChangeStateAndDelay(ref canUseSkill, coolDown, () => { canUseSkill = !canUseSkill;});
     }
-
-    public void UseSkill()
-    {
-        Debug.Log("Skill used!");
-
-        canUseSkill = false;
-        EventManager.TriggerSkillUsed(coolDown);
-        StartCoroutine(ResetSkillAvailability(coolDown));
-    }
-
-
-
-
 
 
 
     private IEnumerator Weakning()
     {
+        //while(PenealtyTime > 0)
+        //{
+
+        //}
+
         PenealtyTime = 3;
         yield return new WaitForSecondsRealtime(1);
         PenealtyTime = 2;

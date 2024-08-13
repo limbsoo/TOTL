@@ -10,7 +10,7 @@ public class PlayerCollisionHandler : MonoBehaviour
     {
         if (collision.collider.tag == "Enemy")
         {
-            Debug.Log("충돌 시작!");
+            //Debug.Log("충돌 시작!");
             EventManager.instance.playerCollisionEnemy(collision.gameObject);
             
 
@@ -31,9 +31,16 @@ public class PlayerCollisionHandler : MonoBehaviour
         //일정 시간 이후에 목표지점 초기화해서 쫒아가다가 범위 벗어나면 멈추게
         if (gameObject.tag == "AttackRange")
         {
+            //Debug.Log("player attack");
+
             if (other.gameObject.tag == "Enemy")
             {
-                EventManager.instance.EnemyInAttackRange(other.gameObject);
+                if (StageManager.Pstate == PlayState.Playing)
+                {
+                    EventManager.instance.EnemyInAttackRange(other.gameObject);
+                }
+
+                  
             }
             
         }
@@ -50,18 +57,24 @@ public class PlayerCollisionHandler : MonoBehaviour
 
         if (other.gameObject.tag == "EnemySensor")
         {
-
-            //일정시간 후에 멈추게 수정
-            if (StageManager.Pstate == PlayState.Playing)
+            if(other.transform.parent != null) 
             {
-                Debug.Log("적에게 포착");
 
-                if (gameObject.tag == "AttackRange") return;
+                //일정시간 후에 멈추게 수정
+                if (StageManager.Pstate == PlayState.Playing)
+                {
+                    //Debug.Log("적에게 포착");
 
-                EventManager.instance.playerDetectedMonster(other.gameObject);
+                    if (gameObject.tag == "AttackRange") return;
+
+                    EventManager.instance.playerDetectedMonster(other.gameObject);
+                }
+
+
             }
 
-                
+
+
         }
     }
 

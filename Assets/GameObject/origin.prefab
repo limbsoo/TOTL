@@ -67,6 +67,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: b24906bf939b88540a7f7b7edb2d7d97, type: 2}
+  - {fileID: 2100000, guid: 54eeb74919ef8c44cb668765512ba14a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -100,7 +101,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d569676ded9df4441af392b98af575d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnUseTeleport:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUseAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerUnderAttack:
+    m_PersistentCalls:
+      m_Calls: []
   teleportLength: 10
+  animator: {fileID: 0}
 --- !u!114 &-1090340338223519807
 MonoBehaviour:
   m_ObjectHideFlags: 0

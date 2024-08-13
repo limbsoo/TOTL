@@ -48,3 +48,18 @@ MonoBehaviour:
   preMap: {fileID: 8585473374205540881, guid: 168272b2f8398674397bc09d1dad4abe, type: 3}
   Gresult: 0
   Sstate: 1
+  OnStageClear:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6800937604832815002, guid: 62cde620ae026d440b8006e306c1c54b, type: 3}
+        m_TargetAssemblyTypeName: EventManager, Assembly-CSharp
+        m_MethodName: stageClear
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

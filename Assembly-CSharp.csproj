@@ -56,11 +56,15 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Function.cs" />
+    <Compile Include="Assets\AnimationManager.cs" />
     <Compile Include="Assets\ConstructSet\GameConstructSet.cs" />
     <Compile Include="Assets\JsonDataManager.cs" />
     <Compile Include="Assets\StageManager.cs" />
     <Compile Include="Assets\Enemy.cs" />
     <Compile Include="Assets\UIManager.cs" />
+    <Compile Include="Assets\DragAndDrop.cs" />
+    <Compile Include="Assets\Annoation.cs" />
     <Compile Include="Assets\Prepartion.cs" />
     <Compile Include="Assets\InterfacesEnums.cs" />
     <Compile Include="Assets\etc\Controller.cs" />
@@ -68,6 +72,7 @@
     <Compile Include="Assets\PlayerCollisionHandler.cs" />
     <Compile Include="Assets\CameraController.cs" />
     <Compile Include="Assets\GameManager.cs" />
+    <Compile Include="Assets\attack.cs" />
     <Compile Include="Assets\etc\WinController.cs" />
     <Compile Include="Assets\ConstructSet\LevelConstructSet.cs" />
     <Compile Include="Assets\EventManager.cs" />
@@ -77,7 +82,7 @@
     <Compile Include="Assets\PlayerData.cs" />
     <Compile Include="Assets\ConstructSet\UIConstructSet.cs" />
     <Compile Include="Assets\LightObstacle.cs" />
-    <Compile Include="Assets\attack.cs" />
+    <Compile Include="Assets\DragAndDropItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -794,8 +799,8 @@
     <Reference Include="Unity.Searcher.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
@@ -820,6 +825,9 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Core">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>

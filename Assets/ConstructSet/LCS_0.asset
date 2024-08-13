@@ -30,5 +30,5 @@ MonoBehaviour:
   lightObstacles:
   - obj: {fileID: 3301909162799466181, guid: 1a63c935327e7e24193f6eef7cbcbc3f, type: 3}
     cnt: 1
-  targetScore: 1
+  targetScore: 2
   timeConstrain: 60

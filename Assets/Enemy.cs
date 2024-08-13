@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering.VirtualTexturing;
 using UnityEngine.UIElements;
 using static UnityEngine.EventSystems.EventTrigger;
+using static UnityEngine.GraphicsBuffer;
 
 
 public class Enemy : MonoBehaviour
@@ -23,7 +25,7 @@ public class Enemy : MonoBehaviour
     //}
 
 
-
+    Material[] mat = new Material[2];
 
 
 
@@ -39,19 +41,68 @@ public class Enemy : MonoBehaviour
     public float health;
     //public string name { get; private set; }
 
-
+    [SerializeField]
     NavMeshAgent nmAgent;
-    public Transform target;
+    [SerializeField]
+    Transform target;
+    private Collider colliderrrr;
 
-    private void Awake()
+    //private void Awake()
+    //{
+    //    health = 2;
+    //    nmAgent = GetComponent<NavMeshAgent>();
+    //}
+
+    private ParticleSystem psystem;
+
+    private void Start()
     {
+        psystem = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>();
+        //psystem = GetComponentInChildren<ParticleSystem>();
         health = 2;
         nmAgent = GetComponent<NavMeshAgent>();
+        target = Player.instance.transform;
+        transform.GetChild(0).gameObject.GetComponent<CapsuleCollider>().enabled = true;
+
+        mat = this.GetComponent<Renderer>().materials;
+
     }
+
+
+    public void startEffect()
+    {
+        psystem.Play();
+    }
+
+
+
+    public void setNullNMagent()
+    {
+        nmAgent = null;
+        Destroy(this.gameObject);
+    }
+
 
     public void updateDestination(Transform tf)
     {
-        nmAgent.SetDestination(tf.position);
+        if (StageManager.Pstate == PlayState.Playing)
+        {
+            if (this.nmAgent == null) return;
+            //if (tf == null) return;
+            //if(this == null) return;
+
+            //Debug.Log("transform : " + tf.position.x + ",  " + tf.position.y + ",  " + tf.position.z);
+
+            if (tf.position.y > 1)
+            {
+                nmAgent.SetDestination(new Vector3(tf.position.x, 1, tf.position.z));
+            }
+
+            else nmAgent.SetDestination(tf.position);
+
+        }
+
+
     }
 
     private void OnEnable()
@@ -66,22 +117,79 @@ public class Enemy : MonoBehaviour
 
     public void chasePlayer(GameObject detectObject)
     {
-        Enemy enemy = detectObject.transform.parent.GetComponent<Enemy>();
+        if(StageManager.Pstate == PlayState.Playing)
+        {
+            //if (this.nmAgent == null) return;
 
-        if (enemy == null) return;
+            //if (detectObject == null) return;
 
-        if (enemy.onceDamaged) return;
+            Enemy enemy = detectObject.transform.parent.GetComponent<Enemy>();
+
+            
+
+            //if (enemy == null) return;
+
+            //if (enemy.onceDamaged) return;
 
 
 
-        //if (StageManager.currentPlayerIdx != 0) return;
+            //if (StageManager.currentPlayerIdx != 0) return;
 
 
 
-        //Rigidbody rb = StageManager.player.GetComponent<Rigidbody>();
-        //enemy.updateDestination(rb.transform);
-        enemy.updateDestination(StageManager.player.transform);
+            //Rigidbody rb = StageManager.player.GetComponent<Rigidbody>();
+            //enemy.updateDestination(rb.transform);
+
+
+            if (StageManager.player == null) return;
+            enemy.updateDestination(StageManager.player.transform);
+        }
+
+
     }
+
+
+
+    public void damaged(float damamge, Vector3 forward)
+    {
+        if(health - damamge <= 0)
+        {
+            StageManager.currentScore++;
+            setNullNMagent();
+        }
+
+        else
+        {
+            startEffect();
+            health -= damamge;
+            transform.position += new Vector3(forward.x * 2, 0, forward.z * 2);
+            updateDestination(transform);
+            onceDamaged = true;
+
+            gameObject.GetComponent<MeshRenderer>().material = mat[1];
+
+            StartCoroutine(Function.instance.CountDown(1f, () =>
+            {
+                onceDamaged = false;
+                gameObject.GetComponent<MeshRenderer>().material = mat[0];
+            }));
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
