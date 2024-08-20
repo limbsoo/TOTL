@@ -66,6 +66,7 @@
     <Compile Include="Assets\DragAndDrop.cs" />
     <Compile Include="Assets\Annoation.cs" />
     <Compile Include="Assets\Prepartion.cs" />
+    <Compile Include="Assets\TimeLine.cs" />
     <Compile Include="Assets\InterfacesEnums.cs" />
     <Compile Include="Assets\etc\Controller.cs" />
     <Compile Include="Assets\Player.cs" />
@@ -83,6 +84,10 @@
     <Compile Include="Assets\ConstructSet\UIConstructSet.cs" />
     <Compile Include="Assets\LightObstacle.cs" />
     <Compile Include="Assets\DragAndDropItem.cs" />
+    <Compile Include="Assets\Augmenter.cs" />
+    <Compile Include="Assets\Select.cs" />
+    <Compile Include="Assets\SelectOption.cs" />
+    <Compile Include="Assets\BlockSelect.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

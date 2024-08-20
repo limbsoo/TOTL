@@ -24,9 +24,9 @@ public class LevelConstructSet : ScriptableObject
 
 
 
+    //public List<List<int>> lightObstacleGrid;
 
-
-
+    public List<GridSet> lightObstacleGrid;
 
 
     //public List<GameObject> player;
@@ -56,4 +56,10 @@ public class ObjectPool
 {
     public GameObject obj;
     public int cnt;
+}
+
+[System.Serializable]
+public class GridSet
+{
+    public int[] cnt;
 }

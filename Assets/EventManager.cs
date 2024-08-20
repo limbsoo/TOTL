@@ -49,7 +49,14 @@ public class EventManager : MonoBehaviour
     }
 
 
+    //public void selectButton()
+    //{
+    //    if(Select.instance.isSelect) Select.instance.setGray();
+    //    else  Select.instance.setOrigin();
 
+
+    //    Select.instance.isSelect = !Select.instance.isSelect;
+    //}
 
 
 

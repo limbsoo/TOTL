@@ -71,9 +71,9 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         //initializeObjects();
     }
 
-    public List<List<int>>lightObstacleGrid;
 
-    
+    List<List<int>> lightObstacleGrid;
+
 
     public void Start()
     {
@@ -89,8 +89,10 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         //mapSize = GetMapSize();
         mapTransform = map.transform;
 
+
+       
         lightObstacleGrid = new List<List<int>>();
-        lightObstacleGrid.Add(new List<int> {3 });
+        lightObstacleGrid.Add(new List<int> { 3 });
         lightObstacleGrid.Add(new List<int> { 2, 3 });
 
 
@@ -374,6 +376,18 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
         for (int i = 0; i < list.Count; i++)
         {
+            //for (int j = 0; j < LCS.lightObstacleGrid[GameManager.instance.playerData.curStage].cnt.Length; j++)
+            //{
+            //    Vector3 newPos = new(gridCenters[LCS.lightObstacleGrid[GameManager.instance.playerData.curStage].cnt[j]].x, list[0].obj.transform.position.y, gridCenters[LCS.lightObstacleGrid[GameManager.instance.playerData.curStage].cnt[j]].z);
+
+            //    GameObject go = Instantiate(list[i].obj, newPos, list[i].obj.transform.rotation);
+            //    GameObject go = Instantiate(list[i].obj, GetRandomPositionInMap(mapSize), list[i].obj.transform.rotation);
+            //    T p = go.GetComponent<T>();
+            //    lgo.Add(go);
+            //}
+
+
+
             for (int j = 0; j < lightObstacleGrid[GameManager.instance.playerData.curStage].Count; j++)
             //for (int j = 0; j < list[i].cnt; j++)
             {
