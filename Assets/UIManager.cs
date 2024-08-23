@@ -82,7 +82,8 @@ public class UIManager : MonoBehaviour
 
         //newCountDown.text = "2";
 
-        float startTime = Time.realtimeSinceStartup;
+
+        //float startTime = Time.time;
         yield return new WaitForSecondsRealtime(1);
         countDown.text = "2";
         yield return new WaitForSecondsRealtime(1);
@@ -95,9 +96,26 @@ public class UIManager : MonoBehaviour
 
         for (int i = 0; i < 59; i++)
         {
-            yield return new WaitForSecondsRealtime(1);
+            yield return new WaitForSeconds(1);
             timeLimit.text = (59 - i).ToString();
         }
+
+        //float startTime = Time.realtimeSinceStartup;
+        //yield return new WaitForSecondsRealtime(1);
+        //countDown.text = "2";
+        //yield return new WaitForSecondsRealtime(1);
+        //countDown.text = "1";
+        //yield return new WaitForSecondsRealtime(1);
+        //countDown.text = "GO!";
+        //yield return new WaitForSecondsRealtime(1);
+        //countDown.gameObject.SetActive(false);
+        //Time.timeScale = 1f; // 게임 시작
+
+        //for (int i = 0; i < 59; i++)
+        //{
+        //    yield return new WaitForSecondsRealtime(1);
+        //    timeLimit.text = (59 - i).ToString();
+        //}
     }
 
     public void StartCount()

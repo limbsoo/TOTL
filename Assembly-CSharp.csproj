@@ -85,9 +85,10 @@
     <Compile Include="Assets\LightObstacle.cs" />
     <Compile Include="Assets\DragAndDropItem.cs" />
     <Compile Include="Assets\Augmenter.cs" />
-    <Compile Include="Assets\Select.cs" />
-    <Compile Include="Assets\SelectOption.cs" />
-    <Compile Include="Assets\BlockSelect.cs" />
+    <Compile Include="Assets\ButtonClickEvent.cs" />
+    <Compile Include="Assets\StatusEffectBlock.cs" />
+    <Compile Include="Assets\StatusButton.cs" />
+    <Compile Include="Assets\MapStatusPopUpmanager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

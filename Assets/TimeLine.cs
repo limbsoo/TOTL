@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TimeLine : MonoBehaviour
 {
+
     public int length = 10;
     public bool haveBlock = false;
 

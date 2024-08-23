@@ -71,11 +71,16 @@ public class LightObstacle : MonoBehaviour
 
     private IEnumerator blinkingIe()
     {
-
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSeconds(3f);
         transform.GetChild(0).gameObject.SetActive(true);
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSeconds(3f);
         BlinkingCoroutine = null;
+
+
+        //yield return new WaitForSecondsRealtime(3f);
+        //transform.GetChild(0).gameObject.SetActive(true);
+        //yield return new WaitForSecondsRealtime(3f);
+        //BlinkingCoroutine = null;
     }
 
 

@@ -53,6 +53,28 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
 
 
+    public void Pause()
+    {
+        Pstate = PlayState.Wait;
+        Time.timeScale = 0;
+    }
+
+    public void Resume()
+    {
+        Pstate = PlayState.Playing;
+        Time.timeScale = 1f;
+    }
+
+
+
+
+
+
+    
+
+
+
+
     public GameObject initializeObjectPos (GameObject go, List<ObjectPool> list)
     {
         go.transform.position = list[0].obj.transform.position;

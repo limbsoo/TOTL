@@ -8,6 +8,10 @@
 //}
 
 
+using UnityEngine;
+
+
+
 public enum SceneState { Preparation, Play }
 public enum PlayerState { Original, Transformed }
 

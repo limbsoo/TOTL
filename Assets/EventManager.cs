@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using static UnityEngine.UI.Button;
 
 
 public class EventManager : MonoBehaviour
@@ -19,6 +21,24 @@ public class EventManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+
+    //public ButtonClickEvent buttonClickEvent;
+
+    //public void Start()
+    //{
+    //    //buttonClickEvent = GetComponent<ButtonClickEvent>();
+    //    buttonClickEvent.clikkkkkk += clickEvent;
+    //}
+
+
+    //public event Action TriggerClickEvent;
+
+    //public void clickEvent(Button clickedButton)
+    //{
+    //    TriggerClickEvent.Invoke();
+
+    //    Debug.Log("Player died event received");
+    //}
 
     public void UseTeleport()
     {

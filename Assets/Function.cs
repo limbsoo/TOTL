@@ -32,7 +32,8 @@ public class Function : MonoBehaviour
 
     public IEnumerator CountDown(float delay, Action act)
     {
-        yield return new WaitForSecondsRealtime(delay);
+        yield return new WaitForSeconds(delay);
+        //yield return new WaitForSecondsRealtime(delay);
         act();
     }
 
