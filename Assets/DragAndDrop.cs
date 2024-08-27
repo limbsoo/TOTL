@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
 {
@@ -24,15 +25,27 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
     bool isSet = false;
 
 
-    private void Awake()
+
+    private void Start()
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-        originPos = rectTransform.position;
+        
     }
+
+
+    //public void Instantiating(GameObject block, Canvas parentCanvas)
+    //{
+    //    rectTransform = block.GetComponent<RectTransform>();
+    //    canvas = parentCanvas;
+
+    //}
+
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        originPos = rectTransform.position;
+
         canvasGroup.alpha = .6f;
         canvasGroup.blocksRaycasts = false;
 

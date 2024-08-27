@@ -12,4 +12,14 @@ public class GameConstructSet : ScriptableObject
     //public string monsterName;
     //public float maxHealth;
     //public float attackDamage;
+
+    public List<CellPos> lightObstacleGrid;
+
+
+}
+
+[System.Serializable]
+public class CellPos
+{
+    public int[] cnt;
 }

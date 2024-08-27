@@ -26,27 +26,41 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public PlayerData playerData;
 
-    private void Start()
-    {
-        //playerData = new PlayerData();
-        //if (PlayerPrefs.HasKey("PlayerData")) LoadPlayerData();
-        SavePlayerData();
-    }
 
-    private void LoadPlayerData()
-    {
-        string jsonData = PlayerPrefs.GetString("PlayerData");
-        playerData = JsonUtility.FromJson<PlayerData>(jsonData);
-    }
 
-    private void SavePlayerData()
-    {
-        string jsonData = JsonUtility.ToJson(playerData);
-        PlayerPrefs.SetString("PlayerData", jsonData);
-        PlayerPrefs.Save();
-    }
+
+
+
+
+
+
+
+
+
+
+
+    //public PlayerData playerData;
+
+    //private void Start()
+    //{
+    //    //playerData = new PlayerData();
+    //    //if (PlayerPrefs.HasKey("PlayerData")) LoadPlayerData();
+    //    //SavePlayerData();
+    //}
+
+    //private void LoadPlayerData()
+    //{
+    //    string jsonData = PlayerPrefs.GetString("PlayerData");
+    //    playerData = JsonUtility.FromJson<PlayerData>(jsonData);
+    //}
+
+    //private void SavePlayerData()
+    //{
+    //    string jsonData = JsonUtility.ToJson(playerData);
+    //    PlayerPrefs.SetString("PlayerData", jsonData);
+    //    PlayerPrefs.Save();
+    //}
 
 
 

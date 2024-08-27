@@ -1,0 +1,16 @@
+{
+    "name": "",
+    "maxStage": 0,
+    "curStage": 0,
+    "health": 100.0,
+    "moveSpeed": 30.0,
+    "damamge": 5.0,
+    "coolDown": 1.0,
+    "isUnlock": [
+        false,
+        false,
+        false,
+        false,
+        false
+    ]
+}

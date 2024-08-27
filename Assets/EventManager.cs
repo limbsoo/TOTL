@@ -21,6 +21,7 @@ public class EventManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    //public UnityEvent selectComplete;
 
     //public ButtonClickEvent buttonClickEvent;
 
@@ -58,9 +59,9 @@ public class EventManager : MonoBehaviour
 
     public void stageClear()
     {
-        GameManager.instance.playerData.curStage = 1;
-        StageManager.instance.initializeStage();
-        UIManager.instance.stageClear();
+        //GameManager.instance.playerData.curStage = 1;
+        //StageManager.instance.initializeStage();
+        //UIManager.instance.stageClear();
 
 
 

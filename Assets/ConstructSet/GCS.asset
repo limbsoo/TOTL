@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c422e901fe87943a7f812d8f38ae6a, type: 3}
   m_Name: GCS
   m_EditorClassIdentifier: 
-  idx: 0
   levelConstructSets:
   - {fileID: 11400000, guid: 41a827499c5ce384bb76e1a5f03efab7, type: 2}
+  lightObstacleGrid:
+  - cnt: 03000000
+  - cnt: 0300000002000000

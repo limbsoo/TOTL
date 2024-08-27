@@ -66,11 +66,16 @@ public class Player : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            PlayerData playerData = GameManager.instance.playerData;
-            health = playerData.health;
-            moveSpeed = playerData.moveSpeed;
-            damamge = playerData.damamge;
-            coolDown = playerData.coolDown;
+
+            GameData data = DataManager.Instance.data;
+
+            //PlayerData playerData = GameManager.instance.playerData;
+            health = data.health;
+            moveSpeed = data.moveSpeed;
+            damamge = data.damamge;
+            coolDown = data.coolDown;
+
+
             PenealtyTime = 0;
             animator = GetComponent<Animator>();
             rb = GetComponent<Rigidbody>();

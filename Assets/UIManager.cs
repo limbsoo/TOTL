@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -17,6 +18,27 @@ public class UIManager : MonoBehaviour
         }
         else Destroy(gameObject);
     }
+
+
+    //public Button DecideBlock { get; private set; }
+    //public Button CompleteStage { get; private set; }
+
+    public Action OnDecideBlock;
+    public Action OnCompleteStage;
+
+    public void DecideBlock()
+    {
+        OnDecideBlock?.Invoke();
+    }
+
+    public void CompleteStage()
+    {
+        OnCompleteStage?.Invoke();
+    }
+
+
+
+
 
     public TMP_Text countDown;
     public TMP_Text timeLimit;
@@ -57,15 +79,15 @@ public class UIManager : MonoBehaviour
 
     public void Start()
     {
-        PlayerData playerData = GameManager.instance.playerData;
+        GameData data = DataManager.Instance.data;
 
-        playerHealth.text = "Health : " + playerData.health.ToString();
-        playerDamage.text = "Damage : " + playerData.damamge.ToString();
-        playerSpeed.text = "Speed : " + playerData.moveSpeed.ToString();
-        playerCoolDown.text = "CoolDown : " + playerData.coolDown.ToString();
+        playerHealth.text = "Health : " + data.health.ToString();
+        playerDamage.text = "Damage : " + data.damamge.ToString();
+        playerSpeed.text = "Speed : " + data.moveSpeed.ToString();
+        playerCoolDown.text = "CoolDown : " + data.coolDown.ToString();
         playerPenealtyCoolDown.text = "Penealty : ";
         target.text = "Target : " + StageManager.LCS.targetScore.ToString();
-        curStage.text = "CurStage : " + GameManager.instance.playerData.curStage.ToString();
+        curStage.text = "CurStage : " + DataManager.Instance.data.curStage.ToString();
 
 
         if (countDown != null)
@@ -78,19 +100,19 @@ public class UIManager : MonoBehaviour
     private IEnumerator StartGame()
     {
         timeLimit.text = "";
-        countDown.text = "3";
+        //countDown.text = "3";
 
-        //newCountDown.text = "2";
+        ////newCountDown.text = "2";
 
 
-        //float startTime = Time.time;
-        yield return new WaitForSecondsRealtime(1);
-        countDown.text = "2";
-        yield return new WaitForSecondsRealtime(1);
-        countDown.text = "1";
-        yield return new WaitForSecondsRealtime(1);
-        countDown.text = "GO!";
-        yield return new WaitForSecondsRealtime(1);
+        ////float startTime = Time.time;
+        //yield return new WaitForSecondsRealtime(1);
+        //countDown.text = "2";
+        //yield return new WaitForSecondsRealtime(1);
+        //countDown.text = "1";
+        //yield return new WaitForSecondsRealtime(1);
+        //countDown.text = "GO!";
+        //yield return new WaitForSecondsRealtime(1);
         countDown.gameObject.SetActive(false);
         Time.timeScale = 1f; // 게임 시작
 
@@ -205,7 +227,7 @@ public class UIManager : MonoBehaviour
         playerCoolDown.text = "CoolDown : " + Player.instance.coolDown.ToString();
 
         curScore.text = "Score: " + StageManager.currentScore.ToString();
-        curStage.text = "CurStage : " + GameManager.instance.playerData.curStage.ToString();
+        curStage.text = "CurStage : " + DataManager.Instance.data.curStage.ToString();
         playerPenealtyCoolDown.text = "Penealty : " + Player.instance.PenealtyTime.ToString();
     }
 
