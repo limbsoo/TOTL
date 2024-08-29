@@ -85,7 +85,7 @@ public class Enemy : MonoBehaviour
 
     public void updateDestination(Transform tf)
     {
-        if (StageManager.Pstate == PlayState.Playing)
+        if (StageManager.Sstate == StageState.Play)
         {
             if (this.nmAgent == null) return;
             //if (tf == null) return;
@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour
 
     public void chasePlayer(GameObject detectObject)
     {
-        if(StageManager.Pstate == PlayState.Playing)
+        if(StageManager.Sstate == StageState.Play)
         {
             //if (this.nmAgent == null) return;
 

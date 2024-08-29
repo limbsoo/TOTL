@@ -35,7 +35,7 @@ public class PlayerCollisionHandler : MonoBehaviour
 
             if (other.gameObject.tag == "Enemy")
             {
-                if (StageManager.Pstate == PlayState.Playing)
+                if (StageManager.Sstate == StageState.Play)
                 {
                     EventManager.instance.EnemyInAttackRange(other.gameObject);
                 }
@@ -61,7 +61,7 @@ public class PlayerCollisionHandler : MonoBehaviour
             {
 
                 //일정시간 후에 멈추게 수정
-                if (StageManager.Pstate == PlayState.Playing)
+                if (StageManager.Sstate == StageState.Play)
                 {
                     //Debug.Log("적에게 포착");
 

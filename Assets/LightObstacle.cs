@@ -17,11 +17,22 @@ public class LightObstacle : MonoBehaviour
     public static bool weakening;
 
 
+    public LightCondition lcd;
+
 
     public static float minusDamage = 0.5f;
 
 
-    LightCondition lcd = LightCondition.Blink;
+    public static string naming;
+
+    //LightCondition lcd = LightCondition.Blink;
+
+
+
+    public void Start()
+    {
+        naming = gameObject.name;
+    }
 
 
     private void Awake()
@@ -53,7 +64,22 @@ public class LightObstacle : MonoBehaviour
 
     void Update()
     {
-        blinking();
+
+        switch (naming)
+        {
+            case ("blink"):
+                blinking();
+                break;
+
+            case ("shadow"):
+                break;
+
+            case ("disable"):
+                break;
+        }
+
+
+        
 
         DetectSpotlightArea();
     }

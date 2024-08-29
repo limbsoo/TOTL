@@ -24,7 +24,7 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
 
     bool isSet = false;
 
-
+    public int lineNum;
 
     private void Start()
     {
@@ -148,7 +148,11 @@ public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
             else break;
         }
 
+
+        lineNum = tBlock.idx;
+        tBlock.blockName = GetComponent<Image>().sprite.name;
         tBlock.endCell += 1;
+        
     }
 
 

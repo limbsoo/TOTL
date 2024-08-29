@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42c422e901fe87943a7f812d8f38ae6a, type: 3}
-  m_Name: GCS
+  m_Script: {fileID: 11500000, guid: cbb642ecfb4c3cd43812c069d35def9e, type: 3}
+  m_Name: LevelEditor
   m_EditorClassIdentifier: 
-  LevelConstructSet:
-  - {fileID: 11400000, guid: 41a827499c5ce384bb76e1a5f03efab7, type: 2}
-  currentLevel: 0

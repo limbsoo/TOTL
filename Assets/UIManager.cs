@@ -33,6 +33,7 @@ public class UIManager : MonoBehaviour
 
     public void CompleteStage()
     {
+        MapStatusPopUP.SetActive(true);
         OnCompleteStage?.Invoke();
     }
 
@@ -41,7 +42,7 @@ public class UIManager : MonoBehaviour
 
 
     public TMP_Text countDown;
-    public TMP_Text timeLimit;
+    public TMP_Text timer;
     public TMP_Text target;
     public TMP_Text curScore;
 
@@ -64,10 +65,10 @@ public class UIManager : MonoBehaviour
     public TMP_Text waveClear;
 
 
+    public TMP_Text StageTimer;
 
 
-
-
+    public GameObject MapStatusPopUP;
 
     //public TMP_Text score;
 
@@ -77,8 +78,11 @@ public class UIManager : MonoBehaviour
 
     //public Text newCountDown;
 
-    public void Start()
+    private void Start()
     {
+        OnDecideBlock += InitializeStageTimer;
+        StageManager.instance.OnStageEnd += CompleteStage;
+
         GameData data = DataManager.Instance.data;
 
         playerHealth.text = "Health : " + data.health.ToString();
@@ -90,16 +94,77 @@ public class UIManager : MonoBehaviour
         curStage.text = "CurStage : " + DataManager.Instance.data.curStage.ToString();
 
 
-        if (countDown != null)
-        {
-            Time.timeScale = 0f; //게임 정지
-            StartCoroutine(StartGame());
-        }
+        //if (countDown != null)
+        //{
+        //    Time.timeScale = 0f; //게임 정지
+        //    StartCoroutine(StartGame());
+        //}
+
+        timer.text = "";
+        StageTimer.text = "";
+        //StartCoroutine(Timer());
     }
+
+
+    Coroutine timerCoroutine = null;
+    Coroutine StageTimerCoroutine = null;
+
+    int time = 0;
+    int stageTime = 0;
+
+    private void Update()
+    {
+        playerHealth.text = "Health : " + Player.instance.health.ToString();
+        playerDamage.text = "Damage : " + Player.instance.damamge.ToString();
+        playerSpeed.text = "Speed : " + Player.instance.moveSpeed.ToString();
+        playerCoolDown.text = "CoolDown : " + Player.instance.coolDown.ToString();
+
+        curScore.text = "Score: " + StageManager.currentScore.ToString();
+        curStage.text = "CurStage : " + DataManager.Instance.data.curStage.ToString();
+        playerPenealtyCoolDown.text = "Penealty : " + Player.instance.PenealtyTime.ToString();
+
+        if (timerCoroutine == null)
+        {
+            time++;
+            timerCoroutine = StartCoroutine(Timer(time));
+        }
+
+        if (StageTimerCoroutine == null)
+        {
+            stageTime++;
+            StageTimerCoroutine = StartCoroutine(StageTimeCheck(stageTime));
+        }
+
+    }
+
+    private IEnumerator Timer(int time)
+    {
+        yield return new WaitForSeconds(1);
+        timer.text = (time).ToString();
+        timerCoroutine = null;
+    }
+
+    private IEnumerator StageTimeCheck(int time)
+    {
+        yield return new WaitForSeconds(1);
+        StageTimer.text = (time).ToString();
+        StageTimerCoroutine = null;
+    }
+
+
+    public void InitializeStageTimer()
+    {
+        StopCoroutine(StageTimerCoroutine);
+        stageTime = 1;
+        //StageTimerCoroutine = null;
+        StageTimerCoroutine = StartCoroutine(StageTimeCheck(stageTime));
+    }
+
+
 
     private IEnumerator StartGame()
     {
-        timeLimit.text = "";
+        timer.text = "";
         //countDown.text = "3";
 
         ////newCountDown.text = "2";
@@ -119,7 +184,7 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < 59; i++)
         {
             yield return new WaitForSeconds(1);
-            timeLimit.text = (59 - i).ToString();
+            timer.text = (59 - i).ToString();
         }
 
         //float startTime = Time.realtimeSinceStartup;
@@ -140,14 +205,14 @@ public class UIManager : MonoBehaviour
         //}
     }
 
-    public void StartCount()
-    {
-        if (countDown != null)
-        {
-            Time.timeScale = 0f; //게임 정지
-            StartCoroutine(StartGame());
-        }
-    }
+    //public void StartCount()
+    //{
+    //    if (countDown != null)
+    //    {
+    //        Time.timeScale = 0f; //게임 정지
+    //        StartCoroutine(StartGame());
+    //    }
+    //}
 
 
     public void stageClear()
@@ -163,8 +228,8 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.instance.OnLoadPreparationScene += StartCount;
-        EventManager.instance.OnLoadPlayScene += StartCount;
+        //EventManager.instance.OnLoadPreparationScene += StartCount;
+        //EventManager.instance.OnLoadPlayScene += StartCount;
 
         EventManager.instance.OnMainStageReady += setMainUI;
 
@@ -189,8 +254,8 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EventManager.instance.OnLoadPreparationScene -= StartCount;
-        EventManager.instance.OnLoadPlayScene -= StartCount;
+        //EventManager.instance.OnLoadPreparationScene -= StartCount;
+        //EventManager.instance.OnLoadPlayScene -= StartCount;
 
         EventManager.instance.OnMainStageReady -= setMainUI;
 
@@ -218,18 +283,6 @@ public class UIManager : MonoBehaviour
 
 
 
-
-    public void Update()
-    {
-        playerHealth.text = "Health : " + Player.instance.health.ToString();
-        playerDamage.text = "Damage : " + Player.instance.damamge.ToString();
-        playerSpeed.text = "Speed : " + Player.instance.moveSpeed.ToString();
-        playerCoolDown.text = "CoolDown : " + Player.instance.coolDown.ToString();
-
-        curScore.text = "Score: " + StageManager.currentScore.ToString();
-        curStage.text = "CurStage : " + DataManager.Instance.data.curStage.ToString();
-        playerPenealtyCoolDown.text = "Penealty : " + Player.instance.PenealtyTime.ToString();
-    }
 
 
 

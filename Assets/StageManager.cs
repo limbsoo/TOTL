@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
@@ -37,19 +38,21 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     GridLayoutGroup glg;
     TimeLine[] t;
 
+    public static StageState Sstate = StageState.Edit;
+
+    public Action OnStageEnd;
+
+
     public void Start()
     {
         UIManager.instance.OnDecideBlock += initializeStage;
-        UIManager.instance.OnDecideBlock += Resume;
         UIManager.instance.OnCompleteStage += EndStage;
-
-
 
         lightObstacles = new List<GameObject>();
         enemies = new List<GameObject>();
 
         DataManager.Instance.LoadGameData();
-        if(DataManager.Instance.data == null) DataManager.Instance.SaveGameData();
+        if (DataManager.Instance.data == null) DataManager.Instance.SaveGameData();
 
         InitializeLevelSet();
 
@@ -59,34 +62,39 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         glg = MapStatusPopUpmanager.instance.slots.GetComponent<GridLayoutGroup>();
         t = glg.GetComponentsInChildren<TimeLine>();
 
-        Pause();
+        //Pause();
 
-        //initializeStage();
-
-
-        //lightObstacles = InstantiateLightObstacle<LightObstacle>(LCS.lightObstacles);
-        //enemies = InstantiateObjectsInLightRange<Enemy>(LCS.enemies);
-
-        //Pstate = PlayState.Playing;
     }
+
+
 
     public void Update()
     {
-        if (Pstate == PlayState.Playing)
+        switch (Sstate)
         {
-            if (targetScore <= currentScore)
-            {
-                Debug.Log("목표달성");
+            case StageState.Edit:
+                break;
 
-                Pause();
+            case StageState.Play:
+                if(targetScore <= currentScore)
+                {
+                    Sstate = StageState.Edit;
+                    currentScore = 0;
+                    DestroyObjects(enemies);
+                    DestroyObjects(lightObstacles);
 
-                targetScore = 0;
+                    enemies.Clear();
+                    lightObstacles.Clear();
 
-                //Pstate = PlayState.Wait;
-                //OnStageClear?.Invoke();
+                    OnStageEnd?.Invoke();
 
-            }
+                    //Pause();
+                    //targetScore = 0;
+                }
+
+                break;
         }
+
     }
 
 
@@ -95,16 +103,16 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     public void InitializeLevelSet()
     {
         curStage = DataManager.Instance.data.curStage;
-        LCS = GCS.levelConstructSets[curStage];
-        mapTransform = LCS.map[0].obj.transform;
+        LCS = GCS.LevelConstructSet[curStage];
+        mapTransform = LCS.map[0].transform;
         gridCenters = Function.instance.GenerateGrid(divide, mapTransform);
         targetScore = LCS.targetScore;
     }
 
     public void initializeStage()
     {
-        DestroyObjects(enemies);
-        DestroyObjects(lightObstacles);
+        //DestroyObjects(enemies);
+        //DestroyObjects(lightObstacles);
 
         InitializeLevelSet();
 
@@ -115,37 +123,53 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         {
             if (t[i].haveBlock)
             {
-                GameObject go = InstantiateLO<LightObstacle>(LCS.lightObstacles, i);
+                GameObject go = InstantiateLO<LightObstacle>(LCS.StatusEffectLight, i, t[i].blockName);
                 lightObstacles.Add(go);
             }
         }
 
-        if(lightObstacles.Count != 0) enemies = InstantiateObjectsInLightRange<Enemy>(LCS.enemies);
+        if (lightObstacles.Count != 0) enemies = InstantiateObjectsInLightRange<Enemy>(LCS.enemy, LCS.enemyCnt);
 
-        
+        //currentScore = 0;
 
-        currentScore = 0;
 
-        Resume();
-        Pstate = PlayState.Playing;
+        Sstate = StageState.Play;
 
-        //StartCoroutine(Function.instance.CountDownRealTime(1, () => {
-        //    //switchPlayObjects(true);
-        //    Resume();
-        //    Pstate = PlayState.Playing;
-        //}));
+        //Resume();
+        //Pstate = PlayState.Playing;
+
 
     }
 
 
-    public GameObject InstantiateLO<T>(List<ObjectPool> list, int idx)
+    public GameObject InstantiateLO<T>(List<GameObject> list, int idx, string name)
     {
         Vector3 newPos = new Vector3();
         newPos.x = gridCenters[idx].x;
-        newPos.y = list[0].obj.transform.position.y;
+        newPos.y = list[0].transform.position.y;
         newPos.z = gridCenters[idx].z;
 
-        GameObject go = Instantiate(list[0].obj, newPos, list[0].obj.transform.rotation);
+        int cnt = 0;
+
+
+        switch (name)
+        {
+            case ("blink"):
+                cnt = 0;
+                break;
+
+            case ("shadow"):
+                cnt = 1;
+                break;
+
+            case ("disable"):
+                cnt = 2;
+                break;
+        }
+
+
+
+        GameObject go = Instantiate(list[cnt], newPos, list[cnt].transform.rotation);
         T p = go.GetComponent<T>();
 
         return go;
@@ -165,55 +189,56 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     {
         if (list == null) return;
 
-        for (int i = 0; i < list.Count; i++) if (list[i] != null) Destroy(list[i]);
-        list = new List<GameObject>();
+        for (int i = 0; i < list.Count; i++) /*if (list[i] != null)*/ Destroy(list[i]);
+
+        //list.Clear();
+        //list = new List<GameObject>();
     }
 
 
 
 
-    public GameObject InstantiateObject<T>(List<ObjectPool> list, int idx)
+    public GameObject InstantiateObject<T>(List<GameObject> list, int idx)
     {
         GameObject go = new GameObject();
-        go = Instantiate(list[idx].obj, list[idx].obj.transform.position, list[idx].obj.transform.rotation);
+        go = Instantiate(list[idx], list[idx].transform.position, list[idx].transform.rotation);
         T p = go.GetComponent<T>();
         return go;
     }
 
-    public List<GameObject> InstantiateLightObstacle<T>(List<ObjectPool> list)
+    //public List<GameObject> InstantiateLightObstacle<T>(List<ObjectPool> list)
+    //{
+    //    List<GameObject> lgo = new List<GameObject>();
+
+    //    for (int i = 0; i < GCS.lightObstacleGrid[curStage].cnt.Length; i++)
+    //    {
+    //        Vector3 newPos = new Vector3();
+    //        newPos.x = gridCenters[GCS.lightObstacleGrid[curStage].cnt[i]].x;
+    //        newPos.y = list[0].obj.transform.position.y;
+    //        newPos.z = gridCenters[GCS.lightObstacleGrid[curStage].cnt[i]].z;
+
+    //        GameObject go = Instantiate(list[i].obj, newPos, list[i].obj.transform.rotation);
+    //        T p = go.GetComponent<T>();
+    //        lgo.Add(go);
+    //    }
+    //    return lgo;
+    //}
+
+    public List<GameObject> InstantiateObjectsInLightRange<T>(List<GameObject> list, int cnt)
     {
         List<GameObject> lgo = new List<GameObject>();
 
-        for (int i = 0; i < GCS.lightObstacleGrid[curStage].cnt.Length; i++)
+        for (int i = 0; i < cnt; i++)
         {
-            Vector3 newPos = new Vector3();
-            newPos.x = gridCenters[GCS.lightObstacleGrid[curStage].cnt[i]].x;
-            newPos.y = list[0].obj.transform.position.y;
-            newPos.z = gridCenters[GCS.lightObstacleGrid[curStage].cnt[i]].z;
-
-            GameObject go = Instantiate(list[i].obj, newPos, list[i].obj.transform.rotation);
+            int randEnemyIdx = UnityEngine.Random.Range(0, list.Count);
+             Vector3 randomPos = Function.instance.GetRandomPositionInLightRange(lightObstacles[UnityEngine.Random.Range(0, lightObstacles.Count)], mapTransform);
+            randomPos.y = list[randEnemyIdx].transform.position.y;
+            GameObject go = Instantiate(list[randEnemyIdx], randomPos, list[randEnemyIdx].transform.rotation);
             T p = go.GetComponent<T>();
             lgo.Add(go);
+
         }
-        return lgo;
-    }
 
-    public List<GameObject> InstantiateObjectsInLightRange<T>(List<ObjectPool> list)
-    {
-        List<GameObject> lgo = new List<GameObject>();
-
-        for (int i = 0; i < list.Count; i++)
-        {
-            for (int j = 0; j < list[i].cnt; j++)
-            {
-                Vector3 randomPos = Function.instance.GetRandomPositionInLightRange(lightObstacles[UnityEngine.Random.Range(0, lightObstacles.Count)], mapTransform);
-                randomPos.y = list[i].obj.transform.position.y;
-
-                GameObject go = Instantiate(list[i].obj, randomPos, list[i].obj.transform.rotation);
-                T p = go.GetComponent<T>();
-                lgo.Add(go);
-            }
-        }
         return lgo;
     }
 
@@ -251,23 +276,23 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
 
     public GameResult Gresult;
-    public SceneState Sstate; // 초기값 지정해서 사전을 할건지 안할 건지
-    public static PlayState Pstate = PlayState.Wait;
+    //public SceneState Sstate; // 초기값 지정해서 사전을 할건지 안할 건지
+    
     Vector3[] gridCenters;
 
 
 
-    public void Pause()
-    {
-        Pstate = PlayState.Wait;
-        Time.timeScale = 0;
-    }
+    //public void Pause()
+    //{
+    //    Pstate = PlayState.Wait;
+    //    Time.timeScale = 0;
+    //}
 
-    public void Resume()
-    {
-        Pstate = PlayState.Playing;
-        Time.timeScale = 1f;
-    }
+    //public void Resume()
+    //{
+    //    Pstate = PlayState.Playing;
+    //    Time.timeScale = 1f;
+    //}
 
 
 

@@ -16,7 +16,8 @@ public class Player : MonoBehaviour
     public UnityEvent OnUseAttack;
     public UnityEvent OnPlayerUnderAttack;
 
-
+    //도망치는게임
+    //디코이 : 제자리를 목표 지점으로 두고 일정 시간이 지난 뒤 플레이어를 다시 추적
 
     public float health { get; private set; }
     public float moveSpeed { get; private set; }
@@ -110,8 +111,15 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        HandleInput();
+        if(StageManager.Sstate == StageState.Play)
+        {
+
+            HandleInput();
+            
+        }
+
         CameraController.Vector3 = transform.position;
+
     }
     void FixedUpdate()
     {

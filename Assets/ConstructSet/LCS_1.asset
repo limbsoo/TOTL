@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254372c9f2dedc247b4b1ef188e4d4ce, type: 3}
   m_Name: LCS_1
   m_EditorClassIdentifier: 
+  gameConstructSet: {fileID: 11400000, guid: 8cdf67968a135ce459ed79354c16e66d, type: 2}
+  selectedMaps:
+  - {fileID: 0}
+  selectedPlayers: []
+  selectedEnemies: []
+  selectedStatusEffects:
+  - {fileID: 0}
   map:
   - obj: {fileID: 7778858998701265200, guid: fe6dbbf6b172a88479fa52cd44b06531, type: 3}
     cnt: 1
@@ -32,3 +39,4 @@ MonoBehaviour:
     cnt: 3
   targetScore: 1
   timeConstrain: 60
+  lightObstacleGrid: []

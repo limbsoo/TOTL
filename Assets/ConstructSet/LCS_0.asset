@@ -12,26 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254372c9f2dedc247b4b1ef188e4d4ce, type: 3}
   m_Name: LCS_0
   m_EditorClassIdentifier: 
-  map:
-  - obj: {fileID: 5399920032641380817, guid: fe6dbbf6b172a88479fa52cd44b06531, type: 3}
-    cnt: 1
-  prePlayer:
-  - obj: {fileID: 1009873531629474668, guid: 73cec767922a4624bb4ff1a86da6c0d6, type: 3}
-    cnt: 1
-  player:
-  - obj: {fileID: 3897148393656547226, guid: a0d7d9165628ae34080813486597b439, type: 3}
-    cnt: 1
-  preEnemies:
-  - obj: {fileID: 8966089980715475670, guid: 19c9c67120629244da8440ef0b4bbb7a, type: 3}
-    cnt: 1
-  enemies:
-  - obj: {fileID: 7995540149897995788, guid: f25ad04244ad9e24a9f8bdf0b8b338c7, type: 3}
-    cnt: 4
-  lightObstacles:
-  - obj: {fileID: 3301909162799466181, guid: 1a63c935327e7e24193f6eef7cbcbc3f, type: 3}
-    cnt: 1
   targetScore: 2
-  timeConstrain: 60
-  lightObstacleGrid:
-  - cnt: 000000000100000002000000030000000400000005000000060000000700000008000000
-  - cnt: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  enemyCnt: 5
+  map:
+  - {fileID: 5399920032641380817, guid: fe6dbbf6b172a88479fa52cd44b06531, type: 3}
+  player:
+  - {fileID: 3897148393656547226, guid: a0d7d9165628ae34080813486597b439, type: 3}
+  enemy:
+  - {fileID: 7995540149897995788, guid: f25ad04244ad9e24a9f8bdf0b8b338c7, type: 3}
+  StatusEffectLight:
+  - {fileID: 3301909162799466181, guid: fc563bf003a29f64d88cb81c320122d5, type: 3}
+  - {fileID: 3301909162799466181, guid: c2d769c5859ae264ba9c2777b4925a89, type: 3}
+  - {fileID: 3301909162799466181, guid: c2d769c5859ae264ba9c2777b4925a89, type: 3}

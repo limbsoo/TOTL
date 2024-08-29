@@ -83,7 +83,7 @@ public class Prepartion : MonoBehaviour
 
     void Update()
     {
-        if (StageManager.instance.Sstate == SceneState.Play) return;
+        //if (StageManager.instance.Sstate == SceneState.Play) return;
 
         HandleInput();
 

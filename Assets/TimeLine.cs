@@ -14,6 +14,10 @@ public class TimeLine : MonoBehaviour
     public int startCell;
     public int endCell;
 
+    public string blockName = "";
+    public int idx;
+
+
     private void Start()
     {
         //GridLayout gridLayout = GetComponent<GridLayout>();
