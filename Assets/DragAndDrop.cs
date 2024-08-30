@@ -5,180 +5,180 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
-{
+//public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
+//{
 
-    RectTransform rectTransform;
-    CanvasGroup canvasGroup;
-    [SerializeField] Canvas canvas;
+//    RectTransform rectTransform;
+//    CanvasGroup canvasGroup;
+//    [SerializeField] Canvas canvas;
 
-    Vector3 originPos;
-    bool isBeingHeld = false;
-    public bool isInLine;
-    Vector3 LoadedPos;
+//    Vector3 originPos;
+//    bool isBeingHeld = false;
+//    public bool isInLine;
+//    Vector3 LoadedPos;
 
-    Vector3 rectPosition;
-    private RectTransform targetRectTransform;
+//    Vector3 rectPosition;
+//    private RectTransform targetRectTransform;
 
-    TimeLine tBlock;
+//    TimeLine tBlock;
 
-    bool isSet = false;
+//    bool isSet = false;
 
-    public int lineNum;
+//    public int lineNum;
 
-    private void Start()
-    {
-        rectTransform = GetComponent<RectTransform>();
-        canvasGroup = GetComponent<CanvasGroup>();
+//    private void Start()
+//    {
+//        rectTransform = GetComponent<RectTransform>();
+//        canvasGroup = GetComponent<CanvasGroup>();
         
-    }
+//    }
 
 
-    //public void Instantiating(GameObject block, Canvas parentCanvas)
-    //{
-    //    rectTransform = block.GetComponent<RectTransform>();
-    //    canvas = parentCanvas;
+//    //public void Instantiating(GameObject block, Canvas parentCanvas)
+//    //{
+//    //    rectTransform = block.GetComponent<RectTransform>();
+//    //    canvas = parentCanvas;
 
-    //}
-
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        originPos = rectTransform.position;
-
-        canvasGroup.alpha = .6f;
-        canvasGroup.blocksRaycasts = false;
-
-        if(tBlock != null)
-        {
-            if(tBlock.haveBlock) tBlock.haveBlock = false; 
-        }
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        isBeingHeld = true;
-        rectTransform.anchoredPosition += eventData.delta;
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        isBeingHeld = false;
-        canvasGroup.alpha = 1f;
-        canvasGroup.blocksRaycasts = true;
-
-        // 드래그 종료 시 조건 검사
-        if (isInLine && !tBlock.haveBlock)
-        {
-            // tBlock에 오브젝트가 없으면 위치를 정렬
-            AlignObjectWithTimeLine();
-            tBlock.haveBlock = true;
-            isSet = true;
-
-            originPos = rectTransform.position;
-        }
-
-        else rectTransform.position = originPos;
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-    }
-
-    public void OnDrop(PointerEventData eventData)
-    {
-    }
+//    //}
 
 
-    // 오브젝트를 타임라인에 맞춰 정렬하는 메서드
-    private void AlignObjectWithTimeLine()
-    {
-        float difference = 999999f;
-        float savedX = 0f;
+//    public void OnBeginDrag(PointerEventData eventData)
+//    {
+//        originPos = rectTransform.position;
 
-        for (int i = 0; i < tBlock.length; i++)
-        {
-            if (Math.Abs(tBlock.gridCenters[i].x - rectTransform.position.x) < difference)
-            {
-                savedX = tBlock.gridCenters[i].x;
-                difference = Math.Abs(tBlock.gridCenters[i].x - rectTransform.position.x);
-            }
-            else break;
-        }
+//        canvasGroup.alpha = .6f;
+//        canvasGroup.blocksRaycasts = false;
 
-        if (savedX == 0) return;
+//        if(tBlock != null)
+//        {
+//            if(tBlock.haveBlock) tBlock.haveBlock = false; 
+//        }
+//    }
 
-        float startPosX = tBlock.rectTransform.position.x - tBlock.rectTransform.sizeDelta.x / 2;
-        float endPosX = tBlock.rectTransform.position.x + tBlock.rectTransform.sizeDelta.x / 2;
+//    public void OnDrag(PointerEventData eventData)
+//    {
+//        isBeingHeld = true;
+//        rectTransform.anchoredPosition += eventData.delta;
+//    }
 
-        if (savedX - rectTransform.sizeDelta.x / 2 < startPosX)
-        {
-            for (int i = 0; i < tBlock.length; i++)
-            {
-                if (tBlock.gridCenters[i].x <= startPosX + rectTransform.sizeDelta.x / 2) savedX = tBlock.gridCenters[i].x;
-                else break;
-            }
-        }
-        else if (savedX + rectTransform.sizeDelta.x / 2 > endPosX)
-        {
-            for (int i = tBlock.length - 1; i >= 0; i--)
-            {
-                if (tBlock.gridCenters[i].x >= endPosX - rectTransform.sizeDelta.x / 2) savedX = tBlock.gridCenters[i].x;
-                else break;
-            }
-        }
+//    public void OnEndDrag(PointerEventData eventData)
+//    {
+//        isBeingHeld = false;
+//        canvasGroup.alpha = 1f;
+//        canvasGroup.blocksRaycasts = true;
 
-        rectTransform.position = new Vector3(savedX, tBlock.gridCenters[0].y, tBlock.gridCenters[0].z);
+//        // 드래그 종료 시 조건 검사
+//        if (isInLine && !tBlock.haveBlock)
+//        {
+//            // tBlock에 오브젝트가 없으면 위치를 정렬
+//            AlignObjectWithTimeLine();
+//            tBlock.haveBlock = true;
+//            isSet = true;
 
-        for (int i = 0; i < tBlock.length; i++)
-        {
-            if (tBlock.gridCenters[i].x >= savedX - rectTransform.sizeDelta.x / 2)
-            {
-                tBlock.startCell = i;
-                break;
-            }
-        }
+//            originPos = rectTransform.position;
+//        }
 
-        for (int i = tBlock.startCell; i < tBlock.length; i++)
-        {
-            if (tBlock.gridCenters[i].x <= savedX + rectTransform.sizeDelta.x / 2)
-            {
-                tBlock.endCell = i;
-            }
-            else break;
-        }
+//        else rectTransform.position = originPos;
+//    }
+
+//    public void OnPointerDown(PointerEventData eventData)
+//    {
+//    }
+
+//    public void OnDrop(PointerEventData eventData)
+//    {
+//    }
 
 
-        lineNum = tBlock.idx;
-        tBlock.blockName = GetComponent<Image>().sprite.name;
-        tBlock.endCell += 1;
+//    // 오브젝트를 타임라인에 맞춰 정렬하는 메서드
+//    private void AlignObjectWithTimeLine()
+//    {
+//        float difference = 999999f;
+//        float savedX = 0f;
+
+//        for (int i = 0; i < tBlock.length; i++)
+//        {
+//            if (Math.Abs(tBlock.gridCenters[i].x - rectTransform.position.x) < difference)
+//            {
+//                savedX = tBlock.gridCenters[i].x;
+//                difference = Math.Abs(tBlock.gridCenters[i].x - rectTransform.position.x);
+//            }
+//            else break;
+//        }
+
+//        if (savedX == 0) return;
+
+//        float startPosX = tBlock.rectTransform.position.x - tBlock.rectTransform.sizeDelta.x / 2;
+//        float endPosX = tBlock.rectTransform.position.x + tBlock.rectTransform.sizeDelta.x / 2;
+
+//        if (savedX - rectTransform.sizeDelta.x / 2 < startPosX)
+//        {
+//            for (int i = 0; i < tBlock.length; i++)
+//            {
+//                if (tBlock.gridCenters[i].x <= startPosX + rectTransform.sizeDelta.x / 2) savedX = tBlock.gridCenters[i].x;
+//                else break;
+//            }
+//        }
+//        else if (savedX + rectTransform.sizeDelta.x / 2 > endPosX)
+//        {
+//            for (int i = tBlock.length - 1; i >= 0; i--)
+//            {
+//                if (tBlock.gridCenters[i].x >= endPosX - rectTransform.sizeDelta.x / 2) savedX = tBlock.gridCenters[i].x;
+//                else break;
+//            }
+//        }
+
+//        rectTransform.position = new Vector3(savedX, tBlock.gridCenters[0].y, tBlock.gridCenters[0].z);
+
+//        for (int i = 0; i < tBlock.length; i++)
+//        {
+//            if (tBlock.gridCenters[i].x >= savedX - rectTransform.sizeDelta.x / 2)
+//            {
+//                tBlock.startCell = i;
+//                break;
+//            }
+//        }
+
+//        for (int i = tBlock.startCell; i < tBlock.length; i++)
+//        {
+//            if (tBlock.gridCenters[i].x <= savedX + rectTransform.sizeDelta.x / 2)
+//            {
+//                tBlock.endCell = i;
+//            }
+//            else break;
+//        }
+
+
+//        lineNum = tBlock.idx;
+//        tBlock.blockName = GetComponent<Image>().sprite.name;
+//        tBlock.endCell += 1;
         
-    }
+//    }
 
 
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        if (other.CompareTag("TimeLine"))
-        {
-            tBlock = other.GetComponent<TimeLine>();
+//    private void OnTriggerStay2D(Collider2D other)
+//    {
+//        if (other.CompareTag("TimeLine"))
+//        {
+//            tBlock = other.GetComponent<TimeLine>();
 
-            if (tBlock.haveBlock) isInLine = false;
-            else isInLine = true;
+//            if (tBlock.haveBlock) isInLine = false;
+//            else isInLine = true;
 
-        }
-    }
+//        }
+//    }
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("TimeLine"))
-        {
-            isInLine = false;
-            tBlock = null;
-        }
-    }
+//    private void OnTriggerExit2D(Collider2D other)
+//    {
+//        if (other.CompareTag("TimeLine"))
+//        {
+//            isInLine = false;
+//            tBlock = null;
+//        }
+//    }
 
-}
+//}
 
 
 

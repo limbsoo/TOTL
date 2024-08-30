@@ -263,6 +263,13 @@ public class Player : MonoBehaviour
 
     public void Move()
     {
+        if (StageManager.Sstate == StageState.Edit)
+        {
+            rb.velocity = Vector3.zero;
+            return;
+        }
+       
+
         if (movement != Vector3.zero)
         {
             Vector3 newPos = rb.position + movement * Time.fixedDeltaTime;

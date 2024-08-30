@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6186121196424915984}
   - component: {fileID: 6186121196424915989}
   - component: {fileID: 6186121196424915988}
-  - component: {fileID: 6186121196424915987}
   - component: {fileID: 6186121196424915990}
   - component: {fileID: 6186121196424915991}
   - component: {fileID: 6186121196424915986}
@@ -41,7 +40,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -363, y: -185}
+  m_AnchoredPosition: {x: 565, y: -555}
   m_SizeDelta: {x: 128, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6186121196424915989
@@ -82,20 +81,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6186121196424915987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6186121196424915999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58e5e1be630465d4eba08c0be0129e35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  isInLine: 0
 --- !u!114 &6186121196424915990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,9 +93,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c27b548483b623a4e89c6545415f4223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idle:
-  - {fileID: 21300000, guid: b1f93ab95bc1d1b46bab121c8dfb398a, type: 3}
-  - {fileID: 21300000, guid: 159811ec088301a49ad081271a6242e9, type: 3}
+  canvas: {fileID: 0}
+  isInLine: 0
+  lineNum: 0
 --- !u!114 &6186121196424915991
 MonoBehaviour:
   m_ObjectHideFlags: 0

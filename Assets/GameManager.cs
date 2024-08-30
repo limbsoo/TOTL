@@ -27,7 +27,11 @@ public class GameManager : MonoBehaviour
     }
 
 
-
+    private void Start()
+    {
+        DataManager.Instance.LoadGameData();
+        if (DataManager.Instance.data == null) DataManager.Instance.SaveGameData();
+    }
 
 
 

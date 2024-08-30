@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class MapStatusPopUpmanager : MonoBehaviour
+public class FieldEffectPopUpManager : MonoBehaviour
 {
-    public static MapStatusPopUpmanager instance { get; private set; }
+    public static FieldEffectPopUpManager instance { get; private set; }
 
     private void Awake()
     {
@@ -43,14 +43,9 @@ public class MapStatusPopUpmanager : MonoBehaviour
 
     void Start()
     {
-        UIManager.instance.OnCompleteStage += CreateBlock;
-
-
+        UIManager.instance.OnInitializeUI += CreateBlock;
 
         blocks = new List<GameObject>();
-
-        
-
 
         foreach (Button btn in buttons)
         {
@@ -68,7 +63,6 @@ public class MapStatusPopUpmanager : MonoBehaviour
         newObject.transform.SetParent(rect.transform, false);
         blocks.Add(newObject);
 
-        // 모든 버튼의 색상을 비활성화 색상으로 변경합니다.
         foreach (Button btn in buttons)
         {
             SetButtonColor(btn, normalColor);
@@ -125,7 +119,7 @@ public class MapStatusPopUpmanager : MonoBehaviour
             }
 
             TimeLine[] ttt = slots.GetComponentsInChildren<TimeLine>();
-            ttt[blocks[blocks.Count - 1].GetComponent<DragAndDrop>().lineNum].blockName = image.sprite.name;
+            ttt[blocks[blocks.Count - 1].GetComponent<FieldEffectBlock>().lineNum].blockName = image.sprite.name;
         }
 
     }

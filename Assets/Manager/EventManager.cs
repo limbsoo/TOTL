@@ -21,6 +21,11 @@ public class EventManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+
+    //public List<Action> callbacks = new List<Action>();
+
+
+
     //public UnityEvent selectComplete;
 
     //public ButtonClickEvent buttonClickEvent;
