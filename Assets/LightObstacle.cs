@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LightObstacle : MonoBehaviour
@@ -27,16 +28,44 @@ public class LightObstacle : MonoBehaviour
 
     //LightCondition lcd = LightCondition.Blink;
 
+    //public static int startTime;
+    public static int endTime;
+
+
+    public int startTime { get; private set; }
+
+
+    public void setTime(int start, int end)
+    {
+        startTime = start;
+        endTime = end;
+    }
 
 
     public void Start()
     {
-        naming = gameObject.name;
+        //naming = gameObject.name;
+
+        ////임시로 순서대로
+        //if(FieldEffectPopUpManager.instance.blocks.Count > 0 ) 
+        //{
+        //    FieldEffectBlock feb = FieldEffectPopUpManager.instance.blocks[0].GetComponent<FieldEffectBlock>();
+        //    startTime = feb.start;
+        //    endTime = feb.end;
+        //    StageManager.instance.idx++;
+        //}
+
     }
 
 
     private void Awake()
     {
+        naming = gameObject.transform.parent.name;
+
+        //naming = gameObject.name;
+
+        startTime = StageManager.instance.startTime;
+        endTime = StageManager.instance.endTime;
 
     }
 
@@ -62,27 +91,57 @@ public class LightObstacle : MonoBehaviour
 
     //}
 
+
+    Coroutine FieldEffectCoroutine = null;
+
+
     void Update()
     {
 
-        switch (naming)
+        if(StageManager.instance.waveTime == startTime)
         {
-            case ("blink"):
-                blinking();
-                break;
+            if(FieldEffectCoroutine == null)
+            {
+                switch (naming)
+                {
+                    case ("Blink(Clone)"):
 
-            case ("shadow"):
-                break;
+                        FieldEffectCoroutine = StartCoroutine(blinkEffect(startTime, endTime));
 
-            case ("disable"):
-                break;
+                        //blinking();
+                        break;
+
+                    case ("Shadow(Clone)"):
+                        break;
+
+                    case ("Disable(Clone)"):
+                        break;
+                }
+            }
+            //half
+
+
         }
+
+
 
 
         
 
         DetectSpotlightArea();
     }
+
+    private IEnumerator blinkEffect(int start, int end)
+    {
+        transform.GetChild(0).gameObject.SetActive(false);
+        yield return new WaitForSeconds(end - start);
+        transform.GetChild(0).gameObject.SetActive(true);
+        FieldEffectCoroutine = null;
+    }
+
+
+
+
 
     Coroutine BlinkingCoroutine = null;
 

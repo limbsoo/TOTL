@@ -15,6 +15,7 @@ public class LevelConstructSet : ScriptableObject
     public List<GameObject> player;
     public List<GameObject> enemy;
     public List<GameObject> FieldEffectLight;
+    public List<GameObject> Goal;
 }
 
 

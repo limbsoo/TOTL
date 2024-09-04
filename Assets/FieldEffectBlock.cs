@@ -28,6 +28,10 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
 
     public int lineNum;
 
+    public int start;
+    public int end;
+
+
     private void Start()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -145,6 +149,10 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         slot.blockName = GetComponent<Image>().sprite.name;
         slot.endCell += 1;
 
+
+
+        start = slot.startCell;
+        end  = slot.endCell;
     }
 
 

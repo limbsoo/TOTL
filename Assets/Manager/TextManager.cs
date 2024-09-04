@@ -70,25 +70,28 @@ public class TextManager : MonoBehaviour
             penealtyCoolDown.text = "Penealty : " + Player.instance.PenealtyTime.ToString();
 
 
-            if (waveTimeCoroutine == null)
-            {
-                waveTimeCoroutine = StartCoroutine(Function.instance.CountDown(1, () =>
-                {
-                    waveTime++;
-                    waveTimer.text = (waveTime).ToString();
-                    waveTimeCoroutine = null;
-                }));
-            }
+            waveTimer.text = (StageManager.instance.waveTime).ToString();
+            stageTimer.text = (StageManager.instance.stageTime).ToString();
 
-            if (stageTimeCoroutine == null)
-            {
-                stageTimeCoroutine = StartCoroutine(Function.instance.CountDown(1, () =>
-                {
-                    stageTime++;
-                    stageTimer.text = (stageTime).ToString();
-                    stageTimeCoroutine = null;
-                }));
-            }
+            //if (waveTimeCoroutine == null)
+            //{
+            //    waveTimeCoroutine = StartCoroutine(Function.instance.CountDown(1, () =>
+            //    {
+            //        waveTime++;
+            //        waveTimer.text = (waveTime).ToString();
+            //        waveTimeCoroutine = null;
+            //    }));
+            //}
+
+            //if (stageTimeCoroutine == null)
+            //{
+            //    stageTimeCoroutine = StartCoroutine(Function.instance.CountDown(1, () =>
+            //    {
+            //        stageTime++;
+            //        stageTimer.text = (stageTime).ToString();
+            //        stageTimeCoroutine = null;
+            //    }));
+            //}
         }
 
         //else

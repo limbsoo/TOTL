@@ -41,12 +41,14 @@ public class UIManager : MonoBehaviour
     public GameObject fieldEffectPopUp;
 
     public Action OnUIisReady;
-    
+
+
+    public Slider stageTimeSlider;
 
     private void Start()
     {
         StageManager.instance.stageLevelSetEnd += ShowFieldEffectPopUp;
-        //StageManager.instance.OnStageEnd += CompleteStage;
+        StageManager.instance.OnStageEnd += CompleteStage;
         TextManager.instance.InitText();
 
         //isReady = true;
@@ -102,6 +104,34 @@ public class UIManager : MonoBehaviour
     }
 
 
+    private IEnumerator stageTimer(float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            stageTimeSlider.value = Mathf.Clamp01(elapsed / duration);
+            yield return null;
+        }
+        stageTimeSlider.value = 0;
+        StageTimeSliderCoroutine = null;
+    }
+
+
+
+    Coroutine StageTimeSliderCoroutine = null;
+
+
+    private void Update()
+    {
+        if (StageManager.Sstate == StageState.Play)
+        {
+            if(StageTimeSliderCoroutine == null)
+            {
+                StageTimeSliderCoroutine = StartCoroutine(stageTimer(10f));
+            }
+        }
+    }
 
 
 }

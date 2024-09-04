@@ -24,3 +24,5 @@ MonoBehaviour:
   - {fileID: 3301909162799466181, guid: fc563bf003a29f64d88cb81c320122d5, type: 3}
   - {fileID: 3301909162799466181, guid: c2d769c5859ae264ba9c2777b4925a89, type: 3}
   - {fileID: 3301909162799466181, guid: e637822f1b20c6d4ca5f13e50cf2c8e3, type: 3}
+  Goal:
+  - {fileID: 1686052611157808059, guid: 0943df966ea94b74cb4b65e3fd8a5ee5, type: 3}
