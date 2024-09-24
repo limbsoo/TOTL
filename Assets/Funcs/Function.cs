@@ -77,13 +77,34 @@ public class Function : MonoBehaviour
         return gridCenters;
     }
 
+    public Vector3 GetRandomPositionInMap(GameObject go, Transform mapTransform)
+    {
+
+        // 맵 경계 내로 위치를 제한
+        float mapWidth = mapTransform.localScale.x * 10f;
+        float mapHeight = mapTransform.localScale.z * 10f;
+
+        Vector3 randomPosition = new Vector3(0, 0, 0);
+
+        randomPosition.x = UnityEngine.Random.Range(-mapWidth / 2, mapWidth / 2) + mapTransform.position.x;
+        randomPosition.z = UnityEngine.Random.Range(-mapHeight / 2, mapHeight / 2) + mapTransform.position.z;
+
+        return randomPosition;
+    }
+
+
+
+
+
 
 
     public Vector3 GetRandomPositionInLightRange(GameObject go, Transform mapTransform)
     {
         // 원기둥의 반지름 계산
-        Transform trans = go.transform.GetChild(0).GetChild(0);
-        float radius = trans.localScale.x * 2f; // 원기둥의 반지름 (Unity 기본 Cylinder의 크기는 직경 1, 반지름 0.5)
+
+        Transform trans = go.transform.GetChild(0);
+        //Transform trans = go.transform.GetChild(0).GetChild(0);
+        float radius = trans.localScale.x * 0.5f; // 원기둥의 반지름 (Unity 기본 Cylinder의 크기는 직경 1, 반지름 0.5)
 
         // 맵 경계 내로 위치를 제한
         float mapWidth = mapTransform.localScale.x * 10f;
@@ -122,4 +143,27 @@ public class Function : MonoBehaviour
         // 주어진 점이 원 안에 있는지 확인
         return (point - center).sqrMagnitude <= radius * radius;
     }
+
+
+    public int checkIdx(string s)
+    {
+        int idx = 0;
+
+        switch(s)
+        {
+            case "Blink":
+                idx = 0;
+                break;
+            case "Shadow":
+                idx = 1;
+                break;
+            case "Swamp":
+                idx = 2;
+                break;
+        }
+
+        return idx;
+    }
+
+
 }

@@ -16,6 +16,14 @@ TagManager:
   - TimeLine
   - MiniMap
   - Goal
+  - Block
+  - Decoy
+  - Blink
+  - Shadow
+  - Seal
+  - FieldEffect
+  - EffectRange
+  - Swamp
   layers:
   - Default
   - TransparentFX

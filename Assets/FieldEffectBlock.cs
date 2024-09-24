@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+using static UnityEngine.GraphicsBuffer;
 
 public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
 {
@@ -16,40 +17,108 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     Vector3 originPos;
     bool isBeingHeld = false;
     public bool isInLine;
-    Vector3 LoadedPos;
+    Vector3 LoadedPos = Vector3.zero;
 
     Vector3 rectPosition;
-    private RectTransform targetRectTransform;
+    //private RectTransform targetRectTransform;
 
-    TimeLine slot;
-    int slotIdx = -1;
+    TimeLine nearSlot;
 
-    bool isSet = false;
+    bool isSet;
 
     public int lineNum;
 
     public int start;
     public int end;
 
+    public int idx;
+
+    //public int name;
+
+    //TimeLine savedSlot;
+
+
+    //public int slotIdx;
+    //public int savedSlotIdx;
+
+
+    private Rigidbody2D rb2;
 
     private void Start()
     {
+        isSet = false;
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
+        rb2 = GetComponent<Rigidbody2D>();
+
+        if(LoadedPos != Vector3.zero)
+        {
+            rectTransform.position = LoadedPos;
+            //SimulateClick(this.gameObject);
+            //PointerEventData eventData = 
+
+            //OnBeginDrag();
+
+            //SimulateDrag(gameObject, new Vector2(LoadedPos.x, LoadedPos.y), new Vector2(LoadedPos.x, LoadedPos.y));
+        }
     }
+
+
+    public void SimulateDrag(GameObject target, Vector2 start, Vector2 end)
+    {
+        // PointerEventData 객체 생성
+        PointerEventData pointer = new PointerEventData(EventSystem.current)
+        {
+            position = start, // 드래그 시작 위치
+            delta = end - start // 드래그 이동량
+        };
+
+        // 드래그 시작 (OnBeginDrag)
+        ExecuteEvents.Execute(target, pointer, ExecuteEvents.beginDragHandler);
+
+        // 드래그 중 (OnDrag)
+        pointer.position = end; // 드래그 중 위치 업데이트
+        ExecuteEvents.Execute(target, pointer, ExecuteEvents.dragHandler);
+
+        // 드래그 끝 (OnEndDrag)
+        ExecuteEvents.Execute(target, pointer, ExecuteEvents.endDragHandler);
+    }
+
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         originPos = rectTransform.position;
-
         canvasGroup.alpha = .6f;
         canvasGroup.blocksRaycasts = false;
 
-        if (slot != null)
+        isSet = false;
+
+
+
+        if (nearSlot != null)
         {
-            if (slot.haveBlock) slot.haveBlock = false;
+            if (nearSlot.feb != null)
+            {
+                nearSlot.feb = null;
+            }
         }
+
     }
+
+    public void SimulateClick(GameObject target)
+    {
+        // PointerEventData 객체 생성 (마우스 클릭 이벤트 데이터)
+        PointerEventData pointer = new PointerEventData(EventSystem.current)
+        {
+            // 포인터의 위치나 다른 정보를 설정할 수 있음 (필요 시)
+            position = new Vector2(target.transform.position.x, target.transform.position.y)
+        };
+
+        // 클릭 이벤트 전달
+        ExecuteEvents.Execute(target, pointer, ExecuteEvents.pointerClickHandler);
+    }
+
+
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -63,18 +132,146 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
 
-        // 드래그 종료 시 조건 검사
-        if (isInLine && !slot.haveBlock)
+        if (isInLine)
         {
-            // tBlock에 오브젝트가 없으면 위치를 정렬
-            AlignObjectWithTimeLine();
-            slot.haveBlock = true;
-            isSet = true;
+            if (nearSlot.feb != null)
+            {
+                FieldEffectBlock otherBlock = nearSlot.feb;
+                Vector3 tempPos = otherBlock.rectTransform.position;
+                otherBlock.rectTransform.position = originPos;
+                nearSlot.feb = null;
 
-            originPos = rectTransform.position;
+            }
+
+            isSet = true;
         }
 
         else rectTransform.position = originPos;
+
+    }
+
+
+
+    private void FindStartEndIdx()
+    {
+        for (int i = 0; i < nearSlot.length; i++)
+        {
+            if (nearSlot.gridCenters[i].x >= rectTransform.position.x - rectTransform.sizeDelta.x / 2)
+            {
+                nearSlot.startCell = i;
+                break;
+            }
+        }
+
+        for (int i = nearSlot.startCell; i < nearSlot.length; i++)
+        {
+            if (nearSlot.gridCenters[i].x <= rectTransform.position.x + rectTransform.sizeDelta.x / 2)
+            {
+                nearSlot.endCell = i;
+            }
+            else break;
+        }
+
+        lineNum = nearSlot.idx;
+        nearSlot.blockName = GetComponent<Image>().sprite.name;
+        nearSlot.endCell += 1;
+
+        nearSlot.blockIdx = idx;
+
+
+        start = nearSlot.startCell;
+        end = nearSlot.endCell;
+
+    }
+
+
+
+    // 오브젝트를 타임라인에 맞춰 정렬하는 메서드
+    private void AlignObjectWithTimeLine()
+    {
+        float difference = 999999f;
+        float savedX = 0f;
+
+        for (int i = 0; i < nearSlot.length; i++)
+        {
+            if (Math.Abs(nearSlot.gridCenters[i].x - rectTransform.position.x) < difference)
+            {
+                savedX = nearSlot.gridCenters[i].x;
+                difference = Math.Abs(nearSlot.gridCenters[i].x - rectTransform.position.x);
+            }
+            else break;
+        }
+
+        if (savedX == 0) return;
+
+        float startPosX = nearSlot.rectTransform.position.x - nearSlot.rectTransform.sizeDelta.x / 2;
+        float endPosX = nearSlot.rectTransform.position.x + nearSlot.rectTransform.sizeDelta.x / 2;
+
+        if (savedX - rectTransform.sizeDelta.x / 2 < startPosX)
+        {
+            for (int i = 0; i < nearSlot.length; i++)
+            {
+                if (nearSlot.gridCenters[i].x <= startPosX + rectTransform.sizeDelta.x / 2) savedX = nearSlot.gridCenters[i].x;
+                else break;
+            }
+        }
+        else if (savedX + rectTransform.sizeDelta.x / 2 > endPosX)
+        {
+            for (int i = nearSlot.length - 1; i >= 0; i--)
+            {
+                if (nearSlot.gridCenters[i].x >= endPosX - rectTransform.sizeDelta.x / 2) savedX = nearSlot.gridCenters[i].x;
+                else break;
+            }
+        }
+
+        rectTransform.position = new Vector3(savedX, nearSlot.gridCenters[0].y, nearSlot.gridCenters[0].z);
+
+    }
+
+    public void SetBlockPos()
+    {
+
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("TimeLine"))
+        {
+            nearSlot = other.GetComponent<TimeLine>();
+
+
+            isInLine = true;
+
+            if(LoadedPos != Vector3.zero)
+            {
+                SimulateDrag(gameObject, new Vector2(LoadedPos.x, LoadedPos.y), new Vector2(LoadedPos.x, LoadedPos.y));
+                LoadedPos = Vector3.zero;
+            }
+
+
+            if(isSet)
+            {
+                if(nearSlot.feb == null)
+                {
+                    nearSlot.feb = this;
+                    AlignObjectWithTimeLine();
+                    FindStartEndIdx();
+                    originPos = rectTransform.position;
+                }
+            }
+
+
+
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("TimeLine"))
+        {
+            isInLine = false;
+            //nearSlot = null;
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -86,151 +283,11 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     }
 
 
-    // 오브젝트를 타임라인에 맞춰 정렬하는 메서드
-    private void AlignObjectWithTimeLine()
+    public void movePos(Vector3 pos)
     {
-        float difference = 999999f;
-        float savedX = 0f;
-
-        for (int i = 0; i < slot.length; i++)
-        {
-            if (Math.Abs(slot.gridCenters[i].x - rectTransform.position.x) < difference)
-            {
-                savedX = slot.gridCenters[i].x;
-                difference = Math.Abs(slot.gridCenters[i].x - rectTransform.position.x);
-            }
-            else break;
-        }
-
-        if (savedX == 0) return;
-
-        float startPosX = slot.rectTransform.position.x - slot.rectTransform.sizeDelta.x / 2;
-        float endPosX = slot.rectTransform.position.x + slot.rectTransform.sizeDelta.x / 2;
-
-        if (savedX - rectTransform.sizeDelta.x / 2 < startPosX)
-        {
-            for (int i = 0; i < slot.length; i++)
-            {
-                if (slot.gridCenters[i].x <= startPosX + rectTransform.sizeDelta.x / 2) savedX = slot.gridCenters[i].x;
-                else break;
-            }
-        }
-        else if (savedX + rectTransform.sizeDelta.x / 2 > endPosX)
-        {
-            for (int i = slot.length - 1; i >= 0; i--)
-            {
-                if (slot.gridCenters[i].x >= endPosX - rectTransform.sizeDelta.x / 2) savedX = slot.gridCenters[i].x;
-                else break;
-            }
-        }
-
-        rectTransform.position = new Vector3(savedX, slot.gridCenters[0].y, slot.gridCenters[0].z);
-
-        for (int i = 0; i < slot.length; i++)
-        {
-            if (slot.gridCenters[i].x >= savedX - rectTransform.sizeDelta.x / 2)
-            {
-                slot.startCell = i;
-                break;
-            }
-        }
-
-        for (int i = slot.startCell; i < slot.length; i++)
-        {
-            if (slot.gridCenters[i].x <= savedX + rectTransform.sizeDelta.x / 2)
-            {
-                slot.endCell = i;
-            }
-            else break;
-        }
-
-
-        lineNum = slot.idx;
-        slot.blockName = GetComponent<Image>().sprite.name;
-        slot.endCell += 1;
-
-
-
-        start = slot.startCell;
-        end  = slot.endCell;
+        LoadedPos = pos;
     }
 
-
-
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        if (other.CompareTag("TimeLine"))
-        {
-            slot = other.GetComponent<TimeLine>();
-
-            if (slot.haveBlock) isInLine = false;
-            else isInLine = true;
-
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("TimeLine"))
-        {
-            isInLine = false;
-            slot = null;
-        }
-    }
 
 }
 
-
-
-//public class FieldEffectBlock : MonoBehaviour
-//{
-//    //SpriteRenderer spriteRenderer;
-
-//    //Image image;
-
-//    //public Sprite[] idle;
-//    //int state;
-//    //int spriteIdx;
-
-
-//    //// Start is called before the first frame update
-//    //void Start()
-//    //{
-//    //    image = GetComponent<Image>();
-//    //    state = 0;
-//    //    spriteIdx = 0;
-
-//    //}
-
-//    //// Update is called once per frame
-//    //void Update()
-//    //{
-
-//    //}
-
-
-//    //public void TriggerChangeBlockState()
-//    //{
-//    //    if(state == 0)
-//    //    {
-//    //        image.sprite = idle[1];
-//    //        //spriteRenderer.sprite = idle[1];
-//    //        state = 1;
-//    //    }
-
-//    //    else
-//    //    {
-//    //        image.sprite = idle[0];
-//    //        //spriteRenderer.sprite = idle[0];
-//    //        state = 0;
-//    //    }
-
-
-
-//    //    //switch (state)
-//    //    //{
-//    //    //    case 0:
-//    //    //}
-//    //}
-
-//}

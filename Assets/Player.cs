@@ -12,7 +12,7 @@ using UnityEngine.Rendering.VirtualTexturing;
 
 public class Player : MonoBehaviour
 {
-    public UnityEvent OnUseTeleport;
+    //public UnityEvent OnUseTeleport;
     public UnityEvent OnUseAttack;
     public UnityEvent OnPlayerUnderAttack;
 
@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
 
     public float teleportLength = 10;
 
-    public static bool canUseTeleport = true; // 스킬 사용 가능 여부
+    public static bool canUseSkill = true; // 스킬 사용 가능 여부
 
     public static bool playerDamaged = false;
 
@@ -58,8 +58,19 @@ public class Player : MonoBehaviour
 
     //prePlayer꺼
 
+    PlayerSkillState psState;
+
 
     public static float inputThreshold = 0.1f; // 임계값 설정
+
+
+    public GameObject Decoy;
+
+
+
+
+
+
 
     public static Player instance { get; private set; }
     private void Awake()
@@ -75,6 +86,22 @@ public class Player : MonoBehaviour
             moveSpeed = data.moveSpeed;
             damamge = data.damamge;
             coolDown = data.coolDown;
+
+
+            switch (data.skill)
+            {
+                case 0:
+                    psState = PlayerSkillState.Teleport;
+                    break;
+                case 1:
+                    psState = PlayerSkillState.Hide;
+                    break;
+                case 2:
+                    psState = PlayerSkillState.Decoy;
+                    break;
+            }
+
+            psState = PlayerSkillState.Decoy;
 
 
             PenealtyTime = 0;
@@ -190,6 +217,9 @@ public class Player : MonoBehaviour
         EventManager.instance.OnPlayerEnterTheLightRange += changeFigure;
         EventManager.instance.OnCollisionResult += HandleCollisionResult;
         EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
+
+        UIManager.instance.OnUseSkill += useSkill;
+        //JoyStickController.instance.JoyStickMove += Move;
     }
 
     private void OnDisable()
@@ -197,7 +227,32 @@ public class Player : MonoBehaviour
         EventManager.instance.OnPlayerEnterTheLightRange -= changeFigure;
         EventManager.instance.OnCollisionResult -= HandleCollisionResult;
         EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
+
+        UIManager.instance.OnUseSkill -= useSkill;
     }
+
+    public void useSkill()
+    {
+        if (canUseSkill)
+        {
+            switch (psState)
+            {
+                case PlayerSkillState.Teleport:
+                    UseTeleport();
+                    break;
+                case PlayerSkillState.Hide:
+
+                    break;
+                case PlayerSkillState.Decoy:
+                    UseDecoy();
+                    break;
+            }
+
+            UIManager.instance.StartCooldown(coolDown);
+        }
+
+    }
+
 
     //if(pState == PlayerState.Transformed)
 
@@ -205,6 +260,13 @@ public class Player : MonoBehaviour
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
+
+
+        if(JoyStickController.instance.inputVector.x != 0 || JoyStickController.instance.inputVector.y != 0 )
+        {
+            moveHorizontal = JoyStickController.instance.inputVector.x;
+            moveVertical = JoyStickController.instance.inputVector.y;
+        }
 
         if (Mathf.Abs(moveHorizontal) < inputThreshold) moveHorizontal = 0;
         if (Mathf.Abs(moveVertical) < inputThreshold) moveVertical = 0;
@@ -225,9 +287,32 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            if (canUseSkill)
+            {
+                switch (psState)
+                {
+                    case PlayerSkillState.Teleport:
+                        UseTeleport();
+                        break;
+                    case PlayerSkillState.Hide:
+                        
+                        break;
+                    case PlayerSkillState.Decoy:
+                        UseDecoy();
+                        break;
+                }
+
+                UIManager.instance.StartCooldown(coolDown);
+            }
+
+
+
+
+
+
             //if (pState == PlayerState.Original)
             {
-                if(canUseTeleport) OnUseTeleport?.Invoke();
+                //if(canUseSkill) OnUseTeleport?.Invoke();
             }
         }
 
@@ -268,10 +353,13 @@ public class Player : MonoBehaviour
             rb.velocity = Vector3.zero;
             return;
         }
-       
+
 
         if (movement != Vector3.zero)
         {
+            Debug.Log($"movement: {movement}");
+
+
             Vector3 newPos = rb.position + movement * Time.fixedDeltaTime;
             float width = StageManager.mapTransform.localScale.x * 10f; // Unity 기본 Plane의 크기는 10x10 단위
             float height = StageManager.mapTransform.localScale.z * 10f;
@@ -279,11 +367,20 @@ public class Player : MonoBehaviour
             newPos.z = Mathf.Clamp(newPos.z, StageManager.mapTransform.position.z - height / 2, StageManager.mapTransform.position.z + height / 2);
             rb.MovePosition(newPos); // 물리적 이동 처리
 
-            Quaternion newRotation = Quaternion.LookRotation(movement);
-            rb.MoveRotation(newRotation);
+            if (movement != Vector3.zero)
+            {
+                Quaternion newRotation = Quaternion.LookRotation(movement);
+                rb.MoveRotation(newRotation);
+            }
+
+
         }
-         
-        else rb.velocity = Vector3.zero; // 키 입력이 없을 때 속도를 0으로 설정하여 움직임을 멈춤
+
+        else
+        {
+            rb.velocity = Vector3.zero; // 키 입력이 없을 때 속도를 0으로 설정하여 움직임을 멈춤
+            movement = Vector3.zero;
+        } 
     }
 
     //void TakeDamage(int damage)
@@ -317,10 +414,21 @@ public class Player : MonoBehaviour
         playerDamaged = true;
 
         gameObject.GetComponent<MeshRenderer>().material = mat[1];
+
+        UIManager.instance.playerDamaged.SetActive(true);
+
         //gameObject.GetComponent<BoxCollider>().enabled = false;
 
+
+        StartCoroutine(Function.instance.CountDown(0.5f, () => {
+
+            UIManager.instance.playerDamaged.SetActive(false);
+        }));
+
+
         health--;
-        StartCoroutine(Function.instance.CountDown(1f, () => { 
+        StartCoroutine(Function.instance.CountDown(1f, () => {
+
             playerDamaged = false;
             gameObject.GetComponent<MeshRenderer>().material = mat[0];
             //gameObject.GetComponent<BoxCollider>().enabled = true;
@@ -330,7 +438,22 @@ public class Player : MonoBehaviour
         //transform.position += new Vector3(collidedObject.transform.forward.x * 2, 0, collidedObject.transform.forward.z * 2);
     }
 
+    public bool summonDecoy = false;
 
+
+    public void UseDecoy()
+    {
+        GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
+
+        canUseSkill = false;
+        summonDecoy = true;
+
+        StartCoroutine(Function.instance.CountDown(coolDown, () => { 
+            canUseSkill = !canUseSkill;
+            summonDecoy = !summonDecoy;
+            Destroy(go);
+        }));
+    }
 
     public void UseTeleport()
     {
@@ -339,8 +462,8 @@ public class Player : MonoBehaviour
 
         Debug.Log("Teleport used!");
 
-        canUseTeleport = false;
-        StartCoroutine(Function.instance.CountDown(coolDown, () => { canUseTeleport = !canUseTeleport; }));
+        canUseSkill = false;
+        StartCoroutine(Function.instance.CountDown(coolDown, () => { canUseSkill = !canUseSkill; }));
         //Function.instance.ChangeStateAndDelay(ref canUseSkill, coolDown, () => { canUseSkill = !canUseSkill;});
     }
 
@@ -367,7 +490,12 @@ public class Player : MonoBehaviour
     }
 
 
-
+    public IEnumerator slowliy()
+    {
+        moveSpeed = 10;
+        yield return new WaitForSecondsRealtime(1);
+        moveSpeed = 20;
+    }
 
 
 

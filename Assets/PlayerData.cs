@@ -1,21 +1,39 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class PlayerData
 {
-    public string name;
-    public int maxStage;
-    public int curStage;
+    //public string name;
 
-    public float health;
-    public float moveSpeed;
-    public float damamge;
-    public float coolDown;
+    //public int maxWave;
+    //public int curWave;
 
-    //public string playerName;
-    //public int playerLevel;
-    //public float playerHealth;
+    //public List<SetBlock> setBlocks;
+
+    ////public int maxStage;
+    ////public int curStage;
+
+    //public float health;
+    //public float moveSpeed;
+    //public float damamge;
+    //public float coolDown;
+
+    ////public string playerName;
+    ////public int playerLevel;
+    ////public float playerHealth;
 }
+
+
+
+//public class SetBlock
+//{
+//    public int blockName;
+//    public int lineNum;
+//    public int start;
+//    public int end;
+//}
+
 
 //public class DataManager : MonoBehaviour
 //{

@@ -16,12 +16,17 @@ public class TimeLine : MonoBehaviour
 
     public string blockName = "";
     public int idx;
+    public int blockIdx;
 
+    public int savedIdx;
+
+    public FieldEffectBlock feb;
 
     private void Start()
     {
         //GridLayout gridLayout = GetComponent<GridLayout>();
-
+        blockIdx = -1;
+        savedIdx = -1;
         gridCenters = new Vector3[length];
         StartCoroutine(CoWaitForPosition()); //코루틴 시작
 

@@ -1,11 +1,47 @@
 {
-    "name": "",
-    "maxStage": 0,
-    "curStage": 0,
+    "name": "Player",
+    "maxWave": 0,
+    "curWave": 4,
+    "setBlocks": [
+        {
+            "blockName": "Blink",
+            "lineNum": 1,
+            "start": 0,
+            "end": 0,
+            "position": {
+                "x": 518.3500366210938,
+                "y": 804.2999877929688,
+                "z": 0.0
+            }
+        },
+        {
+            "blockName": "Shadow",
+            "lineNum": 2,
+            "start": 0,
+            "end": 0,
+            "position": {
+                "x": 857.85009765625,
+                "y": 804.2999877929688,
+                "z": 0.0
+            }
+        },
+        {
+            "blockName": "Swamp",
+            "lineNum": 0,
+            "start": 0,
+            "end": 0,
+            "position": {
+                "x": 580.6392211914063,
+                "y": 611.9386596679688,
+                "z": 0.0
+            }
+        }
+    ],
     "health": 100.0,
-    "moveSpeed": 30.0,
-    "damamge": 5.0,
-    "coolDown": 1.0,
+    "moveSpeed": 20.0,
+    "damamge": 2.0,
+    "coolDown": 2.0,
+    "skill": 0,
     "isUnlock": [
         false,
         false,

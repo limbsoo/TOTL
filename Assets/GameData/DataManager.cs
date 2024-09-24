@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -45,26 +46,62 @@ public class DataManager : MonoBehaviour
             print("불러오기 완료");
         }
 
-        else SaveGameData();
+        else InitData();
     }
+
+    public void InitData()
+    {
+        data.name = "Player";
+        data.maxWave = 0;
+        data.curWave = 0;
+        data.health = 100;
+        data.moveSpeed = 20;
+        data.damamge = 2;
+        data.coolDown = 2;
+        data.skill = 0;
+
+        data.setBlocks = new List<SetBlock>();
+        //string jsonString = JsonConvert.SerializeObject(human);
+
+        string ToJsonData = JsonUtility.ToJson(data, true);
+        string filePath = Application.dataPath + "/" + GameDataFileName;
+        File.WriteAllText(filePath, ToJsonData);
+    }
+
 
 
     // 저장하기
     public void SaveGameData()
     {
+        data.curWave += 1;
+
+        data.setBlocks = new List<SetBlock>();
+
+        for (int i = 0; i < FieldEffectPopUpManager.instance.blocks.Count;i++)
+        {
+            SetBlock sb = new SetBlock();
+            sb.position = FieldEffectPopUpManager.instance.blocks[i].GetComponent<RectTransform>().position;
+            sb.lineNum = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>().lineNum;
+            sb.blockName = FieldEffectPopUpManager.instance.blocks[i].name;
+
+            data.setBlocks.Add(sb);
+        }
+
         // 클래스를 Json 형식으로 전환 (true : 가독성 좋게 작성)
         string ToJsonData = JsonUtility.ToJson(data, true);
         //string filePath = Application.persistentDataPath + "/" + GameDataFileName;
         string filePath = Application.dataPath + "/" + GameDataFileName;
 
+
+
         // 이미 저장된 파일이 있다면 덮어쓰고, 없다면 새로 만들어서 저장
         File.WriteAllText(filePath, ToJsonData);
 
-        // 올바르게 저장됐는지 확인 (자유롭게 변형)
-        print("저장 완료");
-        for (int i = 0; i < data.isUnlock.Length; i++)
-        {
-            print($"{i}번 챕터 잠금 해제 여부 : " + data.isUnlock[i]);
-        }
+        //// 올바르게 저장됐는지 확인 (자유롭게 변형)
+        //print("저장 완료");
+        //for (int i = 0; i < data.isUnlock.Length; i++)
+        //{
+        //    print($"{i}번 챕터 잠금 해제 여부 : " + data.isUnlock[i]);
+        //}
     }
 }

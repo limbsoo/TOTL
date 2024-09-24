@@ -46,11 +46,11 @@ public class EventManager : MonoBehaviour
     //    Debug.Log("Player died event received");
     //}
 
-    public void UseTeleport()
-    {
-        Player.instance.UseTeleport();
-        UIManager.instance.StartCooldown(Player.instance.coolDown);
-    }
+    //public void UseTeleport()
+    //{
+    //    Player.instance.UseTeleport();
+    //    UIManager.instance.StartCooldown(Player.instance.coolDown);
+    //}
 
     public void UseAttack()
     {

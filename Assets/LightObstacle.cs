@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 public class LightObstacle : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class LightObstacle : MonoBehaviour
     // 비활성화, 깜빡거림, 일부분 그림자 
 
     //일정시간마다 새가 버프 혹은 공겨지원, 키누르면 일직선으로 공격?
+    //스킬봉인
 
     public static bool weakening;
 
@@ -44,6 +47,8 @@ public class LightObstacle : MonoBehaviour
 
     public void Start()
     {
+        moving = Vector3.zero;
+
         //naming = gameObject.name;
 
         ////임시로 순서대로
@@ -64,10 +69,12 @@ public class LightObstacle : MonoBehaviour
 
         //naming = gameObject.name;
 
-        startTime = StageManager.instance.startTime;
-        endTime = StageManager.instance.endTime;
+        //startTime = StageManager.instance.startTime;
+        //endTime = StageManager.instance.endTime;
 
     }
+
+
 
 
     //public void Initialize(LevelConstructSet LC, int idx, Vector3 vec)
@@ -92,44 +99,94 @@ public class LightObstacle : MonoBehaviour
     //}
 
 
+    private Vector3 moving;
+
     Coroutine FieldEffectCoroutine = null;
 
 
     void Update()
     {
 
-        if(StageManager.instance.waveTime == startTime)
+        if (StageManager.instance.waveTime == startTime)
         {
-            if(FieldEffectCoroutine == null)
+            if (FieldEffectCoroutine == null)
             {
-                switch (naming)
+                switch (gameObject.tag)
                 {
-                    case ("Blink(Clone)"):
+                    case ("Blink"):
 
                         FieldEffectCoroutine = StartCoroutine(blinkEffect(startTime, endTime));
 
                         //blinking();
                         break;
 
-                    case ("Shadow(Clone)"):
+                    case ("Shadow"):
+
+                        FieldEffectCoroutine = StartCoroutine(shadowEffect(startTime, endTime));
+
                         break;
 
                     case ("Disable(Clone)"):
                         break;
                 }
+
+                //switch (naming)
+                //{
+                //    case ("Blink(Clone)"):
+
+                //        FieldEffectCoroutine = StartCoroutine(blinkEffect(startTime, endTime));
+
+                //        //blinking();
+                //        break;
+
+                //    case ("Shadow(Clone)"):
+
+                //        FieldEffectCoroutine = StartCoroutine(shadowEffect(startTime, endTime));
+
+                //        break;
+
+                //    case ("Disable(Clone)"):
+                //        break;
+                //}
             }
             //half
 
 
         }
 
-
+        if (moving != Vector3.zero)
+        {
+            GameObject go = transform.GetChild(0).gameObject;
+            Vector3 newPos = go.transform.position + moving * Time.fixedDeltaTime;
+            go.transform.position = newPos;
+        }
 
 
         
 
         DetectSpotlightArea();
     }
+
+    private IEnumerator shadowEffect(int start, int end)
+    {
+        moving = new Vector3(50,0,0);
+        yield return new WaitForSeconds(end - start);
+        FieldEffectCoroutine = null;
+        //GameObject go = transform.GetChild(0).gameObject;
+
+        //Vector3 vector3 = new Vector3(10, 0, 0);
+        ////vector3 *= Time.deltaTime;
+
+        //yield return new WaitForSeconds(end - start);
+        //go.transform.position = go.transform.position + vector3;
+
+        //transform.GetChild(0).gameObject.SetActive(false);
+        //yield return new WaitForSeconds(end - start);
+        //transform.GetChild(0).gameObject.SetActive(true);
+        //FieldEffectCoroutine = null;
+    }
+
+
 
     private IEnumerator blinkEffect(int start, int end)
     {

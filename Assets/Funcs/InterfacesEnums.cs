@@ -26,3 +26,5 @@ public enum LightCondition { Usual, Blink, Shadow, Disable, LessPenealty }
 //public enum StageState { Wait, Play }
 
 public enum StageState { Edit, Play }
+
+public enum PlayerSkillState { Teleport, Hide, Decoy}

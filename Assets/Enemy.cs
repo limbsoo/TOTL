@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
 
 
 
-
+    public string curTarget;
 
 
     ////private GameObject obj;
@@ -61,7 +61,10 @@ public class Enemy : MonoBehaviour
         //psystem = GetComponentInChildren<ParticleSystem>();
         health = 2;
         nmAgent = GetComponent<NavMeshAgent>();
-        target = Player.instance.transform;
+        //target = Player.instance.transform;
+
+        target = transform;
+
         transform.GetChild(0).gameObject.GetComponent<CapsuleCollider>().enabled = true;
 
         mat = this.GetComponent<Renderer>().materials;
@@ -177,7 +180,104 @@ public class Enemy : MonoBehaviour
     }
 
 
+    public void chasingPlayer(Transform tr)
+    {
+        updateDestination(tr);
 
+        //if (this.nmAgent == null) return;
+
+        //if (detectObject == null) return;
+
+        //Enemy enemy = detectObject.transform.parent.GetComponent<Enemy>();
+
+
+
+        //if (enemy == null) return;
+
+        //if (enemy.onceDamaged) return;
+
+
+
+        //if (StageManager.currentPlayerIdx != 0) return;
+
+
+
+        //Rigidbody rb = StageManager.player.GetComponent<Rigidbody>();
+        //enemy.updateDestination(rb.transform);
+
+
+        //if (StageManager.player == null) return;
+        //enemy.updateDestination(StageManager.player.transform);
+
+
+
+    }
+
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (StageManager.Sstate == StageState.Play)
+    //    {
+    //        switch (collision.collider.tag)
+    //        {
+    //            case ("Player"):
+    //                chasingPlayer();
+    //                //EventManager.instance.playerCollisionEnemy(collision.gameObject);
+    //                break;
+
+    //                //case ("Goal"):
+    //                //    StageManager.instance.arriveGoal(collision.gameObject);
+    //                //    break;
+    //        }
+
+    //    }
+
+
+    //}
+
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    if (StageManager.Sstate == StageState.Play)
+    //    {
+    //        switch (other.gameObject.tag)
+    //        {
+    //            case ("EnemySensor"):
+    //                if (other.transform.parent != null)
+    //                {
+    //                    if(gameObject.tag == "Player")
+    //                    {
+    //                        chasingPlayer();
+
+    //                    }
+
+    //                    if (Player.instance.summonDecoy)
+    //                    {
+    //                        if (gameObject.tag == "Decoy")
+    //                        {
+    //                            chasingPlayer();
+    //                            //EventManager.instance.playerDetectedMonster(other.gameObject);
+    //                        }
+
+
+    //                    }
+
+    //                    //else
+    //                    //{
+
+
+    //                    //    chasingPlayer(); //EventManager.instance.playerDetectedMonster(other.gameObject); chasingPlayer();
+    //                    //}
+                        
+
+    //                }
+    //                break;
+    //        }
+    //    }
+
+
+
+
+    //}
 
 
 

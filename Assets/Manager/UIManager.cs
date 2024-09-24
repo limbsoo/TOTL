@@ -25,6 +25,10 @@ public class UIManager : MonoBehaviour
 
     //public static bool isReady = false;
 
+    public Image skillCoolDown;
+
+
+
 
     public void CompleteStage()
     {
@@ -32,7 +36,7 @@ public class UIManager : MonoBehaviour
         OnInitializeUI?.Invoke();
     }
 
-
+    
 
 
 
@@ -45,18 +49,36 @@ public class UIManager : MonoBehaviour
 
     public Slider stageTimeSlider;
 
-    private void Start()
-    {
-        StageManager.instance.stageLevelSetEnd += ShowFieldEffectPopUp;
-        StageManager.instance.OnStageEnd += CompleteStage;
-        TextManager.instance.InitText();
+    public Action OnUseSkill;
 
-        //isReady = true;
-        OnUIisReady.Invoke();
+
+    public GameObject playerDamaged;
+
+    public void UseSkill()
+    {
+
+        OnUseSkill?.Invoke();
     }
 
 
-    private void ShowFieldEffectPopUp()
+    private void Start()
+    {
+        ShowFieldEffectPopup();
+
+
+        //StageManager.instance.stageLevelSetEnd += ShowFieldEffectPopup;
+        StageManager.instance.OnStageEnd += CompleteStage;
+        TextManager.instance.InitText();
+
+
+        
+
+        //isReady = true;
+        //OnUIisReady.Invoke();
+    }
+
+
+    private void ShowFieldEffectPopup()
     {
         fieldEffectPopUp.SetActive(true);
     }
@@ -88,19 +110,34 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator CooldownCoroutine(float duration)
     {
-        cooldownSlider.gameObject.SetActive(true); // 슬라이더를 활성화합니다.
+        skillCoolDown.gameObject.SetActive(true);
+
+
         float elapsed = 0f;
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            cooldownSlider.value = Mathf.Clamp01(elapsed / duration);
+            skillCoolDown.fillAmount = (1.0f / duration - elapsed);
             yield return null;
         }
-        cooldownSlider.value = 0;
-        cooldownSlider.gameObject.SetActive(false); // 쿨타임이 끝나면 슬라이더를 비활성화합니다.
+        skillCoolDown.gameObject.SetActive(false);
 
-        // 쿨타임이 끝났음을 알리는 이벤트를 발생시킵니다.
-        EventManager.TriggerCooldownFinished();
+
+
+
+        //cooldownSlider.gameObject.SetActive(true); // 슬라이더를 활성화합니다.
+        //float elapsed = 0f;
+        //while (elapsed < duration)
+        //{
+        //    elapsed += Time.deltaTime;
+        //    cooldownSlider.value = Mathf.Clamp01(elapsed / duration);
+        //    yield return null;
+        //}
+        //cooldownSlider.value = 0;
+        //cooldownSlider.gameObject.SetActive(false); // 쿨타임이 끝나면 슬라이더를 비활성화합니다.
+
+        //// 쿨타임이 끝났음을 알리는 이벤트를 발생시킵니다.
+        //EventManager.TriggerCooldownFinished();
     }
 
 
@@ -126,11 +163,24 @@ public class UIManager : MonoBehaviour
     {
         if (StageManager.Sstate == StageState.Play)
         {
-            if(StageTimeSliderCoroutine == null)
+            if (StageTimeSliderCoroutine == null)
             {
                 StageTimeSliderCoroutine = StartCoroutine(stageTimer(10f));
             }
         }
+
+        else
+        {
+            if(StageTimeSliderCoroutine != null)
+            {
+                StopCoroutine(StageTimeSliderCoroutine);
+                stageTimeSlider.value = 0;
+                StageTimeSliderCoroutine = null;
+            }
+
+
+        }
+        
     }
 
 

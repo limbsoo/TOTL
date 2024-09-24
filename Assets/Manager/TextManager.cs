@@ -30,15 +30,17 @@ public class TextManager : MonoBehaviour
     public TMP_Text coolDown;
     public TMP_Text penealtyCoolDown;
 
+    public TMP_Text nextGoals;
+
 
     private void Start()
     {
 
     }
 
-    public void InitText() 
+    public void InitText()
     {
-        curStage.text = "CurStage : " + DataManager.Instance.data.curStage.ToString();
+        curStage.text = "CurWave : " + DataManager.Instance.data.curWave.ToString();
         //countDown
         waveTimer.text = "";
         stageTimer.text = "";
@@ -49,7 +51,7 @@ public class TextManager : MonoBehaviour
         speed.text = "Speed : " + DataManager.Instance.data.moveSpeed.ToString();
         coolDown.text = "CoolDown : " + DataManager.Instance.data.coolDown.ToString();
         penealtyCoolDown.text = "Penealty : ";
-
+        nextGoals.text = "Next goals : ";
     }
 
 
@@ -68,10 +70,39 @@ public class TextManager : MonoBehaviour
             speed.text = "Speed : " + Player.instance.moveSpeed.ToString();
             coolDown.text = "CoolDown : " + Player.instance.coolDown.ToString();
             penealtyCoolDown.text = "Penealty : " + Player.instance.PenealtyTime.ToString();
-
+            
 
             waveTimer.text = (StageManager.instance.waveTime).ToString();
-            stageTimer.text = (StageManager.instance.stageTime).ToString();
+
+            int minute = StageManager.instance.stageTime / 60;
+            int second = StageManager.instance.stageTime % 60;
+
+            string s = "";
+
+            if (minute < 10) s += "0";
+            s += minute.ToString();
+
+            s += " : ";
+
+            if (second < 10) s += "0";
+            s += second.ToString();
+
+            stageTimer.text = s;
+
+            //stageTimer.text = (StageManager.instance.stageTime).ToString();
+
+
+
+
+
+
+            nextGoals.text = "Next goals : ";
+
+            for(int i = 0; i < StageManager.instance.goalList.Count;i++)
+            {
+                nextGoals.text += ", " + StageManager.instance.goalList[i].ToString();
+            }
+
 
             //if (waveTimeCoroutine == null)
             //{

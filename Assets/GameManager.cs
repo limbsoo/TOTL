@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        DataManager.Instance.LoadGameData();
-        if (DataManager.Instance.data == null) DataManager.Instance.SaveGameData();
+        //DataManager.Instance.LoadGameData();
+        //if (DataManager.Instance.data == null) DataManager.Instance.SaveGameData();
     }
 
 
@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
     }
     public void loadPlayScene()
     {
-        EventManager.instance.TriggerOnLoadPlayScene();
+        //EventManager.instance.TriggerOnLoadPlayScene();
         SceneManager.LoadScene("PlayScene");
     }
 

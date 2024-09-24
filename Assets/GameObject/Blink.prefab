@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8891248597693774529}
   - component: {fileID: 7763246249273203579}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Blink
-  m_TagString: Untagged
+  m_TagString: Blink
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -66,7 +66,7 @@ GameObject:
   - component: {fileID: 3037974122726249741}
   - component: {fileID: 3484024406280541104}
   - component: {fileID: 5365260738524475763}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +272,7 @@ GameObject:
   - component: {fileID: 7427197527817995491}
   - component: {fileID: 7427197527817995500}
   - component: {fileID: 7427197527817995501}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: LightRange
   m_TagString: LightRange
   m_Icon: {fileID: 0}

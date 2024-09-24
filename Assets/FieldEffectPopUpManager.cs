@@ -52,8 +52,50 @@ public class FieldEffectPopUpManager : MonoBehaviour
             btn.onClick.AddListener(() => OnButtonClick(btn));
         }
 
+
+
+        
+
+        if(DataManager.Instance.data.curWave >=1)
+        {
+            SetBlocks();
+        }
+
         CreateBlock();
+
+        //StageManager.instance.OnContinueWave += SetBlocks;
+
     }
+
+    public void SetBlocks()
+    {
+        //GameObject newBlock = blocks[0];
+        //blocks = new List<GameObject>();
+
+        for(int i = 0; i < DataManager.Instance.data.setBlocks.Count; i++)
+        {
+            CreateBlock();
+
+
+            Image image = blocks[i].GetComponent<Image>();
+
+            image.sprite = idle[Function.instance.checkIdx(DataManager.Instance.data.setBlocks[i].blockName)];
+            TimeLine[] ttt = slots.GetComponentsInChildren<TimeLine>();
+            ttt[blocks[i].GetComponent<FieldEffectBlock>().lineNum].blockName = image.sprite.name;
+
+            blocks[i].name = image.sprite.name;
+
+            FieldEffectBlock feb = blocks[i].GetComponent<FieldEffectBlock>();
+            //feb.rectTransform.position = DataManager.Instance.data.setBlocks[i].position;
+
+
+            feb.movePos(DataManager.Instance.data.setBlocks[i].position);
+
+        }
+
+
+    }
+
 
     public void CreateBlock()
     {
@@ -62,6 +104,8 @@ public class FieldEffectPopUpManager : MonoBehaviour
         newObject = Instantiate(block);
         newObject.transform.SetParent(rect.transform, false);
         blocks.Add(newObject);
+
+        newObject.GetComponent<FieldEffectBlock>().idx = blocks.Count - 1;
 
         foreach (Button btn in buttons)
         {
@@ -105,21 +149,26 @@ public class FieldEffectPopUpManager : MonoBehaviour
         {
             Image image = blocks[blocks.Count - 1].GetComponent<Image>();
 
-            switch (s)
-            {
-                case "Blink":
-                    image.sprite = idle[0];
-                    break;
-                case "Shadow":
-                    image.sprite = idle[1];
-                    break;
-                case "Disable":
-                    image.sprite = idle[2];
-                    break;
-            }
+            image.sprite = idle[Function.instance.checkIdx(s)];
+            
+
+            //switch (s)
+            //{
+            //    case "Blink":
+            //        image.sprite = idle[0];
+            //        break;
+            //    case "Shadow":
+            //        image.sprite = idle[1];
+            //        break;
+            //    case "Disable":
+            //        image.sprite = idle[2];
+            //        break;
+            //}
 
             TimeLine[] ttt = slots.GetComponentsInChildren<TimeLine>();
             ttt[blocks[blocks.Count - 1].GetComponent<FieldEffectBlock>().lineNum].blockName = image.sprite.name;
+
+            blocks[blocks.Count - 1].name = image.sprite.name;
         }
 
     }
