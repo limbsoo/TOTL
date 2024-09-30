@@ -29,5 +29,5 @@ MonoBehaviour:
   - {fileID: 3446381173838501712, guid: ca5412122a6f263428b4d402edad1ada, type: 3}
   FieldEffect:
   - {fileID: 8976493157502958342, guid: 412614e3104f22c4ca786360ff7cbb1a, type: 3}
-  - {fileID: 8976493157502958342, guid: dbb41f914457c3f4bbd1d7e207691be2, type: 3}
   - {fileID: 8976493157502958342, guid: 697ce8f968e76104487b59fae16280f2, type: 3}
+  - {fileID: 8976493157502958342, guid: dbb41f914457c3f4bbd1d7e207691be2, type: 3}

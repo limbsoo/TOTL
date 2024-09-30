@@ -100,7 +100,8 @@ public class TextManager : MonoBehaviour
 
             for(int i = 0; i < StageManager.instance.goalList.Count;i++)
             {
-                nextGoals.text += ", " + StageManager.instance.goalList[i].ToString();
+                nextGoals.text += StageManager.instance.goalList[i].ToString();
+                nextGoals.text += " ";
             }
 
 

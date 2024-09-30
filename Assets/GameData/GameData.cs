@@ -38,6 +38,10 @@ public class SetBlock
     public int start;
     public int end;
 
+    public int upperIdx;
+    public int DownerIdx;
+
+
     public Vector3 position;
 
 }

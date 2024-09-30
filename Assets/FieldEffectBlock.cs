@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -31,7 +32,7 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     public int start;
     public int end;
 
-    public int idx;
+    public int _idx;
 
     //public int name;
 
@@ -40,6 +41,18 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
 
     //public int slotIdx;
     //public int savedSlotIdx;
+
+
+    public Sprite[] UpperSprites;
+    public Sprite[] DownerSprites;
+
+
+    public int m_upperIdx;
+    public int m_downerIdx;
+
+    public Image UpperImage;
+    public Image DownerImage;
+
 
 
     private Rigidbody2D rb2;
@@ -51,17 +64,37 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         canvasGroup = GetComponent<CanvasGroup>();
         rb2 = GetComponent<Rigidbody2D>();
 
-        if(LoadedPos != Vector3.zero)
-        {
-            rectTransform.position = LoadedPos;
-            //SimulateClick(this.gameObject);
-            //PointerEventData eventData = 
-
-            //OnBeginDrag();
-
-            //SimulateDrag(gameObject, new Vector2(LoadedPos.x, LoadedPos.y), new Vector2(LoadedPos.x, LoadedPos.y));
-        }
+        if(LoadedPos != Vector3.zero) rectTransform.position = LoadedPos;
     }
+
+
+    public void Init(GameData PlayData, int idx)
+    {
+        if(PlayData == null)
+        {
+            _idx = idx;
+            m_upperIdx = UnityEngine.Random.Range(0, 3);
+            m_downerIdx = UnityEngine.Random.Range(0, 3);
+        }
+
+        else
+        {
+            _idx = idx;
+            m_upperIdx = PlayData.setBlocks[idx].upperIdx;
+            m_downerIdx = PlayData.setBlocks[idx].DownerIdx;
+            //rectTransform.position = PlayData.setBlocks[idx].position;
+            LoadedPos = PlayData.setBlocks[idx].position;
+        }
+
+        UpperImage.sprite = UpperSprites[m_upperIdx];
+        DownerImage.sprite = DownerSprites[m_downerIdx];
+
+        gameObject.name = "";
+        gameObject.name += UpperImage.sprite.name;
+        gameObject.name += DownerImage.sprite.name;
+
+    }
+
 
 
     public void SimulateDrag(GameObject target, Vector2 start, Vector2 end)
@@ -176,7 +209,7 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         nearSlot.blockName = GetComponent<Image>().sprite.name;
         nearSlot.endCell += 1;
 
-        nearSlot.blockIdx = idx;
+        nearSlot.blockIdx = _idx;
 
 
         start = nearSlot.startCell;

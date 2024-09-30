@@ -145,25 +145,25 @@ public class Function : MonoBehaviour
     }
 
 
-    public int checkIdx(string s)
-    {
-        int idx = 0;
+    //public int checkIdx(string s)
+    //{
+    //    int idx = 0;
 
-        switch(s)
-        {
-            case "Blink":
-                idx = 0;
-                break;
-            case "Shadow":
-                idx = 1;
-                break;
-            case "Swamp":
-                idx = 2;
-                break;
-        }
+    //    switch(s)
+    //    {
+    //        case "Blink":
+    //            idx = 0;
+    //            break;
+    //        case "Shadow":
+    //            idx = 1;
+    //            break;
+    //        case "Swamp":
+    //            idx = 2;
+    //            break;
+    //    }
 
-        return idx;
-    }
+    //    return idx;
+    //}
 
 
 }

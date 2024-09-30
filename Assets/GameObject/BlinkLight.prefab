@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8891248597693774529}
   - component: {fileID: 7763246249273203579}
   m_Layer: 6
-  m_Name: Disable
-  m_TagString: Untagged
+  m_Name: BlinkLight
+  m_TagString: Blink
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -322,7 +322,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1ba5de69bfaffd34fa6234b664213ca9, type: 2}
+  - {fileID: 2100000, guid: 37f4c883fbcfb154cb7f6b1790ddc3ab, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

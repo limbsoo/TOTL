@@ -84,6 +84,8 @@ public class DataManager : MonoBehaviour
             sb.lineNum = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>().lineNum;
             sb.blockName = FieldEffectPopUpManager.instance.blocks[i].name;
 
+            sb.upperIdx = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>().m_upperIdx;
+            sb.DownerIdx = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>().m_downerIdx;
             data.setBlocks.Add(sb);
         }
 

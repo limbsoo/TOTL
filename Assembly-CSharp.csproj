@@ -66,6 +66,7 @@
     <Compile Include="Assets\Annoation.cs" />
     <Compile Include="Assets\TimeLine.cs" />
     <Compile Include="Assets\Funcs\InterfacesEnums.cs" />
+    <Compile Include="Assets\GameObject\controller\JoyStickController.cs" />
     <Compile Include="Assets\etc\Controller.cs" />
     <Compile Include="Assets\FieldEffectPopUpManager.cs" />
     <Compile Include="Assets\Player.cs" />
@@ -97,7 +98,6 @@
     <Compile Include="Assets\etc\GameSet.cs" />
     <Compile Include="Assets\LightObstacle.cs" />
     <Compile Include="Assets\DragAndDropItem.cs" />
-    <Compile Include="Assets\GameObject\controller\JoyStickController.cs" />
     <Compile Include="Assets\FieldEffect.cs" />
   </ItemGroup>
   <ItemGroup>

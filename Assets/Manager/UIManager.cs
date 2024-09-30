@@ -27,7 +27,21 @@ public class UIManager : MonoBehaviour
 
     public Image skillCoolDown;
 
+    public Button Skill;
 
+
+    public Button DecideButton;
+
+    public void IdleDecideButton(bool DidDecide)
+    {
+        DecideButton.interactable = DidDecide;
+    }
+
+
+    public void IdleSkillButton(bool CanUseSkill)
+    {
+        Skill.interactable = CanUseSkill;
+    }
 
 
     public void CompleteStage()
@@ -36,9 +50,9 @@ public class UIManager : MonoBehaviour
         OnInitializeUI?.Invoke();
     }
 
-    
 
 
+    public Image SealCoolDown;
 
 
     public Slider cooldownSlider;
@@ -98,7 +112,27 @@ public class UIManager : MonoBehaviour
     int stageTime = 0;
 
 
+    public IEnumerator SEalCoroutine(float duration)
+    {
+        SealCoolDown.gameObject.SetActive(true);
 
+
+        SealCoolDown.fillAmount = 1;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            SealCoolDown.fillAmount = 1 - Mathf.Clamp01(elapsed / duration);
+
+            yield return null;
+        }
+
+
+
+        SealCoolDown.gameObject.SetActive(false);
+
+    }
 
 
     //플레이어 이벤트
@@ -108,19 +142,51 @@ public class UIManager : MonoBehaviour
     }
 
 
-    private IEnumerator CooldownCoroutine(float duration)
+    public IEnumerator CooldownCoroutine(float duration)
     {
         skillCoolDown.gameObject.SetActive(true);
 
+        skillCoolDown.fillAmount = 1;
 
         float elapsed = 0f;
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            skillCoolDown.fillAmount = (1.0f / duration - elapsed);
+            //skillCoolDown.fillAmount = (1.0f / duration - elapsed);
+            skillCoolDown.fillAmount = 1 - Mathf.Clamp01(elapsed / duration);
+
             yield return null;
         }
         skillCoolDown.gameObject.SetActive(false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //skillCoolDown.gameObject.SetActive(true);
+
+        //skillCoolDown.fillAmount = 1;
+
+        //float elapsed = 0f;
+        //while (elapsed < duration)
+        //{
+        //    elapsed += Time.deltaTime;
+        //    skillCoolDown.fillAmount = (1.0f / duration - elapsed);
+
+        //    skillCoolDown.fillAmount -= ()
+
+        //    yield return null;
+        //}
+        //skillCoolDown.gameObject.SetActive(false);
 
 
 
@@ -144,13 +210,28 @@ public class UIManager : MonoBehaviour
     private IEnumerator stageTimer(float duration)
     {
         float elapsed = 0f;
-        while (elapsed < duration)
+
+        float saved = 0;
+
+        while (elapsed <= duration)
         {
             elapsed += Time.deltaTime;
             stageTimeSlider.value = Mathf.Clamp01(elapsed / duration);
+
+            StageManager.instance.waveTime = (int)elapsed;
+
+            if(saved + 1 < elapsed)
+            {
+                saved += 1;
+                StageManager.instance.stageTime += 1;
+            }
+
+
+            
             yield return null;
         }
         stageTimeSlider.value = 0;
+        StageManager.instance.waveTime = 0;
         StageTimeSliderCoroutine = null;
     }
 

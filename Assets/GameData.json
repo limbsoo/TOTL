@@ -1,13 +1,15 @@
 {
     "name": "Player",
     "maxWave": 0,
-    "curWave": 4,
+    "curWave": 5,
     "setBlocks": [
         {
             "blockName": "Blink",
             "lineNum": 1,
             "start": 0,
             "end": 0,
+            "upperIdx": 2,
+            "DownerIdx": 0,
             "position": {
                 "x": 518.3500366210938,
                 "y": 804.2999877929688,
@@ -19,6 +21,8 @@
             "lineNum": 2,
             "start": 0,
             "end": 0,
+            "upperIdx": 0,
+            "DownerIdx": 1,
             "position": {
                 "x": 857.85009765625,
                 "y": 804.2999877929688,
@@ -27,12 +31,27 @@
         },
         {
             "blockName": "Swamp",
-            "lineNum": 0,
+            "lineNum": 4,
             "start": 0,
             "end": 0,
+            "upperIdx": 1,
+            "DownerIdx": 0,
             "position": {
-                "x": 580.6392211914063,
-                "y": 611.9386596679688,
+                "x": 569.550048828125,
+                "y": 610.8900756835938,
+                "z": 0.0
+            }
+        },
+        {
+            "blockName": "block(Clone)",
+            "lineNum": 3,
+            "start": 0,
+            "end": 0,
+            "upperIdx": 2,
+            "DownerIdx": 2,
+            "position": {
+                "x": 230.04998779296876,
+                "y": 610.8900756835938,
                 "z": 0.0
             }
         }

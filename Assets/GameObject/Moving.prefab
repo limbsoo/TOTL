@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 494794159377985404}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 50, y: 0.005, z: 50}
+  m_LocalScale: {x: 30, y: 0.005, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3253219690253866161}
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 37f4c883fbcfb154cb7f6b1790ddc3ab, type: 2}
+  - {fileID: 2100000, guid: ec0fd3240071d06429cf722bbabcddbd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,8 +109,8 @@ GameObject:
   - component: {fileID: 3253219690253866161}
   - component: {fileID: 5337987120966694483}
   m_Layer: 0
-  m_Name: Blink
-  m_TagString: Blink
+  m_Name: Moving
+  m_TagString: Shadow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,7 +127,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8688370750918947354}
+  - {fileID: 1519229385110379210}
   - {fileID: 1810406821092803111}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -146,20 +146,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_upperIdx: 0
   m_downerIdx: 0
---- !u!1001 &561588951574724290
+--- !u!1001 &7659780829284472338
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 3253219690253866161}
     m_Modifications:
+    - target: {fileID: 562636779681180512, guid: 177034c820eed894f8b3031dc4360042, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -5.85
+      objectReference: {fileID: 0}
     - target: {fileID: 4026453564578296545, guid: 177034c820eed894f8b3031dc4360042, type: 3}
       propertyPath: m_Name
       value: EffectCoolDownUI
       objectReference: {fileID: 0}
-    - target: {fileID: 9001780256921250444, guid: 177034c820eed894f8b3031dc4360042, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
+    - target: {fileID: 4653692676517656809, guid: 177034c820eed894f8b3031dc4360042, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9001780256921250444, guid: 177034c820eed894f8b3031dc4360042, type: 3}
       propertyPath: m_AnchorMax.y
@@ -251,8 +255,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 177034c820eed894f8b3031dc4360042, type: 3}
---- !u!224 &8688370750918947354 stripped
+--- !u!224 &1519229385110379210 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9176190924216061144, guid: 177034c820eed894f8b3031dc4360042, type: 3}
-  m_PrefabInstance: {fileID: 561588951574724290}
+  m_PrefabInstance: {fileID: 7659780829284472338}
   m_PrefabAsset: {fileID: 0}

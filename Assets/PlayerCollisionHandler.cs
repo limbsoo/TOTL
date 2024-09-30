@@ -37,6 +37,73 @@ public class PlayerCollisionHandler : MonoBehaviour
     private Coroutine swampEffectedCoroutine;
 
 
+    private Coroutine DelayEffectCoroutine;
+
+
+    private bool isDelayTriggered = false;
+    public float triggerTime = 2.0f; // 효과를 발동시키기 위한 시간 (초)
+    private float triggerEnterTime = 0.0f; // Trigger가 시작된 시간
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (StageManager.Sstate == StageState.Play)
+        {
+            switch (other.gameObject.tag)
+            {
+                case ("EffectRange"):
+                    if (gameObject.tag == "Player")
+                    {
+
+
+                        FieldEffect fe = other.gameObject.transform.parent.GetComponent<FieldEffect>();
+
+                        if(fe == null)
+                        {
+                            isDelayTriggered = false;
+                            triggerEnterTime = 0.0f;
+                        }
+
+
+
+                        else if (fe.m_upperIdx == 1)
+                        {
+                            isDelayTriggered = true;
+                            triggerEnterTime = Time.time;
+                        }
+                    }
+                    break;
+
+
+                //break;
+            }
+
+            
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (StageManager.Sstate == StageState.Play)
+        {
+            switch (other.gameObject.tag)
+            {
+                case ("EffectRange"):
+                    if (gameObject.tag == "Player")
+                    {
+                        isDelayTriggered = false; // Trigger 영역을 벗어남
+                        triggerEnterTime = 0.0f; // 타이머 초기화
+                    }
+                    break;
+            }
+
+
+        }
+
+    }
+
+
+
+
     private void OnTriggerStay(Collider other)
     {
         if (StageManager.Sstate == StageState.Play)
@@ -110,28 +177,36 @@ public class PlayerCollisionHandler : MonoBehaviour
                 case ("EffectRange"):
                     if (gameObject.tag == "Player")
                     {
-                        switch (other.gameObject.transform.parent.tag)
+                        FieldEffect fe = other.gameObject.transform.parent.GetComponent<FieldEffect>();
+
+                        if (fe == null)
                         {
-                            case "Blink":
-                                
-                                break;
-                            case "Shadow":
-                               
-                                break;
-                            case "Swamp":
-                                if(swampEffectedCoroutine != null)
-                                {
-                                    StopCoroutine(swampEffectedCoroutine);
-
-                                   
-                                }
-
-                                swampEffectedCoroutine = StartCoroutine(gameObject.GetComponent<Player>().slowliy());
-
-                                break;
+                            isDelayTriggered = false;
+                            triggerEnterTime = 0.0f;
                         }
 
-                        
+                        else if (fe.m_upperIdx == 1)
+                        {
+                            if (isDelayTriggered)
+                            {
+                                if (Time.time - triggerEnterTime >= triggerTime)
+                                {
+
+                                    triggerEnterTime = 0.0f;
+
+                                    Player P = gameObject.GetComponent<Player>();
+
+                                    P.ApplyDelayEffect(fe);
+                                }
+                            }
+                        }
+
+                        else
+                        {
+                            Player P = gameObject.GetComponent<Player>();
+                            P.setEffected(fe.m_downerIdx);
+                        }
+
                     }
                     break;
 
@@ -260,9 +335,6 @@ public class PlayerCollisionHandler : MonoBehaviour
 
         //}
     }
-
-
-
 
 
 

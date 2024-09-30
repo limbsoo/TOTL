@@ -409,6 +409,78 @@ public class Player : MonoBehaviour
         }
     }
 
+
+
+    public bool summonDecoy = false;
+
+
+    public void UseDecoy()
+    {
+        GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
+
+        canUseSkill = false;
+        summonDecoy = true;
+
+        UIManager.instance.IdleSkillButton(false);
+
+        StartCoroutine(Function.instance.CountDown(coolDown, () => {
+            UIManager.instance.IdleSkillButton(true);
+            canUseSkill = !canUseSkill;
+            summonDecoy = !summonDecoy;
+            Destroy(go);
+        }));
+    }
+
+    public void UseTeleport()
+    {
+        Vector3 teleportPosition = rb.position + rb.transform.forward * teleportLength;
+        rb.MovePosition(teleportPosition);
+
+        Debug.Log("Teleport used!");
+
+        canUseSkill = false;
+        StartCoroutine(Function.instance.CountDown(coolDown, () => { canUseSkill = !canUseSkill; }));
+        //Function.instance.ChangeStateAndDelay(ref canUseSkill, coolDown, () => { canUseSkill = !canUseSkill;});
+    }
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public void ApplyFieldEffect(FieldEffect fe)
+    {
+        switch (fe.m_downerIdx)
+        {
+            case 0: // Damage
+
+                if (!playerDamaged) underAttack();
+
+
+                //health -= 1;
+                break;
+            case 1: // Seal
+                StartCoroutine(Weakning());
+                break;
+            case 2: // Slow
+
+                if (slowEffectedCoroutine != null)
+                {
+                    StopCoroutine(slowEffectedCoroutine);
+                }
+
+                slowEffectedCoroutine = StartCoroutine(ApplySlow(5));
+
+
+
+                break;
+        }
+    }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public void underAttack()
     {
         playerDamaged = true;
@@ -438,38 +510,9 @@ public class Player : MonoBehaviour
         //transform.position += new Vector3(collidedObject.transform.forward.x * 2, 0, collidedObject.transform.forward.z * 2);
     }
 
-    public bool summonDecoy = false;
 
 
-    public void UseDecoy()
-    {
-        GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
-
-        canUseSkill = false;
-        summonDecoy = true;
-
-        StartCoroutine(Function.instance.CountDown(coolDown, () => { 
-            canUseSkill = !canUseSkill;
-            summonDecoy = !summonDecoy;
-            Destroy(go);
-        }));
-    }
-
-    public void UseTeleport()
-    {
-        Vector3 teleportPosition = rb.position + rb.transform.forward * teleportLength;
-        rb.MovePosition(teleportPosition);
-
-        Debug.Log("Teleport used!");
-
-        canUseSkill = false;
-        StartCoroutine(Function.instance.CountDown(coolDown, () => { canUseSkill = !canUseSkill; }));
-        //Function.instance.ChangeStateAndDelay(ref canUseSkill, coolDown, () => { canUseSkill = !canUseSkill;});
-    }
-
-
-
-    private IEnumerator Weakning()
+    public IEnumerator Weakning()
     {
         //while(PenealtyTime > 0)
         //{
@@ -490,15 +533,108 @@ public class Player : MonoBehaviour
     }
 
 
-    public IEnumerator slowliy()
+    public IEnumerator slowliy() //딜레이는 시간도 더 길게 패널티를 주자
     {
         moveSpeed = 10;
-        yield return new WaitForSecondsRealtime(1);
+        //yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(0.1f);
+        moveSpeed = 20;
+    }
+
+    private Coroutine slowEffectedCoroutine;
+
+
+    public IEnumerator ApplySlow(float delay) //딜레이는 시간도 더 길게 패널티를 주자
+    {
+        moveSpeed = 10;
+        //yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(delay);
         moveSpeed = 20;
     }
 
 
+    private Coroutine SealSkillCoroutine;
 
+
+
+    public void ApplyDelayEffect(FieldEffect fe)
+    {
+        switch (fe.m_downerIdx)
+        {
+            case 0: // Damage
+
+                if (!playerDamaged) underAttack();
+
+
+                //health -= 1;
+                break;
+            case 1: // Seal
+                    //StartCoroutine(Weakning());
+
+                if (SealSkillCoroutine != null)
+                {
+                    StopCoroutine(SealSkillCoroutine);
+                }
+
+                SealSkillCoroutine = StartCoroutine(UIManager.instance.SEalCoroutine(5));
+
+
+
+                break;
+            case 2: // Slow
+
+                if (slowEffectedCoroutine != null)
+                {
+                    StopCoroutine(slowEffectedCoroutine);
+                }
+
+                slowEffectedCoroutine = StartCoroutine(ApplySlow(5));
+
+
+
+                break;
+        }
+    }
+
+
+
+    public void setEffected(int idx)
+    {
+        switch (idx)
+        {
+            case 0: // Damage
+
+                if(!playerDamaged) underAttack();
+
+
+                //health -= 1;
+                break;
+            case 1: // Seal
+                    //StartCoroutine(Weakning());
+                if (SealSkillCoroutine != null)
+                {
+                    StopCoroutine(SealSkillCoroutine);
+                }
+
+                SealSkillCoroutine = StartCoroutine(UIManager.instance.SEalCoroutine(5));
+
+
+
+                break;
+            case 2: // Slow
+
+                if (slowEffectedCoroutine != null)
+                {
+                    StopCoroutine(slowEffectedCoroutine);
+                }
+
+                slowEffectedCoroutine = StartCoroutine(slowliy());
+
+
+                
+                break;
+        }
+    }
 
 
 
