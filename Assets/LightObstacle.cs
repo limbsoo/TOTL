@@ -241,7 +241,7 @@ public class LightObstacle : MonoBehaviour
         float spotRange = spotLightComponent.range;
 
         // 게임 오브젝트가 스포트라이트의 범위 내에 있는지 체크
-        Vector3 toObject = StageManager.player.transform.position - spotlightPosition;
+        Vector3 toObject = StageManager.instance.player.transform.position - spotlightPosition;
         float distanceToObject = toObject.magnitude;
 
         // 범위 내에 있는지 확인
@@ -311,7 +311,7 @@ public class LightObstacle : MonoBehaviour
     //    float spotRange = spotLightComponent.range;
 
     //    // 게임 오브젝트가 스포트라이트의 범위 내에 있는지 체크
-    //    Vector3 toObject = StageManager.players[StageManager.currentPlayerIdx].transform.position - spotlightPosition;
+    //    Vector3 toObject = StageManager.instance.players[StageManager.currentPlayerIdx].transform.position - spotlightPosition;
     //    float distanceToObject = toObject.magnitude;
 
     //    // 범위 내에 있는지 확인

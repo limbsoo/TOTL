@@ -63,7 +63,9 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
 
         if (DataManager.Instance.data.curWave >=1 ) SetBlocks(DataManager.Instance.data);
-        CreateBlock();
+        
+        
+        if (DataManager.Instance.data.curWave <= 7) CreateBlock();
 
         //StageManager.instance.OnContinueWave += SetBlocks;
 

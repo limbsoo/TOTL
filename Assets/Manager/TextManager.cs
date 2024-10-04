@@ -35,7 +35,6 @@ public class TextManager : MonoBehaviour
 
     private void Start()
     {
-
     }
 
     public void InitText()
@@ -44,7 +43,7 @@ public class TextManager : MonoBehaviour
         //countDown
         waveTimer.text = "";
         stageTimer.text = "";
-        targetScore.text = "TargetScore : " + StageManager.LCS.targetScore.ToString();
+        targetScore.text = "TargetScore : " + StageManager.instance.LCS.targetScore.ToString();
         curScore.text = "Score: 0";
         health.text = "Health : " + DataManager.Instance.data.health.ToString();
         damage.text = "Damage : " + DataManager.Instance.data.damamge.ToString();
@@ -64,7 +63,7 @@ public class TextManager : MonoBehaviour
     {
         if(StageManager.Sstate == StageState.Play)
         {
-            curScore.text = "Score: " + StageManager.currentScore.ToString();
+            curScore.text = "Score: " + StageManager.instance.currentScore.ToString();
             health.text = "Health : " + Player.instance.health.ToString();
             damage.text = "Damage : " + Player.instance.damamge.ToString();
             speed.text = "Speed : " + Player.instance.moveSpeed.ToString();

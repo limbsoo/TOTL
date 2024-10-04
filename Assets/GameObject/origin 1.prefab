@@ -337,6 +337,7 @@ MonoBehaviour:
   teleportLength: 10
   animator: {fileID: 8418733224931950773}
   Decoy: {fileID: 7556202531076509471, guid: a0ca2608fb4d52747a426aff3a759807, type: 3}
+  summonDecoy: 0
 --- !u!114 &8418733224931950775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,6 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a47490ba4a8cf594fb8367f07e7f560b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerTime: 2
 --- !u!54 &3230312416363756384
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -621,6 +623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a47490ba4a8cf594fb8367f07e7f560b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerTime: 2
 --- !u!54 &4982673284350739958
 Rigidbody:
   m_ObjectHideFlags: 0

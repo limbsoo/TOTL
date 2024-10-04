@@ -53,7 +53,19 @@ public class Enemy : MonoBehaviour
     //    nmAgent = GetComponent<NavMeshAgent>();
     //}
 
+    public Vector3 originPos;
+
+
+
     private ParticleSystem psystem;
+
+
+    public Coroutine chasing;
+
+
+    public Animator animator;
+
+    private GameObject enemyFBX;
 
     private void Start()
     {
@@ -68,6 +80,12 @@ public class Enemy : MonoBehaviour
         transform.GetChild(0).gameObject.GetComponent<CapsuleCollider>().enabled = true;
 
         mat = this.GetComponent<Renderer>().materials;
+
+        originPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+
+
+        enemyFBX = transform.Find("Enemy").gameObject;
+        animator = enemyFBX.GetComponent<Animator>();
 
     }
 
@@ -84,6 +102,44 @@ public class Enemy : MonoBehaviour
         nmAgent = null;
         Destroy(this.gameObject);
     }
+
+
+    public void updateDesitnationPos(Vector3 pos)
+    {
+        if (StageManager.Sstate == StageState.Play)
+        {
+            if (this.nmAgent == null) return;
+        }
+
+        nmAgent.SetDestination(pos);
+
+    }
+
+    public void Update()
+    {
+        if(curTarget == "")
+        {
+            animator.SetInteger("Idle", 0);
+        }
+
+        else
+        {
+            animator.SetInteger("Idle", 1);
+        }
+
+
+        //if(nmAgent.destination == transform.position)
+        //{
+        //    animator.SetInteger("Idle", 0);
+        //}
+
+        //else
+        //{
+        //    animator.SetInteger("Idle", 1);
+        //}
+    }
+
+
 
 
     public void updateDestination(Transform tf)
@@ -140,24 +196,24 @@ public class Enemy : MonoBehaviour
 
 
 
-            //Rigidbody rb = StageManager.player.GetComponent<Rigidbody>();
+            //Rigidbody rb = StageManager.instance.player.GetComponent<Rigidbody>();
             //enemy.updateDestination(rb.transform);
 
 
-            if (StageManager.player == null) return;
-            enemy.updateDestination(StageManager.player.transform);
+            if (StageManager.instance.player == null) return;
+            enemy.updateDestination(StageManager.instance.player.transform);
         }
 
 
     }
-
+ 
 
 
     public void damaged(float damamge, Vector3 forward)
     {
         if(health - damamge <= 0)
         {
-            StageManager.currentScore++;
+            StageManager.instance.currentScore++;
             setNullNMagent();
         }
 
@@ -202,12 +258,12 @@ public class Enemy : MonoBehaviour
 
 
 
-        //Rigidbody rb = StageManager.player.GetComponent<Rigidbody>();
+        //Rigidbody rb = StageManager.instance.player.GetComponent<Rigidbody>();
         //enemy.updateDestination(rb.transform);
 
 
-        //if (StageManager.player == null) return;
-        //enemy.updateDestination(StageManager.player.transform);
+        //if (StageManager.instance.player == null) return;
+        //enemy.updateDestination(StageManager.instance.player.transform);
 
 
 

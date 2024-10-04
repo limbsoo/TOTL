@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements.Experimental;
 
 public class PlayerCollisionHandler : MonoBehaviour
 {
@@ -87,11 +88,32 @@ public class PlayerCollisionHandler : MonoBehaviour
         {
             switch (other.gameObject.tag)
             {
-                case ("EffectRange"):
+                //case ("EffectRange"):
+                //    if (gameObject.tag == "Player")
+                //    {
+                //        isDelayTriggered = false; // Trigger 영역을 벗어남
+                //        triggerEnterTime = 0.0f; // 타이머 초기화
+                //    }
+                //    break;
+
+                case ("EnemySensor"):
                     if (gameObject.tag == "Player")
                     {
-                        isDelayTriggered = false; // Trigger 영역을 벗어남
-                        triggerEnterTime = 0.0f; // 타이머 초기화
+                        Enemy enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
+
+                        enemy.chasing = StartCoroutine(Function.instance.CountDown(2f, () =>
+                        {
+                            enemy.updateDesitnationPos(enemy.originPos); // 적이 플레이어를 쫓는 함수
+                            enemy.curTarget = "";
+
+                        }));
+
+
+
+
+
+                        //isDelayTriggered = false; // Trigger 영역을 벗어남
+                        //triggerEnterTime = 0.0f; // 타이머 초기화
                     }
                     break;
             }
@@ -143,12 +165,19 @@ public class PlayerCollisionHandler : MonoBehaviour
                 case ("EnemySensor"):
                     if (other.transform.parent != null)
                     {
+                       
+
+
+
+
                         if (gameObject.tag == "Decoy")
                         {
                             // 충돌한 적이 디코이를 감지했을 때
                             Enemy enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
                             enemy.chasingPlayer(gameObject.transform); // 적이 플레이어를 쫓는 함수
                             enemy.curTarget = "Decoy"; // 적의 현재 타겟을 디코이로 설정
+
+                            if (enemy.chasing != null) enemy.chasing = null;
                         }
                         else if (gameObject.tag == "Player")
                         {
@@ -168,6 +197,8 @@ public class PlayerCollisionHandler : MonoBehaviour
                                 enemy.chasingPlayer(gameObject.transform); // 적이 플레이어를 쫓음
                             }
 
+                            if (enemy.chasing != null) enemy.chasing = null;
+
                         }
 
                     }
@@ -178,6 +209,8 @@ public class PlayerCollisionHandler : MonoBehaviour
                     if (gameObject.tag == "Player")
                     {
                         FieldEffect fe = other.gameObject.transform.parent.GetComponent<FieldEffect>();
+
+                        
 
                         if (fe == null)
                         {
@@ -203,8 +236,15 @@ public class PlayerCollisionHandler : MonoBehaviour
 
                         else
                         {
-                            Player P = gameObject.GetComponent<Player>();
-                            P.setEffected(fe.m_downerIdx);
+                            if(fe.IsActivated())
+                            //if(other.gameObject.GetComponent<CapsuleCollider>().enabled)
+                            {
+
+                                Player P = gameObject.GetComponent<Player>();
+                                P.setEffected(fe.m_downerIdx);
+                            }
+
+
                         }
 
                     }

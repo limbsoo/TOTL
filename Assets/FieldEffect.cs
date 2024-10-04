@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -26,7 +27,7 @@ public class FieldEffect : MonoBehaviour
 
     private Slider EffectTimer;
 
-
+    private Slider EffectActiveTimer;
 
     public void Start()
     {
@@ -55,9 +56,17 @@ public class FieldEffect : MonoBehaviour
             //EffectTime.GetComponent<Slider>();
 
             EffectTimer = EffectTime.GetComponent<Slider>();
+
+            EffectActiveTimer = go.transform.Find("EffectActiveCoolDown").gameObject.GetComponent<Slider>();
         }
 
 
+
+        RangeMaterial = EffectRange.gameObject.GetComponent<Renderer>().material;
+
+        RangeMaterial.SetFloat("_curState", 0.1f);
+
+        //RangeMaterial
 
         //EffectRange = transform.GetChild(0).gameObject;
     }
@@ -72,6 +81,8 @@ public class FieldEffect : MonoBehaviour
         gridIdx = idx;
     }
 
+
+    public Material RangeMaterial;
 
     //private Vector3 moving;
 
@@ -89,6 +100,19 @@ public class FieldEffect : MonoBehaviour
         }
         EffectTimer.value = 0;
         //EffectTimer = null;
+
+
+
+        elapsed = 0f;
+        while (elapsed < 5)
+        {
+            elapsed += Time.deltaTime;
+
+            EffectActiveTimer.value = Mathf.Clamp01(elapsed / duration);
+            yield return null;
+        }
+        EffectActiveTimer.value = 0;
+
     }
 
 
@@ -106,15 +130,25 @@ public class FieldEffect : MonoBehaviour
                     {
                         case (0): //0 Blink
                             FieldEffectCoroutine = StartCoroutine(blinkEffect(startTime, endTime));
+                            //EffectRange.SetActive(true);
+                            //RangeMaterial.SetFloat("_curState", 1f);
 
-                            //if (EffectTime != null)
+                            //FieldEffectCoroutine = StartCoroutine(EffectStart(startTime, endTime, () =>
                             //{
-                            //    StartCoroutine(StartEffectTimer(5));
-                            //}
+                            //    EffectRange.SetActive(false);
+                            //    RangeMaterial.SetFloat("_curState", 0.2f);
+                            //    FieldEffectCoroutine = null;
+                            //}));
+
 
                             break;
 
                         case (1): //1 Delay
+
+                            //EffectRange.SetActive(true);
+                            //RangeMaterial.SetFloat("_curState", 1f);
+
+
                             FieldEffectCoroutine = StartCoroutine(Delay(startTime, endTime));
 
 
@@ -124,6 +158,11 @@ public class FieldEffect : MonoBehaviour
 
                         case (2): //2 Moving
                             FieldEffectCoroutine = StartCoroutine(moveRange(startTime, endTime, gridIdx));
+
+
+
+
+
                             break;
                     }
 
@@ -141,12 +180,38 @@ public class FieldEffect : MonoBehaviour
 
     }
 
+    //private IEnumerator EffectStart(int start, int end, Action act)
+    //{
+
+    //    //EffectRange.SetActive(true);
+    //    yield return new WaitForSeconds(end - start);
+
+    //    act();
+
+    //    //EffectRange.SetActive(false);
+
+
+
+    //    //FieldEffectCoroutine = null;
+    //}
+
+
+
+
+
+
+
     private IEnumerator Delay(int start, int end)
     {
         EffectRange.gameObject.GetComponent<CapsuleCollider>().enabled = true;
 
+        RangeMaterial.SetFloat("_curState", 1f);
+
         yield return new WaitForSeconds(end - start);
         EffectRange.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+
+
+        RangeMaterial.SetFloat("_curState", 0.2f);
 
         FieldEffectCoroutine = null;
     }
@@ -154,7 +219,9 @@ public class FieldEffect : MonoBehaviour
 
     private IEnumerator moveRange(int start, int end, int idx)
     {
-        while(end != StageManager.instance.waveTime) 
+        RangeMaterial.SetFloat("_curState", 1f);
+
+        while (end != StageManager.instance.waveTime) 
         {
 
             // 현재 위치를 저장
@@ -191,7 +258,7 @@ public class FieldEffect : MonoBehaviour
         }
 
 
-
+        RangeMaterial.SetFloat("_curState", 0.2f);
         FieldEffectCoroutine = null;
     }
 
@@ -229,16 +296,16 @@ public class FieldEffect : MonoBehaviour
     }
 
 
-
     private IEnumerator blinkEffect(int start, int end)
     {
 
         EffectRange.SetActive(true);
+        RangeMaterial.SetFloat("_curState", 1f);
         yield return new WaitForSeconds(end - start);
 
 
         EffectRange.SetActive(false);
-
+        RangeMaterial.SetFloat("_curState", 0.2f);
 
 
         FieldEffectCoroutine = null;
@@ -254,6 +321,15 @@ public class FieldEffect : MonoBehaviour
         FieldEffectCoroutine = null;
     }
 
+    public bool IsActivated()
+    {
+        if (FieldEffectCoroutine == null)
+        {
+            return false;
+        }
+
+        else return true;
+    }
 
 
 

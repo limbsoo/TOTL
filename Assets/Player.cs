@@ -115,25 +115,37 @@ public class Player : MonoBehaviour
 
     private float attackDuration;
 
-    
+
+    private GameObject playerFBX;
+
+
 
     private void Start()
     {
-        
+
+
+        playerFBX = transform.Find("Player").gameObject;
+
+        animator = playerFBX.GetComponent<Animator>();
+
+        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+        //clips[0].
 
         mat = this.GetComponent<Renderer>().materials;
 
-        //gameObject.GetComponent<MeshRenderer>().material = mat[1];
-        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+        ////gameObject.GetComponent<MeshRenderer>().material = mat[1];
+        //AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
 
-        foreach (AnimationClip clip in clips)
-        {
-            if (clip.name == "Attack")
-            {
-                attackDuration = clip.length;
-                break;
-            }
-        }
+        //foreach (AnimationClip clip in clips)
+        //{
+        //    if (clip.name == "Attack")
+        //    {
+        //        attackDuration = clip.length;
+        //        break;
+        //    }
+        //}
+
+
     }
 
     void Update()
@@ -282,7 +294,14 @@ public class Player : MonoBehaviour
         if (movement != Vector3.zero)
         {
             lastRotation = Quaternion.LookRotation(movement);
+            animator.SetInteger("Idle", 1);
         }
+
+        else
+        {
+            animator.SetInteger("Idle", 0);
+        }
+        
 
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -361,10 +380,10 @@ public class Player : MonoBehaviour
 
 
             Vector3 newPos = rb.position + movement * Time.fixedDeltaTime;
-            float width = StageManager.mapTransform.localScale.x * 10f; // Unity 기본 Plane의 크기는 10x10 단위
-            float height = StageManager.mapTransform.localScale.z * 10f;
-            newPos.x = Mathf.Clamp(newPos.x, StageManager.mapTransform.position.x - width / 2, StageManager.mapTransform.position.x + width / 2);
-            newPos.z = Mathf.Clamp(newPos.z, StageManager.mapTransform.position.z - height / 2, StageManager.mapTransform.position.z + height / 2);
+            float width = StageManager.instance.mapTransform.localScale.x * 10f; // Unity 기본 Plane의 크기는 10x10 단위
+            float height = StageManager.instance.mapTransform.localScale.z * 10f;
+            newPos.x = Mathf.Clamp(newPos.x, StageManager.instance.mapTransform.position.x - width / 2, StageManager.instance.mapTransform.position.x + width / 2);
+            newPos.z = Mathf.Clamp(newPos.z, StageManager.instance.mapTransform.position.z - height / 2, StageManager.instance.mapTransform.position.z + height / 2);
             rb.MovePosition(newPos); // 물리적 이동 처리
 
             if (movement != Vector3.zero)
@@ -661,16 +680,16 @@ public class Player : MonoBehaviour
 
     //void suffleFigure(int a, int b)
     //{
-    //    StageManager.players[b].SetActive(true);
-    //    StageManager.players[b].transform.position = StageManager.players[a].transform.position;
-    //    StageManager.players[b].transform.rotation = StageManager.players[a].transform.rotation;
+    //    StageManager.instance.players[b].SetActive(true);
+    //    StageManager.instance.players[b].transform.position = StageManager.instance.players[a].transform.position;
+    //    StageManager.instance.players[b].transform.rotation = StageManager.instance.players[a].transform.rotation;
 
-    //    //rb = StageManager.players[a].GetComponent<Rigidbody>();
+    //    //rb = StageManager.instance.players[a].GetComponent<Rigidbody>();
 
-    //    StageManager.players[a].SetActive(false);
+    //    StageManager.instance.players[a].SetActive(false);
     //    StageManager.currentPlayerIdx = b;
 
-    //    //CameraController.instance.transform.position = new Vector3(StageManager.players[b].transform.position.x, StageManager.players[b].transform.position.y + 50, StageManager.players[b].transform.position.z - 30);
+    //    //CameraController.instance.transform.position = new Vector3(StageManager.instance.players[b].transform.position.x, StageManager.instance.players[b].transform.position.y + 50, StageManager.instance.players[b].transform.position.z - 30);
 
     //}
 

@@ -146,6 +146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_upperIdx: 0
   m_downerIdx: 0
+  RangeMaterial: {fileID: 0}
 --- !u!1001 &7659780829284472338
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -154,8 +155,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 3253219690253866161}
     m_Modifications:
     - target: {fileID: 562636779681180512, guid: 177034c820eed894f8b3031dc4360042, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -4.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 562636779681180512, guid: 177034c820eed894f8b3031dc4360042, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -5.85
+      value: 3.05
       objectReference: {fileID: 0}
     - target: {fileID: 4026453564578296545, guid: 177034c820eed894f8b3031dc4360042, type: 3}
       propertyPath: m_Name

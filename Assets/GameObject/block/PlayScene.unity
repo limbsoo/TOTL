@@ -6537,15 +6537,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GCS: {fileID: 11400000, guid: 8cdf67968a135ce459ed79354c16e66d, type: 2}
-  divide: 0
+  LCS: {fileID: 0}
+  player: {fileID: 0}
+  enemies: []
+  fieldEffects: []
+  curStage: 0
+  targetScore: 0
+  currentScore: 0
   gridCenters: []
+  mapTransform: {fileID: 0}
+  divide: 0
+  goals: []
   waveTime: 0
   stageTime: 0
   goalList: 
   m_curWave: 0
   timereee: 0
   idx: 0
-  Gresult: 0
   OnStageClear:
     m_PersistentCalls:
       m_Calls: []
@@ -6562,6 +6570,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillCoolDown: {fileID: 0}
+  Skill: {fileID: 0}
+  DecideButton: {fileID: 0}
   SealCoolDown: {fileID: 0}
   cooldownSlider: {fileID: 107883937}
   fieldEffectPopUp: {fileID: 0}
@@ -7392,15 +7402,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GCS: {fileID: 11400000, guid: 8cdf67968a135ce459ed79354c16e66d, type: 2}
-  divide: 3
+  LCS: {fileID: 0}
+  player: {fileID: 0}
+  enemies: []
+  fieldEffects: []
+  curStage: 0
+  targetScore: 0
+  currentScore: 0
   gridCenters: []
+  mapTransform: {fileID: 0}
+  divide: 3
+  goals: []
   waveTime: 0
   stageTime: 0
   goalList: 
   m_curWave: 0
   timereee: 0
   idx: 0
-  Gresult: 0
   OnStageClear:
     m_PersistentCalls:
       m_Calls:
@@ -8938,7 +8956,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &1254183278
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10172,6 +10190,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillCoolDown: {fileID: 1156886335}
+  Skill: {fileID: 1464739597}
+  DecideButton: {fileID: 586817015}
   SealCoolDown: {fileID: 46756241}
   cooldownSlider: {fileID: 107883937}
   fieldEffectPopUp: {fileID: 1814429432}
@@ -11508,7 +11528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1638160237
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14776,6 +14796,7 @@ GameObject:
   - component: {fileID: 1931976769}
   - component: {fileID: 1931976768}
   - component: {fileID: 1931976767}
+  - component: {fileID: 1931976771}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -14876,6 +14897,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!95 &1931976771
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931976766}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9417cefee61af5c438b870a7885e7f02, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1932687185
 GameObject:
   m_ObjectHideFlags: 0

@@ -4959,6 +4959,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_upperIdx: 0
   m_downerIdx: 0
+  RangeMaterial: {fileID: 0}
 --- !u!1001 &2695571665056935823
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4973,6 +4974,10 @@ PrefabInstance:
     - target: {fileID: 4653692676517656809, guid: 177034c820eed894f8b3031dc4360042, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6186832774302398442, guid: 177034c820eed894f8b3031dc4360042, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9001780256921250444, guid: 177034c820eed894f8b3031dc4360042, type: 3}
       propertyPath: m_AnchorMax.x
