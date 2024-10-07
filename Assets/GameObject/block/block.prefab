@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 128, y: 128}
+  m_SizeDelta: {x: 131, y: 168}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8385153907823022993
 CanvasRenderer:
@@ -119,8 +119,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 547, y: -858}
-  m_SizeDelta: {x: 128, y: 128}
+  m_AnchoredPosition: {x: 1170, y: -324}
+  m_SizeDelta: {x: 131, y: 168}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6186121196424915989
 CanvasRenderer:
@@ -177,7 +177,7 @@ MonoBehaviour:
   lineNum: 0
   start: 0
   end: 0
-  idx: 0
+  _idx: 0
   UpperSprites:
   - {fileID: 21300000, guid: dc1564a9b3db1d940a2875f797798958, type: 3}
   - {fileID: 21300000, guid: e29c102d4e3658d4983cb308311264f9, type: 3}
@@ -186,8 +186,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5d259f9235991cc4fbead08d94cdd3e8, type: 3}
   - {fileID: 21300000, guid: c9eb0bca95931e048bd395b9150ff1d7, type: 3}
   - {fileID: 21300000, guid: cabda1e23f5ce3445b14620b801230c8, type: 3}
-  UpperIdx: 0
-  DownerIdx: 0
+  m_upperIdx: 0
+  m_downerIdx: 0
   UpperImage: {fileID: 3784385270560162123}
   DownerImage: {fileID: 7679137393991574564}
 --- !u!114 &6186121196424915991
@@ -356,7 +356,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 128, y: 128}
+  m_SizeDelta: {x: 131, y: 168}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6334921370572612616
 CanvasRenderer:

@@ -109,9 +109,11 @@ public class Enemy : MonoBehaviour
         if (StageManager.Sstate == StageState.Play)
         {
             if (this.nmAgent == null) return;
+
+            nmAgent.SetDestination(pos);
         }
 
-        nmAgent.SetDestination(pos);
+       
 
     }
 
@@ -126,6 +128,18 @@ public class Enemy : MonoBehaviour
         {
             animator.SetInteger("Idle", 1);
         }
+
+        Vector2 forward = new Vector2(transform.position.z, transform.position.x);
+        Vector2 steeringTarget = new Vector2(nmAgent.steeringTarget.z, nmAgent.steeringTarget.x);
+
+        //방향을 구한 뒤, 역함수로 각을 구한다.
+        Vector2 dir = steeringTarget - forward;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        //방향 적용
+        transform.eulerAngles = Vector3.up * angle;
+
+
 
 
         //if(nmAgent.destination == transform.position)
