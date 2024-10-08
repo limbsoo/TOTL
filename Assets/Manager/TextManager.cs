@@ -39,18 +39,18 @@ public class TextManager : MonoBehaviour
 
     public void InitText()
     {
-        curStage.text = "CurWave : " + DataManager.Instance.data.curWave.ToString();
+        curStage.text = /*"CurWave : " + */DataManager.Instance.data.curWave.ToString();
         //countDown
         waveTimer.text = "";
         stageTimer.text = "";
         targetScore.text = "TargetScore : " + StageManager.instance.LCS.targetScore.ToString();
-        curScore.text = "Score: 0";
-        health.text = "Health : " + DataManager.Instance.data.health.ToString();
+        curScore.text = "";
+        health.text = /*"Health : " +*/ DataManager.Instance.data.health.ToString();
         damage.text = "Damage : " + DataManager.Instance.data.damamge.ToString();
         speed.text = "Speed : " + DataManager.Instance.data.moveSpeed.ToString();
         coolDown.text = "CoolDown : " + DataManager.Instance.data.coolDown.ToString();
         penealtyCoolDown.text = "Penealty : ";
-        nextGoals.text = "Next goals : ";
+        nextGoals.text = "";
     }
 
 
@@ -63,8 +63,8 @@ public class TextManager : MonoBehaviour
     {
         if(StageManager.Sstate == StageState.Play)
         {
-            curScore.text = "Score: " + StageManager.instance.currentScore.ToString();
-            health.text = "Health : " + Player.instance.health.ToString();
+            curScore.text = StageManager.instance.currentScore.ToString() + " / " + StageManager.instance.targetScore.ToString();
+            health.text = /*"Health : " +*/ Player.instance.health.ToString();
             damage.text = "Damage : " + Player.instance.damamge.ToString();
             speed.text = "Speed : " + Player.instance.moveSpeed.ToString();
             coolDown.text = "CoolDown : " + Player.instance.coolDown.ToString();
@@ -95,7 +95,7 @@ public class TextManager : MonoBehaviour
 
 
 
-            nextGoals.text = "Next goals : ";
+            nextGoals.text = "";
 
             for(int i = 0; i < StageManager.instance.goalList.Count;i++)
             {

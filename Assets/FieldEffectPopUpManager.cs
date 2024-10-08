@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using TMPro;
+using UnityEngine.Rendering.Universal;
 
 public class FieldEffectPopUpManager : MonoBehaviour
 {
@@ -71,18 +73,68 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     }
 
+
+    public TMP_Text slot1;
+    public TMP_Text selectBlockName;
+    public TMP_Text selectBlockInformation;
+
+
     private void Update()
     {
-        //if(blocks.Count > 0) 
-        //{
-        //    if (blocks[blocks.Count-1].) 
-        //    {
+        if (blocks.Count > 0)
+        {
 
-        //    }
+            // 만들때랑 갱신할때만 불러오게
+            FieldEffectBlock feb = blocks[blocks.Count - 1].GetComponent<FieldEffectBlock>();
 
-        //}
+
+            selectBlockName.text = feb.UpperSprites[feb.m_upperIdx].name + " + " + feb.DownerSprites[feb.m_downerIdx].name + " block";
+
+            string s = "";
+
+            switch (feb.m_upperIdx)
+            {
+                case (0): //0 Blink
+                    s += "a부터 b 기간 동안 활성화되는 ";
+                    break;
+
+                case (1): //0 Delay
+                    s += "a부터 b 기간 동안 활성화되며 해당 공간 방문 시 n 초 후에 효과가 발동되는 ";
+                    break;
+
+                case (2): //0 Moving
+                    s += "a부터 b 기간 동안 이동하는 ";
+                    break;
+            }
+
+
+            switch (feb.m_downerIdx)
+            {
+                case (0): //0 Damage
+                    s += "m의 데미지를 주는";
+                    break;
+
+                case (1): //0 Seal
+                    s += "스킬을 n초간 봉인하는";
+                    break;
+
+                case (2): //0 Slow
+                    s += "k만큼 속도를 낮추는";
+                    break;
+            }
+
+            s += " 블록이다.";
+
+
+            //if (blocks[blocks.Count - 1])
+            //{
+
+            //}
+
+            selectBlockInformation.text = s;
+        }
+
     }
-
 
     public void SetBlocks(GameData PlayData)
     {
