@@ -1,7 +1,7 @@
 {
     "name": "Player",
     "maxWave": 0,
-    "curWave": 2,
+    "curWave": 3,
     "setBlocks": [
         {
             "blockName": "MovingSeal",
@@ -11,8 +11,8 @@
             "upperIdx": 2,
             "DownerIdx": 1,
             "position": {
-                "x": 1549.3900146484375,
-                "y": 785.6349487304688,
+                "x": 1545.0400390625,
+                "y": 786.5999755859375,
                 "z": 0.0
             }
         },
@@ -24,8 +24,21 @@
             "upperIdx": 0,
             "DownerIdx": 0,
             "position": {
-                "x": 1601.469970703125,
-                "y": 543.4049682617188,
+                "x": 1588.5999755859375,
+                "y": 542.4199829101563,
+                "z": 0.0
+            }
+        },
+        {
+            "blockName": "MovingSlow",
+            "lineNum": 4,
+            "start": 0,
+            "end": 0,
+            "upperIdx": 2,
+            "DownerIdx": 2,
+            "position": {
+                "x": 1787.9998779296875,
+                "y": 542.4199829101563,
                 "z": 0.0
             }
         }

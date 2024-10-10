@@ -136,6 +136,20 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     }
 
+    public void WriteBlockPeriod(int start, int end)
+    {
+
+    }
+
+
+    public void WriteBlockExplain()
+    {
+
+    }
+
+
+
+
     public void SetBlocks(GameData PlayData)
     {
         //RectTransform rect = GetComponent<RectTransform>();
