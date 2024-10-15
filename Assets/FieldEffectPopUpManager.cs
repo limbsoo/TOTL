@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UIElements;
+using Unity.VisualScripting;
 
 public class FieldEffectPopUpManager : MonoBehaviour
 {
@@ -29,7 +31,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     //private int idx;
 
-    public Button[] buttons;
+    //public Button[] buttons;
     public Color normalColor;
     public Color disabledColor;
 
@@ -46,6 +48,11 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     public TimeLine[] TL;
 
+    public List<TMP_Text> slotEffectExplans = new List<TMP_Text>();
+
+
+    public UnityEngine.UI.Button Reroll;
+
 
     //public UnityEvent selectComplete;
 
@@ -55,13 +62,15 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     private void Start()
     {
+        TL = slots.GetComponentsInChildren<TimeLine>();
+
         UIManager.instance.OnInitializeUI += CreateBlock;
 
         rectTransform = GetComponent<RectTransform>();
 
         blocks = new List<GameObject>();
 
-        TL = slots.GetComponentsInChildren<TimeLine>();
+
 
 
         if (DataManager.Instance.data.curWave >=1 ) SetBlocks(DataManager.Instance.data);
@@ -81,60 +90,167 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     private void Update()
     {
+        //if(Player.instance.gold < 50)
+        //{
+        //    Reroll.interactable = false;
+        //}
+
+        //else
+        //{
+        //    Reroll.interactable = true;
+        //}
+
+
+        for(int i = 0; i < slotEffectExplans.Count;i++)
+        {
+            slotEffectExplans[i].text = "";
+        }
+
+
+
         if (blocks.Count > 0)
         {
+            UpdateTexts();
 
-            // 만들때랑 갱신할때만 불러오게
-            FieldEffectBlock feb = blocks[blocks.Count - 1].GetComponent<FieldEffectBlock>();
-
-
-            selectBlockName.text = feb.UpperSprites[feb.m_upperIdx].name + " + " + feb.DownerSprites[feb.m_downerIdx].name + " block";
-
-            string s = "";
-
-            switch (feb.m_upperIdx)
+            for (int i = 0; i < blocks.Count; i++)
             {
-                case (0): //0 Blink
-                    s += "a부터 b 기간 동안 활성화되는 ";
-                    break;
+                FieldEffectBlock feeeeb = blocks[i].GetComponent<FieldEffectBlock>();
 
-                case (1): //0 Delay
-                    s += "a부터 b 기간 동안 활성화되며 해당 공간 방문 시 n 초 후에 효과가 발동되는 ";
-                    break;
+                if(feeeeb.lineNum != -1)
+                {
+                    string s = "";
+                    s += feeeeb.start.ToString();
+                    s += " to ";
+                    s += feeeeb.end.ToString();
+                    s += " ";
+                    s += feeeeb.UpperSprites[feeeeb.m_upperIdx].name + " + " + feeeeb.DownerSprites[feeeeb.m_downerIdx].name + " block";
 
-                case (2): //0 Moving
-                    s += "a부터 b 기간 동안 이동하는 ";
-                    break;
+                    slotEffectExplans[feeeeb.lineNum].text = s;
+                }
+
+
+
+
             }
 
 
-            switch (feb.m_downerIdx)
-            {
-                case (0): //0 Damage
-                    s += "m의 데미지를 주는";
-                    break;
-
-                case (1): //0 Seal
-                    s += "스킬을 n초간 봉인하는";
-                    break;
-
-                case (2): //0 Slow
-                    s += "k만큼 속도를 낮추는";
-                    break;
-            }
-
-            s += " 블록이다.";
-
-
-            //if (blocks[blocks.Count - 1])
-            //{
-
-            //}
-
-            selectBlockInformation.text = s;
         }
 
     }
+
+    public void UpdateTexts()
+    {
+        FieldEffectBlock feb = blocks[curBlockIdx].GetComponent<FieldEffectBlock>();
+        selectBlockName.text = feb.UpperSprites[feb.m_upperIdx].name + " + " + feb.DownerSprites[feb.m_downerIdx].name + " block";
+
+        string s = "";
+
+        s += feb.start.ToString();
+        s += " to ";
+        s += feb.end.ToString();
+
+
+        switch (feb.m_upperIdx)
+        {
+            case (0): //0 Blink
+                s += " Blink ";
+                break;
+
+            case (1): //0 Delay
+                s += " Delay ";
+                break;
+
+            case (2): //0 Moving
+                s += " Moving ";
+                break;
+        }
+
+
+        switch (feb.m_downerIdx)
+        {
+            case (0): //0 Damage
+                s += "Damage";
+                break;
+
+            case (1): //0 Seal
+                s += "Seal";
+                break;
+
+            case (2): //0 Slow
+                s += "Slow";
+                break;
+        }
+
+        s += " Block.";
+
+
+        //if (blocks[blocks.Count - 1])
+        //{
+
+        //}
+
+        selectBlockInformation.text = s;
+
+        //slotEffectExplans[feb.lineNum].text = feb.UpperSprites[feb.m_upperIdx].name + " + " + feb.DownerSprites[feb.m_downerIdx].name + " block";
+
+
+
+
+
+
+
+
+        //// 만들때랑 갱신할때만 불러오게
+        ////FieldEffectBlock feb = blocks[blocks.Count - 1].GetComponent<FieldEffectBlock>();
+        //FieldEffectBlock feb = blocks[curBlockIdx].GetComponent<FieldEffectBlock>();
+
+        //selectBlockName.text = feb.UpperSprites[feb.m_upperIdx].name + " + " + feb.DownerSprites[feb.m_downerIdx].name + " block";
+
+        //string s = "";
+
+        //switch (feb.m_upperIdx)
+        //{
+        //    case (0): //0 Blink
+        //        s += "a부터 b 기간 동안 활성화되는 ";
+        //        break;
+
+        //    case (1): //0 Delay
+        //        s += "a부터 b 기간 동안 활성화되며 해당 공간 방문 시 n 초 후에 효과가 발동되는 ";
+        //        break;
+
+        //    case (2): //0 Moving
+        //        s += "a부터 b 기간 동안 이동하는 ";
+        //        break;
+        //}
+
+
+        //switch (feb.m_downerIdx)
+        //{
+        //    case (0): //0 Damage
+        //        s += "m의 데미지를 주는";
+        //        break;
+
+        //    case (1): //0 Seal
+        //        s += "스킬을 n초간 봉인하는";
+        //        break;
+
+        //    case (2): //0 Slow
+        //        s += "k만큼 속도를 낮추는";
+        //        break;
+        //}
+
+        //s += " 블록이다.";
+
+
+        ////if (blocks[blocks.Count - 1])
+        ////{
+
+        ////}
+
+        //selectBlockInformation.text = s;
+    }    
+
+
 
     public void WriteBlockPeriod(int start, int end)
     {
@@ -154,15 +270,26 @@ public class FieldEffectPopUpManager : MonoBehaviour
     {
         //RectTransform rect = GetComponent<RectTransform>();
 
-        for (int i = 0; i < PlayData.setBlocks.Count; i++)
+        for (int i = 0; i < PlayData.febs.Count; i++)
         {
-            GameObject go = null;
-            go = Instantiate(block);
+            //GameObject go = null;
+
+            GameObject go = Instantiate(block);
+
+
+            //go = Instantiate(block);
             go.transform.SetParent(rectTransform, false);
             blocks.Add(go);
             FieldEffectBlock feb = go.GetComponent<FieldEffectBlock>();
 
+            //feb.setRect();
+
+            //feb.rectTransform = new Vector3(-1000, -1000, -1110);
+
             feb.Init(PlayData, blocks.Count - 1);
+
+
+
 
             //image.sprite = idle[Function.instance.checkIdx(DataManager.Instance.data.setBlocks[i].blockName)];
             //TimeLine[] ttt = slots.GetComponentsInChildren<TimeLine>();
@@ -178,6 +305,9 @@ public class FieldEffectPopUpManager : MonoBehaviour
     }
 
 
+    public int curBlockIdx;
+
+
     public void CreateBlock()
     {
         //RectTransform rect = GetComponent<RectTransform>();
@@ -189,7 +319,73 @@ public class FieldEffectPopUpManager : MonoBehaviour
             go.transform.SetParent(rectTransform, false);
             blocks.Add(go);
             FieldEffectBlock feb = go.GetComponent<FieldEffectBlock>();
+
+            //Vector3 newPos = new Vector3();
+
+            //if (DataManager.Instance.data.slots.Count == 0)
+            //{
+            //    newPos = TL[1].rectTransform.position;
+            //}
+
+            //else
+            //{
+            //    for (int i = 0; i < DataManager.Instance.data.slots.Count; i++)
+            //    {
+            //        if (DataManager.Instance.data.slots[i] == 0)
+            //        {
+            //            newPos = TL[i].rectTransform.position;
+            //            break;
+            //        }
+
+
+
+            //        //if (!TL[i].haveBlock)
+            //        //{
+            //        //    //newPos = new Vector3(StageManager.instance.gridCenters[i].x, StageManager.instance.gridCenters[i].y, StageManager.instance.gridCenters[i].z);
+            //        //    //feb.
+
+            //        //    newPos = TL[i].rectTransform.position;
+            //        //    break;
+            //        //}
+            //    }
+            //}
+
+
+
+
+
+            //List<int> Idxes = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+            //for(int i = 0; i < blocks.Count; i++)
+            //{
+            //    //FieldEffectBlock feb = blocks[blocks.Count - 1].GetComponent<FieldEffectBlock>();
+            //}
+
+
+
+            //while(true)
+            //{
+            //    int ranIdx = UnityEngine.Random.Range(0, 10);
+
+
+
+            //    Vector3 newPos = new Vector3(0f, 0f, 0f);
+
+
+
+
+            //    if (StageManager.instance.gridCenters[ranIdx].xyz)
+
+            //}
+
+            //StartCoroutine(CoWaitForPosition()); //코루틴 시작
+
             feb.Init(null, blocks.Count - 1);
+
+            StartCoroutine(CoWaitForPosition(feb));
+            //feb.SetPos(newPos);
+
+            feb.changeSelected();
         }
 
         else
@@ -200,16 +396,78 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     }
 
+    IEnumerator CoWaitForPosition(FieldEffectBlock feb)
+    {
+        yield return new WaitForEndOfFrame();
+
+        //feb.SetPos(new Vector3(-1000, -1000, -1110));
+
+        //Vector3 newPos = new Vector3();
+
+        FieldEffectBlock feeb;
+
+        if (DataManager.Instance.data.febs.Count == 0)
+        {
+            feb.SetPos(TL[0].rectTransform.position);
+        }
+
+        else
+        {
+            List<int> occupied = new List<int>();
+            for (int i = 0; i < DataManager.Instance.data.febs.Count; i++)
+            {
+                //feeb = DataManager.Instance.data.febs[i].GetComponent<FieldEffectBlock>();
+                occupied.Add(DataManager.Instance.data.febs[i].lineNum);
+            }
+            occupied.Sort();
+            int idx = 0;
+
+            for(int i = 0; i < occupied.Count; i++)
+            {
+                if(idx == occupied[i]) idx++;
+                else break;
+            }
+
+            feb.SetPos(TL[idx].rectTransform.position);
+        }
+
+
+        //if (Player.instance.gold < 50)
+        //{
+        //    Reroll.interactable = false;
+        //}
+
+        //else
+        //{
+        //    Reroll.interactable = true;
+        //}
+
+    }
+
+
+
     //리롤 횟수 제한 추가
     public void RerollBlock()
     {
-        FieldEffectBlock feb = blocks[blocks.Count - 1].GetComponent<FieldEffectBlock>();
+        FieldEffectBlock feb = blocks[curBlockIdx].GetComponent<FieldEffectBlock>();
 
         feb.m_upperIdx = UnityEngine.Random.Range(0, 3);
         feb.m_downerIdx = UnityEngine.Random.Range(0, 3);
 
         feb.UpperImage.sprite = feb.UpperSprites[feb.m_upperIdx];
         feb.DownerImage.sprite = feb.DownerSprites[feb.m_downerIdx];
+
+        feb.start = UnityEngine.Random.Range(0, 10);
+        feb.end = (feb.start + 5) % 10;
+        feb.StartText.text = feb.start.ToString();
+        feb.EndText.text = feb.end.ToString();
+
+        //if (Player.instance.gold < 50)
+        //{
+        //    Reroll.interactable = false;
+        //}
+
+
     }
 
 

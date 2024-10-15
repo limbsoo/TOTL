@@ -67,7 +67,7 @@ public class Player : MonoBehaviour
     public GameObject Decoy;
 
 
-
+    public int gold;
 
 
 
@@ -86,7 +86,7 @@ public class Player : MonoBehaviour
             moveSpeed = data.moveSpeed;
             damamge = data.damamge;
             coolDown = data.coolDown;
-
+            gold = data.gold;
 
             switch (data.skill)
             {
@@ -243,9 +243,12 @@ public class Player : MonoBehaviour
         UIManager.instance.OnUseSkill -= useSkill;
     }
 
+
+    private int DecoyLifeCycle = 3;
+
     public void useSkill()
     {
-        if (canUseSkill)
+        if(SkillCoolDownCoroutine == null)
         {
             switch (psState)
             {
@@ -256,12 +259,64 @@ public class Player : MonoBehaviour
 
                     break;
                 case PlayerSkillState.Decoy:
-                    UseDecoy();
+                    //SkillCoolDownCoroutine = StartCoroutine()
+
+                    GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
+                    summonDecoy = true;
+                    StartCoroutine(Function.instance.CountDown(DecoyLifeCycle, () => {
+                        summonDecoy = !summonDecoy;
+                        Destroy(go);
+                    }));
+
+                    SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
+                    {
+                        SkillCoolDownCoroutine = null;
+
+                        ////UIManager.instance.IdleSkillButton(true);
+                        ////canUseSkill = !canUseSkill;
+                        //summonDecoy = !summonDecoy;
+                        //Destroy(go);
+                    }));
+
+                    UIManager.instance.StartCooldown(coolDown);
+
+
+                    ////UIManager.instance.IdleSkillButton(false);
+
+                    //StartCoroutine(Function.instance.CountDown(coolDown, () => {
+                    //    //UIManager.instance.IdleSkillButton(true);
+                    //    //canUseSkill = !canUseSkill;
+                    //    summonDecoy = !summonDecoy;
+                    //    Destroy(go);
+                    //}));
+
+
+
+                    //UseDecoy();
                     break;
             }
-
-            UIManager.instance.StartCooldown(coolDown);
         }
+
+
+
+
+        //if (canUseSkill)
+        //{
+        //    switch (psState)
+        //    {
+        //        case PlayerSkillState.Teleport:
+        //            UseTeleport();
+        //            break;
+        //        case PlayerSkillState.Hide:
+
+        //            break;
+        //        case PlayerSkillState.Decoy:
+        //            UseDecoy();
+        //            break;
+        //    }
+
+        //    UIManager.instance.StartCooldown(coolDown);
+        //}
 
     }
 
@@ -321,7 +376,7 @@ public class Player : MonoBehaviour
                         break;
                 }
 
-                UIManager.instance.StartCooldown(coolDown);
+                //UIManager.instance.StartCooldown(coolDown);
             }
 
 
@@ -329,10 +384,10 @@ public class Player : MonoBehaviour
 
 
 
-            //if (pState == PlayerState.Original)
-            {
-                //if(canUseSkill) OnUseTeleport?.Invoke();
-            }
+            ////if (pState == PlayerState.Original)
+            //{
+            //    //if(canUseSkill) OnUseTeleport?.Invoke();
+            //}
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -376,7 +431,7 @@ public class Player : MonoBehaviour
 
         if (movement != Vector3.zero)
         {
-            Debug.Log($"movement: {movement}");
+            //Debug.Log($"movement: {movement}");
 
 
             Vector3 newPos = rb.position + movement * Time.fixedDeltaTime;
@@ -464,8 +519,23 @@ public class Player : MonoBehaviour
 
 
 
+    public Coroutine SkillCoolDownCoroutine;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     public void ApplyFieldEffect(FieldEffect fe)
@@ -592,6 +662,23 @@ public class Player : MonoBehaviour
 
                 if (SealSkillCoroutine != null)
                 {
+                    //GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
+
+                    //canUseSkill = false;
+                    //summonDecoy = true;
+
+                    //UIManager.instance.IdleSkillButton(false);
+
+                    //StartCoroutine(Function.instance.CountDown(coolDown, () => {
+                    //    UIManager.instance.IdleSkillButton(true);
+                    //    canUseSkill = !canUseSkill;
+                    //    summonDecoy = !summonDecoy;
+                    //    Destroy(go);
+                    //}));
+
+
+
+
                     StopCoroutine(SealSkillCoroutine);
                 }
 
@@ -630,12 +717,37 @@ public class Player : MonoBehaviour
                 break;
             case 1: // Seal
                     //StartCoroutine(Weakning());
-                if (SealSkillCoroutine != null)
+
+                if(SkillCoolDownCoroutine != null)
                 {
-                    StopCoroutine(SealSkillCoroutine);
+                    if(UIManager.instance.CheckCoolDown(5))
+                    {
+                        StopCoroutine(SkillCoolDownCoroutine);
+
+                        SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
+                        {
+                            SkillCoolDownCoroutine = null;
+                        }));
+                    }
                 }
 
-                SealSkillCoroutine = StartCoroutine(UIManager.instance.SEalCoroutine(5));
+                else
+                {
+                    SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
+                    {
+                        SkillCoolDownCoroutine = null;
+                    }));
+
+                    UIManager.instance.StartCooldown(coolDown);
+                }
+
+
+                //if (SealSkillCoroutine != null)
+                //{
+                //    StopCoroutine(SealSkillCoroutine);
+                //}
+
+                //SealSkillCoroutine = StartCoroutine(UIManager.instance.SEalCoroutine(5));
 
 
 

@@ -59,8 +59,8 @@ public class DataManager : MonoBehaviour
         data.damamge = 2;
         data.coolDown = 2;
         data.skill = 0;
-
-        data.setBlocks = new List<SetBlock>();
+        data.gold = 0;
+        data.febs = new List<BlockData>();
         //string jsonString = JsonConvert.SerializeObject(human);
 
         string ToJsonData = JsonUtility.ToJson(data, true);
@@ -75,19 +75,59 @@ public class DataManager : MonoBehaviour
     {
         data.curWave += 1;
 
-        data.setBlocks = new List<SetBlock>();
+
+        List<BlockData> bds = new List<BlockData>();
 
         for (int i = 0; i < FieldEffectPopUpManager.instance.blocks.Count;i++)
         {
-            SetBlock sb = new SetBlock();
-            sb.position = FieldEffectPopUpManager.instance.blocks[i].GetComponent<RectTransform>().position;
-            sb.lineNum = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>().lineNum;
-            sb.blockName = FieldEffectPopUpManager.instance.blocks[i].name;
+            BlockData bd = new BlockData();
+            FieldEffectBlock feb = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>();
 
-            sb.upperIdx = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>().m_upperIdx;
-            sb.DownerIdx = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>().m_downerIdx;
-            data.setBlocks.Add(sb);
+            bd.m_downerIdx = feb.m_downerIdx;
+            bd.m_upperIdx = feb.m_upperIdx;
+            bd.start = feb.start;
+            bd.end = feb.end;
+            bd.lineNum = feb.lineNum;
+            bd.blockName = feb.name;
+            bd.position = feb.GetPos();
+
+
+            bds.Add(bd);
         }
+
+        data.febs = bds;
+
+        //data.febs = FieldEffectPopUpManager.instance.blocks;
+
+
+
+        //data.setBlocks = new List<SetBlock>();
+
+
+
+
+
+        //data.timeLines = FieldEffectPopUpManager.instance.TL;
+
+
+        //for (int i = 0; i < FieldEffectPopUpManager.instance.TL.Length;i++)
+        //{
+        //    if (FieldEffectPopUpManager.instance.TL[i].haveBlock) data.slots.Add(0);
+        //    else data.slots.Add(1);
+        //}
+
+
+        //for (int i = 0; i < FieldEffectPopUpManager.instance.blocks.Count;i++)
+        //{
+        //    SetBlock sb = new SetBlock();
+        //    sb.position = FieldEffectPopUpManager.instance.blocks[i].GetComponent<RectTransform>().position;
+        //    sb.lineNum = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>().lineNum;
+        //    sb.blockName = FieldEffectPopUpManager.instance.blocks[i].name;
+
+        //    sb.upperIdx = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>().m_upperIdx;
+        //    sb.DownerIdx = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>().m_downerIdx;
+        //    data.setBlocks.Add(sb);
+        //}
 
         // 클래스를 Json 형식으로 전환 (true : 가독성 좋게 작성)
         string ToJsonData = JsonUtility.ToJson(data, true);

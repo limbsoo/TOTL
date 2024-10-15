@@ -23,6 +23,8 @@ public class LevelConstructSet : ScriptableObject
 
 
     public List<GameObject> FieldEffect;
+
+    public List<GameObject> Item;
 }
 
 

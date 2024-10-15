@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class FieldEffect : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class FieldEffect : MonoBehaviour
     private int damage = 2;
     private int slow = 2;
     private int seal = 2;
-    private float speed = 3f;
+    private float speed = 15f;
 
     private int endTime;
     private int startTime;
@@ -117,6 +118,8 @@ public class FieldEffect : MonoBehaviour
 
 
 
+
+
     void Update()
     {
         if(StageManager.Sstate == StageState.Play)
@@ -207,7 +210,8 @@ public class FieldEffect : MonoBehaviour
 
         RangeMaterial.SetFloat("_curState", 1f);
 
-        yield return new WaitForSeconds(end - start);
+        //yield return new WaitForSeconds(end - start);
+        yield return new WaitForSeconds(Math.Abs(end - start));
         EffectRange.gameObject.GetComponent<CapsuleCollider>().enabled = false;
 
 
@@ -216,21 +220,25 @@ public class FieldEffect : MonoBehaviour
         FieldEffectCoroutine = null;
     }
 
-
     private IEnumerator moveRange(int start, int end, int idx)
     {
         RangeMaterial.SetFloat("_curState", 1f);
 
-        while (end != StageManager.instance.waveTime) 
-        {
+        // 이동 반경 설정
+        float radius = 20;
+        float boundaryLeft = StageManager.instance.gridCenters[idx].x - radius;
+        float boundaryRight = StageManager.instance.gridCenters[idx].x + radius;
+        float boundaryTop = StageManager.instance.gridCenters[idx].z + radius;
+        float boundaryBottom = StageManager.instance.gridCenters[idx].z - radius;
 
+        while (end != StageManager.instance.waveTime)
+        {
             // 현재 위치를 저장
             Vector3 startPosition = EffectRange.transform.position;
 
-
-            float radius = 10;
-            float randXPos = UnityEngine.Random.Range(-radius + StageManager.instance.gridCenters[idx].x, radius + StageManager.instance.gridCenters[idx].x);
-            float randZPos = UnityEngine.Random.Range(-radius + StageManager.instance.gridCenters[idx].z, radius + StageManager.instance.gridCenters[idx].z);
+            // 랜덤한 목표 위치 설정 (사각형 경계 내에서)
+            float randXPos = UnityEngine.Random.Range(boundaryLeft, boundaryRight);
+            float randZPos = UnityEngine.Random.Range(boundaryBottom, boundaryTop);
             Vector3 targetPosition = new Vector3(randXPos, EffectRange.transform.position.y, randZPos);
 
             float distance = Vector3.Distance(startPosition, targetPosition);
@@ -247,20 +255,92 @@ public class FieldEffect : MonoBehaviour
                 // 새 위치 계산
                 Vector3 newPos = Vector3.Lerp(startPosition, targetPosition, travelPercent);
 
+                // 경계 감지 후 튕기기
+                if (newPos.x <= boundaryLeft || newPos.x >= boundaryRight)
+                {
+                    speed = -speed; // 속도 반전
+                    ApplyRandomDirection(ref newPos, boundaryLeft, boundaryRight, boundaryTop, boundaryBottom); // 랜덤 방향 적용
+                }
+                if (newPos.z <= boundaryBottom || newPos.z >= boundaryTop)
+                {
+                    speed = -speed; // 속도 반전
+                    ApplyRandomDirection(ref newPos, boundaryLeft, boundaryRight, boundaryTop, boundaryBottom); // 랜덤 방향 적용
+                }
+
+                // 새로운 위치를 적용
                 EffectRange.transform.position = newPos;
 
                 // 다음 프레임까지 대기
                 yield return null;
             }
-
-
-
         }
-
 
         RangeMaterial.SetFloat("_curState", 0.2f);
         FieldEffectCoroutine = null;
     }
+
+    // 랜덤한 방향을 적용하는 함수
+    void ApplyRandomDirection(ref Vector3 currentPosition, float boundaryLeft, float boundaryRight, float boundaryTop, float boundaryBottom)
+    {
+        float randomAngle = UnityEngine.Random.Range(-30f, 30f); // 랜덤 각도
+        float cosAngle = Mathf.Cos(randomAngle * Mathf.Deg2Rad);
+        float sinAngle = Mathf.Sin(randomAngle * Mathf.Deg2Rad);
+
+        // X축, Z축 방향을 랜덤하게 조정
+        float newX = currentPosition.x * cosAngle - currentPosition.z * sinAngle;
+        float newZ = currentPosition.x * sinAngle + currentPosition.z * cosAngle;
+
+        // 경계를 넘지 않도록 조정
+        newX = Mathf.Clamp(newX, boundaryLeft, boundaryRight);
+        newZ = Mathf.Clamp(newZ, boundaryBottom, boundaryTop);
+
+        currentPosition = new Vector3(newX, currentPosition.y, newZ);
+    }
+
+    //private IEnumerator moveRange(int start, int end, int idx)
+    //{
+    //    RangeMaterial.SetFloat("_curState", 1f);
+
+    //    while (end != StageManager.instance.waveTime) 
+    //    {
+
+    //        // 현재 위치를 저장
+    //        Vector3 startPosition = EffectRange.transform.position;
+
+
+    //        float radius = 10;
+    //        float randXPos = UnityEngine.Random.Range(-radius + StageManager.instance.gridCenters[idx].x, radius + StageManager.instance.gridCenters[idx].x);
+    //        float randZPos = UnityEngine.Random.Range(-radius + StageManager.instance.gridCenters[idx].z, radius + StageManager.instance.gridCenters[idx].z);
+    //        Vector3 targetPosition = new Vector3(randXPos, EffectRange.transform.position.y, randZPos);
+
+    //        float distance = Vector3.Distance(startPosition, targetPosition);
+    //        float travelPercent = 0f;
+
+    //        // 이동 완료할 때까지 반복
+    //        while (travelPercent < 1f)
+    //        {
+    //            if (end == StageManager.instance.waveTime) break;
+
+    //            // 현재 프레임에서 이동할 비율 계산
+    //            travelPercent += speed * Time.deltaTime / distance;
+
+    //            // 새 위치 계산
+    //            Vector3 newPos = Vector3.Lerp(startPosition, targetPosition, travelPercent);
+
+    //            EffectRange.transform.position = newPos;
+
+    //            // 다음 프레임까지 대기
+    //            yield return null;
+    //        }
+
+
+
+    //    }
+
+
+    //    RangeMaterial.SetFloat("_curState", 0.2f);
+    //    FieldEffectCoroutine = null;
+    //}
 
 
 
@@ -301,7 +381,7 @@ public class FieldEffect : MonoBehaviour
 
         EffectRange.SetActive(true);
         RangeMaterial.SetFloat("_curState", 1f);
-        yield return new WaitForSeconds(end - start);
+        yield return new WaitForSeconds(Math.Abs(end - start));
 
 
         EffectRange.SetActive(false);
@@ -357,4 +437,7 @@ public class FieldEffect : MonoBehaviour
     //    //yield return new WaitForSecondsRealtime(3f);
     //    //BlinkingCoroutine = null;
     //}
+
+
+
 }

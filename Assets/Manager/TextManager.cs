@@ -33,6 +33,9 @@ public class TextManager : MonoBehaviour
     public TMP_Text nextGoals;
 
 
+    public TMP_Text gold;
+
+
     private void Start()
     {
     }
@@ -51,6 +54,8 @@ public class TextManager : MonoBehaviour
         coolDown.text = "CoolDown : " + DataManager.Instance.data.coolDown.ToString();
         penealtyCoolDown.text = "Penealty : ";
         nextGoals.text = "";
+
+        gold.text = "";
     }
 
 
@@ -102,6 +107,9 @@ public class TextManager : MonoBehaviour
                 nextGoals.text += StageManager.instance.goalList[i].ToString();
                 nextGoals.text += " ";
             }
+
+
+            gold.text = Player.instance.gold.ToString();
 
 
             //if (waveTimeCoroutine == null)

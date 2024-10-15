@@ -61,8 +61,10 @@
     <Compile Include="Assets\ConstructSet\GameConstructSet.cs" />
     <Compile Include="Assets\JsonDataManager.cs" />
     <Compile Include="Assets\Manager\StageManager.cs" />
+    <Compile Include="Assets\Gold.cs" />
     <Compile Include="Assets\ConstructSet\Inventory.cs" />
     <Compile Include="Assets\DragAndDrop.cs" />
+    <Compile Include="Assets\EffectSensor.cs" />
     <Compile Include="Assets\Annoation.cs" />
     <Compile Include="Assets\TimeLine.cs" />
     <Compile Include="Assets\Funcs\InterfacesEnums.cs" />

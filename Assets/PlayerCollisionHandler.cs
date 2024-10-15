@@ -41,87 +41,87 @@ public class PlayerCollisionHandler : MonoBehaviour
     private Coroutine DelayEffectCoroutine;
 
 
-    private bool isDelayTriggered = false;
-    public float triggerTime = 2.0f; // 효과를 발동시키기 위한 시간 (초)
-    private float triggerEnterTime = 0.0f; // Trigger가 시작된 시간
+    //private bool isDelayTriggered = false;
+    //public float triggerTime = 2.0f; // 효과를 발동시키기 위한 시간 (초)
+    //private float triggerEnterTime = 0.0f; // Trigger가 시작된 시간
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (StageManager.Sstate == StageState.Play)
-        {
-            switch (other.gameObject.tag)
-            {
-                case ("EffectRange"):
-                    if (gameObject.tag == "Player")
-                    {
-
-
-                        FieldEffect fe = other.gameObject.transform.parent.GetComponent<FieldEffect>();
-
-                        if(fe == null)
-                        {
-                            isDelayTriggered = false;
-                            triggerEnterTime = 0.0f;
-                        }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (StageManager.Sstate == StageState.Play)
+    //    {
+    //        switch (other.gameObject.tag)
+    //        {
+    //            case ("EffectRange"):
+    //                if (gameObject.tag == "Player")
+    //                {
 
 
+    //                    FieldEffect fe = other.gameObject.transform.parent.GetComponent<FieldEffect>();
 
-                        else if (fe.m_upperIdx == 1)
-                        {
-                            isDelayTriggered = true;
-                            triggerEnterTime = Time.time;
-                        }
-                    }
-                    break;
+    //                    if(fe == null)
+    //                    {
+    //                        isDelayTriggered = false;
+    //                        triggerEnterTime = 0.0f;
+    //                    }
 
 
-                //break;
-            }
+
+    //                    else if (fe.m_upperIdx == 1)
+    //                    {
+    //                        isDelayTriggered = true;
+    //                        triggerEnterTime = Time.time;
+    //                    }
+    //                }
+    //                break;
+
+
+    //            //break;
+    //        }
 
             
-        }
-    }
+    //    }
+    //}
 
-    void OnTriggerExit(Collider other)
-    {
-        if (StageManager.Sstate == StageState.Play)
-        {
-            switch (other.gameObject.tag)
-            {
-                //case ("EffectRange"):
-                //    if (gameObject.tag == "Player")
-                //    {
-                //        isDelayTriggered = false; // Trigger 영역을 벗어남
-                //        triggerEnterTime = 0.0f; // 타이머 초기화
-                //    }
-                //    break;
+    //void OnTriggerExit(Collider other)
+    //{
+    //    if (StageManager.Sstate == StageState.Play)
+    //    {
+    //        switch (other.gameObject.tag)
+    //        {
+    //            //case ("EffectRange"):
+    //            //    if (gameObject.tag == "Player")
+    //            //    {
+    //            //        isDelayTriggered = false; // Trigger 영역을 벗어남
+    //            //        triggerEnterTime = 0.0f; // 타이머 초기화
+    //            //    }
+    //            //    break;
 
-                case ("EnemySensor"):
-                    if (gameObject.tag == "Player")
-                    {
-                        Enemy enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
+    //            case ("EnemySensor"):
+    //                if (gameObject.tag == "Player")
+    //                {
+    //                    Enemy enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
 
-                        enemy.chasing = StartCoroutine(Function.instance.CountDown(2f, () =>
-                        {
-                            enemy.updateDesitnationPos(enemy.originPos); // 적이 플레이어를 쫓는 함수
-                            enemy.curTarget = "";
+    //                    enemy.chasing = StartCoroutine(Function.instance.CountDown(2f, () =>
+    //                    {
+    //                        enemy.updateDesitnationPos(enemy.originPos); // 적이 플레이어를 쫓는 함수
+    //                        enemy.curTarget = "";
 
-                        }));
-
-
+    //                    }));
 
 
 
-                        //isDelayTriggered = false; // Trigger 영역을 벗어남
-                        //triggerEnterTime = 0.0f; // 타이머 초기화
-                    }
-                    break;
-            }
 
 
-        }
+    //                    //isDelayTriggered = false; // Trigger 영역을 벗어남
+    //                    //triggerEnterTime = 0.0f; // 타이머 초기화
+    //                }
+    //                break;
+    //        }
 
-    }
+
+    //    }
+
+    //}
 
 
 
@@ -145,111 +145,130 @@ public class PlayerCollisionHandler : MonoBehaviour
                 case ("Goal"):
                     StageManager.instance.arriveGoal(other.gameObject);
                     break;
-                case ("preEnemy"):
-                    EventManager.instance.prePlayerCollisionPreEnemy(other.gameObject);
-                    break;
+                //case ("preEnemy"):
+                //    EventManager.instance.prePlayerCollisionPreEnemy(other.gameObject);
+                //    break;
 
 
-                case ("AttackRange"):
-                    if (other.gameObject.tag == "Enemy")
-                    {
-                        if (StageManager.Sstate == StageState.Play) EventManager.instance.EnemyInAttackRange(other.gameObject);
-                    }
-                    break;
+                //case ("AttackRange"):
+                //    if (other.gameObject.tag == "Enemy")
+                //    {
+                //        if (StageManager.Sstate == StageState.Play) EventManager.instance.EnemyInAttackRange(other.gameObject);
+                //    }
+                //    break;
 
-                case ("LightRange"):
-                    if (gameObject.tag == "AttackRange") return;
-                    EventManager.instance.playerEnterTheLightRange();
-                    break;
+                //case ("LightRange"):
+                //    if (gameObject.tag == "AttackRange") return;
+                //    EventManager.instance.playerEnterTheLightRange();
+                //    break;
 
-                case ("EnemySensor"):
-                    if (other.transform.parent != null)
-                    {
+                //case ("EnemySensor"):
+                //    if (other.transform.parent != null)
+                //    {
                        
 
 
 
 
-                        if (gameObject.tag == "Decoy")
-                        {
-                            // 충돌한 적이 디코이를 감지했을 때
-                            Enemy enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
-                            enemy.chasingPlayer(gameObject.transform); // 적이 플레이어를 쫓는 함수
-                            enemy.curTarget = "Decoy"; // 적의 현재 타겟을 디코이로 설정
+                //        if (gameObject.tag == "Decoy")
+                //        {
+                //            // 충돌한 적이 디코이를 감지했을 때
+                //            Enemy enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
+                //            enemy.chasingPlayer(gameObject.transform); // 적이 플레이어를 쫓는 함수
+                //            enemy.curTarget = "Decoy"; // 적의 현재 타겟을 디코이로 설정
 
-                            if (enemy.chasing != null) enemy.chasing = null;
-                        }
-                        else if (gameObject.tag == "Player")
-                        {
-                            // 충돌한 적이 플레이어를 감지했을 때
-                            Enemy enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
+                //            if (enemy.chasing != null) enemy.chasing = null;
+                //        }
+                //        else if (gameObject.tag == "Player")
+                //        {
+                //            // 충돌한 적이 플레이어를 감지했을 때
+                //            Enemy enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
 
-                            // 적이 현재 디코이를 추적 중이지 않을 때만 플레이어를 추적하도록 함
-                            if (enemy.curTarget == "Decoy")
-                            {
+                //            // 적이 현재 디코이를 추적 중이지 않을 때만 플레이어를 추적하도록 함
+                //            if (enemy.curTarget == "Decoy")
+                //            {
                                 
-                                enemy.curTarget = "Player"; // 타겟을 플레이어로 설정
-                            }
+                //                enemy.curTarget = "Player"; // 타겟을 플레이어로 설정
+                //            }
 
-                            else
-                            {
-                                enemy.curTarget = "Player"; // 타겟을 플레이어로 설정
-                                enemy.chasingPlayer(gameObject.transform); // 적이 플레이어를 쫓음
-                            }
+                //            else
+                //            {
+                //                enemy.curTarget = "Player"; // 타겟을 플레이어로 설정
+                //                enemy.chasingPlayer(gameObject.transform); // 적이 플레이어를 쫓음
+                //            }
 
-                            if (enemy.chasing != null) enemy.chasing = null;
+                //            if (enemy.chasing != null) enemy.chasing = null;
 
-                        }
+                //        }
 
-                    }
-                    break;
+                //    }
+                //    break;
 
 
-                case ("EffectRange"):
-                    if (gameObject.tag == "Player")
-                    {
-                        FieldEffect fe = other.gameObject.transform.parent.GetComponent<FieldEffect>();
+                //case ("EffectRange"):
+                //    if (gameObject.tag == "Player")
+                //    {
+                //        FieldEffect fe = other.gameObject.transform.parent.GetComponent<FieldEffect>();
 
                         
 
-                        if (fe == null)
-                        {
-                            isDelayTriggered = false;
-                            triggerEnterTime = 0.0f;
-                        }
+                //        if (fe == null)
+                //        {
+                //            isDelayTriggered = false;
+                //            triggerEnterTime = 0.0f;
+                //        }
 
-                        else if (fe.m_upperIdx == 1)
-                        {
-                            if (isDelayTriggered)
-                            {
-                                if (Time.time - triggerEnterTime >= triggerTime)
-                                {
+                //        else if (fe.m_upperIdx == 1)
+                //        {
+                //            if (isDelayTriggered)
+                //            {
+                //                if (Time.time - triggerEnterTime >= triggerTime)
+                //                {
 
-                                    triggerEnterTime = 0.0f;
+                //                    triggerEnterTime = 0.0f;
 
-                                    Player P = gameObject.GetComponent<Player>();
+                //                    Player P = gameObject.GetComponent<Player>();
 
-                                    P.ApplyDelayEffect(fe);
-                                }
-                            }
-                        }
+                //                    P.ApplyDelayEffect(fe);
+                //                }
+                //            }
+                //        }
 
-                        else
-                        {
-                            if(fe.IsActivated())
-                            //if(other.gameObject.GetComponent<CapsuleCollider>().enabled)
-                            {
+                //        else
+                //        {
+                //            if(fe.IsActivated())
+                //            //if(other.gameObject.GetComponent<CapsuleCollider>().enabled)
+                //            {
 
-                                Player P = gameObject.GetComponent<Player>();
-                                P.setEffected(fe.m_downerIdx);
-                            }
+                //                Player P = gameObject.GetComponent<Player>();
+                //                P.setEffected(fe.m_downerIdx);
+                //            }
 
 
-                        }
+                //        }
 
-                    }
-                    break;
+                //    }
+                //    break;
 
+
+                //case ("Item"):
+                //    if (gameObject.tag == "Player")
+                //    {
+                //        Player P = gameObject.GetComponent<Player>();
+                //        P.gold += 100;
+
+                //        //other.gameObject.SetActive(false);
+
+                //        Destroy(other.gameObject);
+                //    }
+
+                //    break;
+
+                    //if (other.gameObject.tag == "Enemy")
+                    //{
+                    //    if (StageManager.Sstate == StageState.Play) EventManager.instance.EnemyInAttackRange(other.gameObject);
+                    //}
+                    //break;
             }
         }
 

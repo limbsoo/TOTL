@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[SerializeField]
 public class TimeLine : MonoBehaviour
 {
 
@@ -24,6 +26,8 @@ public class TimeLine : MonoBehaviour
 
     private void Start()
     {
+        rectTransform = GetComponent<RectTransform>();
+
         //GridLayout gridLayout = GetComponent<GridLayout>();
         blockIdx = -1;
         savedIdx = -1;

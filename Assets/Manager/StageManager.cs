@@ -14,6 +14,7 @@ using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using static UnityEditor.Progress;
 using static UnityEngine.EventSystems.EventTrigger;
 using Vector3 = UnityEngine.Vector3;
 
@@ -37,11 +38,20 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     public List<GameObject> enemies;
     public List<GameObject> fieldEffects;
 
+
+    public List<GameObject> items;
+
+
     public int curStage;
     public int targetScore;
     public int currentScore;
     public Vector3[] gridCenters;
     public Transform mapTransform;
+
+
+
+    public int lifeCycle;
+
 
 
     public int divide;
@@ -86,6 +96,9 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         //하나로 만드는게
         goals = new List<GameObject>();
         goalList = new List<int> { };
+
+        items = new List<GameObject>();
+
 
         LoadLevelSet();
         gridCenters = Function.instance.GenerateGrid(divide, mapTransform);
@@ -207,6 +220,21 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
         //if (fieldEffects.Count != 0) enemies = InstantiateObjectsInLightRange<Enemy>(LCS.enemy, LCS.enemyCnt);
         if (fieldEffects.Count != 0) enemies = InstantiateEnemies<Enemy>(LCS.enemy, LCS.enemyCnt + LCS.increaseEnemyPerWave *( m_curWave + 1));
+
+
+
+
+        int randomnumber = UnityEngine.Random.Range(0, 9);
+
+
+
+        
+
+
+        Vector3 newPos = new Vector3(gridCenters[randomnumber].x, LCS.Item[0].transform.position.y, gridCenters[randomnumber].z);
+        GameObject go1 = Instantiate(LCS.Item[0], newPos, LCS.Item[0].transform.rotation);
+        items.Add(go1);
+
 
         Sstate = StageState.Play;
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 468088234039797304}
   - component: {fileID: 3915928173618620539}
   - component: {fileID: 6569087383926137296}
+  - component: {fileID: 6016546968121477814}
   m_Layer: 6
   m_Name: EffectRange
   m_TagString: EffectRange
@@ -98,6 +99,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &6016546968121477814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494794159377985404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbfc85b17a47e7e4dae552d051e06017, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8976493157502958342
 GameObject:
   m_ObjectHideFlags: 0
@@ -147,6 +160,7 @@ MonoBehaviour:
   m_upperIdx: 0
   m_downerIdx: 0
   RangeMaterial: {fileID: 0}
+  triggerTime: 2
 --- !u!1001 &7659780829284472338
 PrefabInstance:
   m_ObjectHideFlags: 0

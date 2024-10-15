@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -9,9 +10,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
+
+[SerializeField]
 public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
 {
+    [SerializeField]
     RectTransform rectTransform;
+
+    [SerializeField]
     CanvasGroup canvasGroup;
     [SerializeField] Canvas canvas;
 
@@ -23,6 +29,7 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     Vector3 rectPosition;
     //private RectTransform targetRectTransform;
 
+    [SerializeField]
     TimeLine nearSlot;
 
     bool isSet;
@@ -53,6 +60,9 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     public Image UpperImage;
     public Image DownerImage;
 
+    public TMP_Text StartText;
+    public TMP_Text EndText;
+
 
 
     private Rigidbody2D rb2;
@@ -65,6 +75,11 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         rb2 = GetComponent<Rigidbody2D>();
 
         if(LoadedPos != Vector3.zero) rectTransform.position = LoadedPos;
+
+        else
+        {
+            rectTransform.position = new Vector3(-1000, -1000, -1110);
+        }
     }
 
 
@@ -75,15 +90,27 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
             _idx = idx;
             m_upperIdx = UnityEngine.Random.Range(0, 3);
             m_downerIdx = UnityEngine.Random.Range(0, 3);
+
+            start = UnityEngine.Random.Range(0, 10);
+            end = (start + 5) % 10;
+
+            //LoadedPos = new Vector3(-1000, -1000, -1110);
         }
 
         else
         {
+
             _idx = idx;
-            m_upperIdx = PlayData.setBlocks[idx].upperIdx;
-            m_downerIdx = PlayData.setBlocks[idx].DownerIdx;
+            m_upperIdx = PlayData.febs[idx].m_upperIdx;
+            m_downerIdx = PlayData.febs[idx].m_downerIdx;
+
+            start = PlayData.febs[idx].start;
+            end = PlayData.febs[idx].end;
+
+            //LoadedPos = PlayData.febs[idx].nearSlot.rectTransform.position;
+
             //rectTransform.position = PlayData.setBlocks[idx].position;
-            LoadedPos = PlayData.setBlocks[idx].position;
+            LoadedPos = PlayData.febs[idx].position;
         }
 
         UpperImage.sprite = UpperSprites[m_upperIdx];
@@ -93,8 +120,59 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         gameObject.name += UpperImage.sprite.name;
         gameObject.name += DownerImage.sprite.name;
 
+
+        StartText.text = start.ToString();
+        EndText.text = end.ToString();
     }
 
+
+    public Vector3 GetPos()
+    {
+        return rectTransform.position;
+    }
+
+
+    public void setRect()
+    {
+        LoadedPos = new Vector3(-1000, -1000, -1110);
+    }
+
+
+
+    public Image selected;
+
+    public void changeSelected()
+    {
+        FieldEffectBlock feb =  FieldEffectPopUpManager.instance.blocks[FieldEffectPopUpManager.instance.curBlockIdx].GetComponent<FieldEffectBlock>();
+        feb.ChangeColor(false);
+
+
+        ChangeColor(true);
+        FieldEffectPopUpManager.instance.curBlockIdx = _idx;
+    }
+
+    public void ChangeColor(bool isTrue)
+    {
+        if(isTrue) 
+        {
+            selected.enabled = isTrue;
+            //canvasGroup.blocksRaycasts = false;
+        }
+
+        else
+        {
+            selected.enabled = isTrue;
+            //canvasGroup.blocksRaycasts = true;
+        }
+    }
+
+
+    public void SetPos(Vector3 pos)
+    {
+        rectTransform.position = pos;
+
+        //LoadedPos = pos;
+    }
 
 
     public void SimulateDrag(GameObject target, Vector2 start, Vector2 end)
@@ -125,8 +203,8 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         canvasGroup.blocksRaycasts = false;
 
         isSet = false;
-
-
+        nearSlot.haveBlock = false;
+        lineNum = -1;
 
         if (nearSlot != null)
         {
@@ -157,6 +235,7 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     {
         isBeingHeld = true;
         rectTransform.anchoredPosition += eventData.delta;
+        
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -177,6 +256,8 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
             }
 
             isSet = true;
+            nearSlot.haveBlock = true;
+            //lineNum = nearSlot.idx;
         }
 
         else rectTransform.position = originPos;
@@ -212,8 +293,8 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         nearSlot.blockIdx = _idx;
 
 
-        start = nearSlot.startCell;
-        end = nearSlot.endCell;
+        //start = nearSlot.startCell;
+        //end = nearSlot.endCell;
 
     }
 
@@ -222,42 +303,45 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     // 오브젝트를 타임라인에 맞춰 정렬하는 메서드
     private void AlignObjectWithTimeLine()
     {
-        float difference = 999999f;
-        float savedX = 0f;
+        rectTransform.position = nearSlot.rectTransform.position;
 
-        for (int i = 0; i < nearSlot.length; i++)
-        {
-            if (Math.Abs(nearSlot.gridCenters[i].x - rectTransform.position.x) < difference)
-            {
-                savedX = nearSlot.gridCenters[i].x;
-                difference = Math.Abs(nearSlot.gridCenters[i].x - rectTransform.position.x);
-            }
-            else break;
-        }
 
-        if (savedX == 0) return;
+        //float difference = 999999f;
+        //float savedX = 0f;
 
-        float startPosX = nearSlot.rectTransform.position.x - nearSlot.rectTransform.sizeDelta.x / 2;
-        float endPosX = nearSlot.rectTransform.position.x + nearSlot.rectTransform.sizeDelta.x / 2;
+        //for (int i = 0; i < nearSlot.length; i++)
+        //{
+        //    if (Math.Abs(nearSlot.gridCenters[i].x - rectTransform.position.x) < difference)
+        //    {
+        //        savedX = nearSlot.gridCenters[i].x;
+        //        difference = Math.Abs(nearSlot.gridCenters[i].x - rectTransform.position.x);
+        //    }
+        //    else break;
+        //}
 
-        if (savedX - rectTransform.sizeDelta.x / 2 < startPosX)
-        {
-            for (int i = 0; i < nearSlot.length; i++)
-            {
-                if (nearSlot.gridCenters[i].x <= startPosX + rectTransform.sizeDelta.x / 2) savedX = nearSlot.gridCenters[i].x;
-                else break;
-            }
-        }
-        else if (savedX + rectTransform.sizeDelta.x / 2 > endPosX)
-        {
-            for (int i = nearSlot.length - 1; i >= 0; i--)
-            {
-                if (nearSlot.gridCenters[i].x >= endPosX - rectTransform.sizeDelta.x / 2) savedX = nearSlot.gridCenters[i].x;
-                else break;
-            }
-        }
+        //if (savedX == 0) return;
 
-        rectTransform.position = new Vector3(savedX, nearSlot.gridCenters[0].y, nearSlot.gridCenters[0].z);
+        //float startPosX = nearSlot.rectTransform.position.x - nearSlot.rectTransform.sizeDelta.x / 2;
+        //float endPosX = nearSlot.rectTransform.position.x + nearSlot.rectTransform.sizeDelta.x / 2;
+
+        //if (savedX - rectTransform.sizeDelta.x / 2 < startPosX)
+        //{
+        //    for (int i = 0; i < nearSlot.length; i++)
+        //    {
+        //        if (nearSlot.gridCenters[i].x <= startPosX + rectTransform.sizeDelta.x / 2) savedX = nearSlot.gridCenters[i].x;
+        //        else break;
+        //    }
+        //}
+        //else if (savedX + rectTransform.sizeDelta.x / 2 > endPosX)
+        //{
+        //    for (int i = nearSlot.length - 1; i >= 0; i--)
+        //    {
+        //        if (nearSlot.gridCenters[i].x >= endPosX - rectTransform.sizeDelta.x / 2) savedX = nearSlot.gridCenters[i].x;
+        //        else break;
+        //    }
+        //}
+
+        //rectTransform.position = new Vector3(savedX, nearSlot.gridCenters[0].y, nearSlot.gridCenters[0].z);
 
     }
 
@@ -272,7 +356,7 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         {
             nearSlot = other.GetComponent<TimeLine>();
 
-
+            lineNum = nearSlot.idx;
             isInLine = true;
 
             if(LoadedPos != Vector3.zero)

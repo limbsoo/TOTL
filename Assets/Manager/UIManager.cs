@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 using UnityEngine.UI;
@@ -112,6 +113,15 @@ public class UIManager : MonoBehaviour
     int stageTime = 0;
 
 
+
+
+
+
+
+
+
+
+
     public IEnumerator SEalCoroutine(float duration)
     {
         SealCoolDown.gameObject.SetActive(true);
@@ -135,15 +145,92 @@ public class UIManager : MonoBehaviour
     }
 
 
+    public Coroutine SkillCoolDownCoroutine;
+    public float MaxCoolDown;
+
+
+    public bool CheckCoolDown(float duration)
+    {
+        if (SkillCoolDownCoroutine != null)
+        {
+            if ((1 - skillCoolDown.fillAmount) * MaxCoolDown < duration)
+            {
+                StopCoroutine(SkillCoolDownCoroutine);
+                SkillCoolDownCoroutine = StartCoroutine(CooldownCoroutine(duration));
+                return true;
+            }
+
+
+        }
+
+        else
+        {
+            MaxCoolDown = duration;
+            SkillCoolDownCoroutine = StartCoroutine(CooldownCoroutine(duration));
+        }
+
+        return false;
+    }
+
+
+
+
     //플레이어 이벤트
     public void StartCooldown(float duration)
     {
-        StartCoroutine(CooldownCoroutine(duration));
+        //if (StageManager.Sstate == StageState.Play)
+        //{
+        //    if (StageTimeSliderCoroutine == null)
+        //    {
+        //        StageTimeSliderCoroutine = StartCoroutine(stageTimer(10f));
+        //    }
+        //}
+
+        //else
+        //{
+        //    if (StageTimeSliderCoroutine != null)
+        //    {
+        //        StopCoroutine(StageTimeSliderCoroutine);
+        //        stageTimeSlider.value = 0;
+        //        StageTimeSliderCoroutine = null;
+        //    }
+
+
+        //}
+
+
+
+        if (SkillCoolDownCoroutine != null)
+        {
+            if((1 - skillCoolDown.fillAmount) * MaxCoolDown < duration)
+            {
+                StopCoroutine(SkillCoolDownCoroutine);
+                SkillCoolDownCoroutine = StartCoroutine(CooldownCoroutine(duration));
+            }
+
+
+            //SkillCoolDownCoroutine.Yield();
+
+
+            
+        }
+
+        else
+        {
+            MaxCoolDown = duration;
+            SkillCoolDownCoroutine = StartCoroutine(CooldownCoroutine(duration));
+        }
+
+
+
+        //StartCoroutine(CooldownCoroutine(duration));
     }
 
 
     public IEnumerator CooldownCoroutine(float duration)
     {
+        IdleSkillButton(false);
+
         skillCoolDown.gameObject.SetActive(true);
 
         skillCoolDown.fillAmount = 1;
@@ -159,13 +246,13 @@ public class UIManager : MonoBehaviour
         }
         skillCoolDown.gameObject.SetActive(false);
 
+        MaxCoolDown = 0;
 
 
 
+        IdleSkillButton(true);
 
-
-
-
+        SkillCoolDownCoroutine = null;
 
 
 
@@ -233,6 +320,8 @@ public class UIManager : MonoBehaviour
         stageTimeSlider.value = 0;
         StageManager.instance.waveTime = 0;
         StageTimeSliderCoroutine = null;
+
+        StageManager.instance.lifeCycle++;
     }
 
 
