@@ -12,19 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254372c9f2dedc247b4b1ef188e4d4ce, type: 3}
   m_Name: LCS_0
   m_EditorClassIdentifier: 
-  targetScore: 2
-  enemyCnt: 10
-  increaseEnemyPerWave: 2
   map:
   - {fileID: 5399920032641380817, guid: fe6dbbf6b172a88479fa52cd44b06531, type: 3}
   player:
-  - {fileID: 793001626749674294, guid: d0718f0bd726778468c18d67f86ee3f5, type: 3}
+  - {fileID: 793001626749674294, guid: 2fc42ea707e8cf24d8292519bc171302, type: 3}
   enemy:
   - {fileID: 2763794255627545027, guid: e323209cf3f2dec45a101427ab9408cc, type: 3}
-  FieldEffectLight:
-  - {fileID: 3301909162799466181, guid: fc563bf003a29f64d88cb81c320122d5, type: 3}
-  - {fileID: 3301909162799466181, guid: c2d769c5859ae264ba9c2777b4925a89, type: 3}
-  - {fileID: 3301909162799466181, guid: e637822f1b20c6d4ca5f13e50cf2c8e3, type: 3}
   Goal:
   - {fileID: 3446381173838501712, guid: ca5412122a6f263428b4d402edad1ada, type: 3}
   FieldEffect:
@@ -34,3 +27,12 @@ MonoBehaviour:
   Item:
   - {fileID: 7910582084679339359, guid: bf04ba4c14ac0a44c97cbba389f8edfe, type: 3}
   - {fileID: 7910582084679339359, guid: 8aa8c96f5a320bd48999df5ad219da4c, type: 3}
+  gate:
+  - {fileID: 1150117686112970776, guid: ef238dd02c03efe4d9d9c18f21f86f45, type: 3}
+  numOfInitkeysRequired: 2
+  numOfInitEnemy: 20
+  InitrerollCost: 100
+  enemyIncreasePerWave: 2
+  goldIncreasePerWave: 0
+  costIncreasePerWave: 0
+  EliteEnemyIncreasePerWave: 1

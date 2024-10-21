@@ -138,7 +138,7 @@ public class Function : MonoBehaviour
         return randomPosition;
     }
 
-    bool IsInsideCircle(Vector3 point, Vector3 center, float radius)
+    public bool IsInsideCircle(Vector3 point, Vector3 center, float radius)
     {
         // 주어진 점이 원 안에 있는지 확인
         return (point - center).sqrMagnitude <= radius * radius;
@@ -166,4 +166,10 @@ public class Function : MonoBehaviour
     //}
 
 
+}
+
+
+public interface Spawn
+{
+    void Init(Vector3[] gridCenters, Transform mapTransform);
 }

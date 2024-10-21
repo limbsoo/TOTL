@@ -101,6 +101,9 @@
     <Compile Include="Assets\LightObstacle.cs" />
     <Compile Include="Assets\DragAndDropItem.cs" />
     <Compile Include="Assets\FieldEffect.cs" />
+    <Compile Include="Assets\GenericClass.cs" />
+    <Compile Include="Assets\Goal.cs" />
+    <Compile Include="Assets\Gate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

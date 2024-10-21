@@ -16,6 +16,7 @@ using UnityEngine.UIElements;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEditor.Progress;
 using static UnityEngine.EventSystems.EventTrigger;
+using static UnityEngine.GraphicsBuffer;
 using Vector3 = UnityEngine.Vector3;
 
 public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭트사용해서 여러가지 함
@@ -84,35 +85,14 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
     public Action OnContinueWave;
 
+    public bool IsArriveGate = false;
+
 
     public void Start()
     {
         DataManager.Instance.LoadGameData();
         m_curWave = DataManager.Instance.data.curWave;
-
-        fieldEffects = new List<GameObject>();
-        enemies = new List<GameObject>();
-
-        //하나로 만드는게
-        goals = new List<GameObject>();
-        goalList = new List<int> { };
-
-        items = new List<GameObject>();
-
-
-        LoadLevelSet();
-        gridCenters = Function.instance.GenerateGrid(divide, mapTransform);
-        for (int i = 0; i < gridCenters.Length; i++) goals.Add(InstantiateGoal(i));
-
-        UIManager.instance.OnDecideBlock = () =>
-        {
-            if(player == null)
-            {
-                player = new GameObject();
-                player = InstantiateObject<Player>(LCS.player, 0);
-            }
-            initializeStage();
-        };
+        InitStage();
     }
 
     public double timereee = 0;
@@ -126,13 +106,15 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
                 break;
 
             case StageState.Play:
-                if (targetScore <= currentScore)
+                if (IsArriveGate)
                 {
                     Sstate = StageState.Edit;
                     currentScore = 0;
                     DestroyObjects(enemies);
                     //DestroyObjects(fieldEffectLights);
                     DestroyObjects(fieldEffects);
+
+                    IsArriveGate = false;
 
                     DataManager.Instance.SaveGameData();
 
@@ -145,20 +127,145 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     }
 
 
+    void InitStage()
+    {
+        //fieldEffects = new List<GameObject>();
+        //enemies = new List<GameObject>();
+        //items = new List<GameObject>();
+        
+        ////하나로 만드는게
+        //goals = new List<GameObject>();
+        //goalList = new List<int> { };
+
+        LoadLevelSet();
+        gridCenters = Function.instance.GenerateGrid(divide, mapTransform);
+
+        goals = new List<GameObject>();
+
+        for (int i = 0; i < gridCenters.Length; i++)
+        {
+            Vector3 pos = new Vector3(gridCenters[i].x, gridCenters[i].y + 1, gridCenters[i].z);
+            goals.Add(InstantiateObject<Goal>(LCS.Goal[0], pos, LCS.Goal[0].transform.rotation));
+            goals[i].SetActive(false);
+        }
+
+
+        UIManager.instance.OnDecideBlock = () => 
+        {
+            SetGoals();
+            SpwanObjects(); 
+        };
+    }
+
+    public void SpwanObjects()
+    {
+        if (player == null)
+        {
+            player = InstantiateObject<Player>(LCS.player[0], LCS.player[0].transform.position, LCS.player[0].transform.rotation);
+        }
+ 
+        
+
+        for (int i = 0; i < FieldEffectPopUpManager.instance.blocks.Count; i++)
+        {
+            FieldEffectBlock feb = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>();
+            Vector3 pos = new Vector3(gridCenters[feb.lineNum].x, LCS.FieldEffect[0].transform.position.y, gridCenters[feb.lineNum].z);
+            GameObject go = InstantiateObject<FieldEffect>(LCS.FieldEffect[feb.m_upperIdx], pos, LCS.FieldEffect[0].transform.rotation);
+
+            FieldEffect fe = go.GetComponent<FieldEffect>();
+            fe.Init(feb.start, feb.end, feb.lineNum, feb.m_upperIdx, feb.m_downerIdx);
+            fieldEffects.Add(go);
+        }
+
+        //if (fieldEffects.Count != 0) enemies = InstantiateObjectsInLightRange<Enemy>(LCS.enemy, LCS.enemyCnt);
+
+        if (fieldEffects.Count != 0)
+        {
+            //enemies = InstantiateEnemies<Enemy>(LCS.enemy, LCS.enemyCnt + LCS.increaseEnemyPerWave * (m_curWave + 1));
+            enemies = InstantiateEnemies<Enemy>(LCS.enemy, LCS.numOfInitEnemy + LCS.enemyIncreasePerWave * (m_curWave + 1));
+        }
+        
+        int randomnumber = UnityEngine.Random.Range(0, 9);
+
+        Vector3 newPos = new Vector3(gridCenters[randomnumber].x, LCS.Item[0].transform.position.y, gridCenters[randomnumber].z);
+        GameObject go1 = Instantiate(LCS.Item[0], newPos, LCS.Item[0].transform.rotation);
+        items.Add(go1);
+
+
+        Sstate = StageState.Play;
+
+    }
+
+    public GameObject InstantiateObject<T>(GameObject gob, Vector3 pos, UnityEngine.Quaternion rot) where T : UnityEngine.Component, Spawn
+    {
+        GameObject go = Instantiate(gob, pos, rot);
+        T t = go.GetComponent<T>();
+        if (t != null) t.Init(gridCenters, mapTransform);
+        return go;
+    }
+
+
+    public List<GameObject> InstantiateEnemies<T>(List<GameObject> list, int cnt)
+    {
+        List<GameObject> lgo = new List<GameObject>();
+
+        for (int i = 0; i < cnt; i++)
+        {
+            int randIdx = UnityEngine.Random.Range(0, list.Count);
+         
+            Vector3 randomPos = Function.instance.GetRandomPositionInMap(fieldEffects[UnityEngine.Random.Range(0, fieldEffects.Count)], mapTransform);
+
+            while (Function.instance.IsInsideCircle(randomPos, new Vector3(gridCenters[4].x, 0, gridCenters[4].z), 10f))
+            {
+                randomPos = Function.instance.GetRandomPositionInMap(fieldEffects[UnityEngine.Random.Range(0, fieldEffects.Count)], mapTransform);
+            }
+
+
+            randomPos.y = list[randIdx].transform.position.y;
+            GameObject go = Instantiate(list[randIdx], randomPos, list[randIdx].transform.rotation);
+            T p = go.GetComponent<T>();
+            lgo.Add(go);
+        }
+        return lgo;
+    }
+
+
+
+
+    void SetGoals()
+    {
+        goalList.Clear();
+
+        for (int i = 0; i < targetScore; i++)
+        {
+            while (true)
+            {
+                int randNum = UnityEngine.Random.Range(0, 9);
+
+                while (randNum == 4)
+                {
+                    randNum = UnityEngine.Random.Range(0, 9);
+                }
+
+                
+                int num = goalList.Find(x => x == randNum);
+
+                if (num == 0)
+                {
+                    goalList.Add(randNum);
+                    goals[randNum].SetActive(true);
+                    break;
+                }
+            }
+        }
+    }
+
 
     public void LoadLevelSet()
     {
         LCS = GCS.LevelConstructSet[curStage];
         mapTransform = LCS.map[0].transform;
-        targetScore = LCS.targetScore;
-    }
-    public GameObject InstantiateGoal(int idx)
-    {
-        Vector3 newPos = gridCenters[idx];
-        newPos.y += 1;
-        GameObject go = Instantiate(LCS.Goal[0], newPos, LCS.Goal[0].transform.rotation);
-        go.SetActive(false);
-        return go;
+        targetScore = LCS.numOfInitkeysRequired;
     }
 
 
@@ -169,113 +276,124 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         g.gameObject.SetActive(false);
         currentScore++;
 
+        if(currentScore == targetScore)
+        {
+            Instantiate(LCS.gate[0], LCS.gate[0].transform.position, LCS.gate[0].transform.rotation);
+        }
+
     }
+
+    public void arriveGate(GameObject g)
+    {
+        IsArriveGate = true;
+        Destroy(g );
+    }
+
+
+
+    //public int idx = 0;
+
+    //public GameObject InstantiateFieldEffect(List<GameObject> list, FieldEffectBlock feb)
+    //{
+    //    Vector3 newPos = new Vector3(gridCenters[feb.lineNum].x, list[0].transform.position.y, gridCenters[feb.lineNum].z);
+    //    GameObject go = Instantiate(list[feb.m_upperIdx], newPos, list[feb.m_upperIdx].transform.rotation);
+    //    return go;
+    //}
+
+
+    //public GameObject InstantiateObject<T>(List<GameObject> list, int idx) where T : UnityEngine.Component, Spawn
+    //{
+    //    GameObject go = Instantiate(list[idx], list[idx].transform.position, list[idx].transform.rotation);
+    //    T t = go.GetComponent<T>();
+    //    if (t != null) t.Init(gridCenters, mapTransform);
+    //    return go;
+    //}
+
+    //public GameObject InstantiateGoal(int idx)
+    //{
+    //    Vector3 newPos = gridCenters[idx];
+    //    newPos.y += 1;
+    //    GameObject go = Instantiate(LCS.Goal[0], newPos, LCS.Goal[0].transform.rotation);
+    //    go.SetActive(false);
+    //    return go;
+    //}
+
+
+
+
+    //public GameObject InstantiateObject<T>(List<GameObject> list, int idx) where T : UnityEngine.Component
+    //{
+    //    // 해당 인덱스의 게임 오브젝트를 Instantiate
+    //    GameObject go = Instantiate(list[idx], list[idx].transform.position, list[idx].transform.rotation);
+
+    //    // T 타입의 컴포넌트를 가져옴
+    //    T p = go.GetComponent<T>();
+
+    //    // 만약 p가 null이 아니라면, Init 메소드 호출
+    //    if (p != null)
+    //    {
+    //        p.Init(gridCenters, mapTransform); // T는 Init 메소드를 가진 타입이어야 함
+    //    }
+
+    //    return go;
+    //}
+
+
+    //public GameObject InstantiateObject<T>(List<GameObject> list, int idx) where T : class
+    //{
+
+    //    GameObject go = Instantiate(list[idx], list[idx].transform.position, list[idx].transform.rotation);
+    //    T p = go.GetComponent<T>();
+    //    p.Init(gridCenters, mapTransform);
+
+    //    return go;
+    //}
+
+
+
+
+    //public GameObject InstantiateObject<T>(List<GameObject> list, int idx)
+    //{
+
+
+
+
+
+    //    //GameObject go = Instantiate(list[idx], list[idx].transform.position, list[idx].transform.rotation);
+    //    //T p = go.GetComponent<T>();
+
+    //    //p.Init(gridCenters, mapTransform);
+
+    //    //return go;
+    //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
     //public int startTime;
     //public int endTime;
-    public void initializeStage()
-    {
-        goalList.Clear();
-
-        for (int i = 0; i < LCS.targetScore;i++)
-        {
-            while(true)
-            {
-                int randNum = UnityEngine.Random.Range(1,9);
-                int num = goalList.Find(x => x == randNum);
-
-                if(num == 0)
-                {
-                    goalList.Add(randNum);
-                    goals[randNum].SetActive(true);
-                    break;
-                }
-            }
-        }
-
-
-
-        for (int i = 0; i < FieldEffectPopUpManager.instance.blocks.Count; i++)
-        {
-            FieldEffectBlock feb = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>();
-
-            GameObject go = InstantiateFieldEffect(LCS.FieldEffect, feb);
-
-
-
-            //GameObject go = InstantiateFieldEffect(LCS.FieldEffect, feb.lineNum, feb.name, FieldEffectPopUpManager.instance.blocks[i].name);
-
-            FieldEffect fe = go.GetComponent<FieldEffect>();
-            fe.Init(feb.start, feb.end, feb.lineNum, feb.m_upperIdx, feb.m_downerIdx);
-            fieldEffects.Add(go);
-
-            //transform.GetChild(0)
-
-            //fieldEffectLights.Add(go);
-        }
-
-
-        //if (fieldEffects.Count != 0) enemies = InstantiateObjectsInLightRange<Enemy>(LCS.enemy, LCS.enemyCnt);
-        if (fieldEffects.Count != 0) enemies = InstantiateEnemies<Enemy>(LCS.enemy, LCS.enemyCnt + LCS.increaseEnemyPerWave *( m_curWave + 1));
-
-
-
-
-        int randomnumber = UnityEngine.Random.Range(0, 9);
-
-
-
-        
-
-
-        Vector3 newPos = new Vector3(gridCenters[randomnumber].x, LCS.Item[0].transform.position.y, gridCenters[randomnumber].z);
-        GameObject go1 = Instantiate(LCS.Item[0], newPos, LCS.Item[0].transform.rotation);
-        items.Add(go1);
-
-
-        Sstate = StageState.Play;
-
-
-    }
-
-    public List<GameObject> InstantiateEnemies<T>(List<GameObject> list, int cnt)
-    {
-        List<GameObject> lgo = new List<GameObject>();
-
-        for (int i = 0; i < cnt; i++)
-        {
-            int randEnemyIdx = UnityEngine.Random.Range(0, list.Count);
-            //Vector3 randomPos = Function.instance.GetRandomPositionInLightRange(fieldEffectLights[UnityEngine.Random.Range(0, fieldEffectLights.Count)], mapTransform);
-            Vector3 randomPos = Function.instance.GetRandomPositionInMap(fieldEffects[UnityEngine.Random.Range(0, fieldEffects.Count)], mapTransform);
-
-
-
-
-            randomPos.y = list[randEnemyIdx].transform.position.y;
-            GameObject go = Instantiate(list[randEnemyIdx], randomPos, list[randEnemyIdx].transform.rotation);
-            T p = go.GetComponent<T>();
-            lgo.Add(go);
-
-        }
-
-        return lgo;
-    }
 
 
 
 
 
-    public int idx = 0;
 
-    public GameObject InstantiateFieldEffect(List<GameObject> list, FieldEffectBlock feb)
-    {
-        Vector3 newPos = new Vector3(gridCenters[feb.lineNum].x, list[0].transform.position.y, gridCenters[feb.lineNum].z);
-        GameObject go = Instantiate(list[feb.m_upperIdx], newPos, list[feb.m_upperIdx].transform.rotation);
-        return go;
-    }
 
 
 
@@ -299,12 +417,7 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
 
 
-    public GameObject InstantiateObject<T>(List<GameObject> list, int idx)
-    {
-        GameObject go = Instantiate(list[idx], list[idx].transform.position, list[idx].transform.rotation);
-        T p = go.GetComponent<T>();
-        return go;
-    }
+
 
     //public List<GameObject> InstantiateLightObstacle<T>(List<ObjectPool> list)
     //{
@@ -324,24 +437,24 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     //    return lgo;
     //}
 
-    public List<GameObject> InstantiateObjectsInLightRange<T>(List<GameObject> list, int cnt)
-    {
-        List<GameObject> lgo = new List<GameObject>();
+    //public List<GameObject> InstantiateObjectsInLightRange<T>(List<GameObject> list, int cnt)
+    //{
+    //    List<GameObject> lgo = new List<GameObject>();
 
-        for (int i = 0; i < cnt; i++)
-        {
-            int randEnemyIdx = UnityEngine.Random.Range(0, list.Count);
-            //Vector3 randomPos = Function.instance.GetRandomPositionInLightRange(fieldEffectLights[UnityEngine.Random.Range(0, fieldEffectLights.Count)], mapTransform);
-            Vector3 randomPos = Function.instance.GetRandomPositionInLightRange(fieldEffects[UnityEngine.Random.Range(0, fieldEffects.Count)], mapTransform);
-            randomPos.y = list[randEnemyIdx].transform.position.y;
-            GameObject go = Instantiate(list[randEnemyIdx], randomPos, list[randEnemyIdx].transform.rotation);
-            T p = go.GetComponent<T>();
-            lgo.Add(go);
+    //    for (int i = 0; i < cnt; i++)
+    //    {
+    //        int randEnemyIdx = UnityEngine.Random.Range(0, list.Count);
+    //        //Vector3 randomPos = Function.instance.GetRandomPositionInLightRange(fieldEffectLights[UnityEngine.Random.Range(0, fieldEffectLights.Count)], mapTransform);
+    //        Vector3 randomPos = Function.instance.GetRandomPositionInLightRange(fieldEffects[UnityEngine.Random.Range(0, fieldEffects.Count)], mapTransform);
+    //        randomPos.y = list[randEnemyIdx].transform.position.y;
+    //        GameObject go = Instantiate(list[randEnemyIdx], randomPos, list[randEnemyIdx].transform.rotation);
+    //        T p = go.GetComponent<T>();
+    //        lgo.Add(go);
 
-        }
+    //    }
 
-        return lgo;
-    }
+    //    return lgo;
+    //}
 
 
 

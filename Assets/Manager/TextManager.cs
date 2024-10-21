@@ -46,7 +46,7 @@ public class TextManager : MonoBehaviour
         //countDown
         waveTimer.text = "";
         stageTimer.text = "";
-        targetScore.text = "TargetScore : " + StageManager.instance.LCS.targetScore.ToString();
+        targetScore.text = "TargetScore : " + StageManager.instance.targetScore.ToString();
         curScore.text = "";
         health.text = /*"Health : " +*/ DataManager.Instance.data.health.ToString();
         damage.text = "Damage : " + DataManager.Instance.data.damamge.ToString();

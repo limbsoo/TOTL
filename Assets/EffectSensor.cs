@@ -12,42 +12,34 @@ public class EffectSensor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         if (StageManager.Sstate == StageState.Play)
         {
             switch (other.gameObject.tag)
             {
-                case ("EffectRange"):
-                    if (gameObject.tag == "Player")
+                case ("Player"):
+
+                    FieldEffect fe = gameObject.transform.parent.GetComponent<FieldEffect>();
+
+                    if (fe == null)
                     {
-
-
-                        FieldEffect fe = other.gameObject.transform.parent.GetComponent<FieldEffect>();
-
-                        if (fe == null)
-                        {
-                            isDelayTriggered = false;
-                            triggerEnterTime = 0.0f;
-                        }
+                        isDelayTriggered = false;
+                        triggerEnterTime = 0.0f;
+                    }
 
 
 
-                        else if (fe.m_upperIdx == 1)
-                        {
-                            isDelayTriggered = true;
-                            triggerEnterTime = Time.time;
-                        }
+                    else if (fe.m_upperIdx == 1)
+                    {
+                        isDelayTriggered = true;
+                        triggerEnterTime = Time.time;
                     }
                     break;
-
-
-                    //break;
             }
-
-
         }
     }
 
- 
+
 
     private void OnTriggerStay(Collider other)
     {

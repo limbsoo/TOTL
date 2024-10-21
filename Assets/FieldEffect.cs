@@ -7,8 +7,37 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
-public class FieldEffect : MonoBehaviour
+public class FieldEffect : MonoBehaviour, Spawn
 {
+
+    Vector3[] _gridCenters;
+    Transform _mapTransform;
+
+
+
+
+
+
+    public void Init(Vector3[] gridCenters, Transform mapTransform)
+    {
+
+        _gridCenters = gridCenters;
+        _mapTransform = mapTransform;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private int delayEffectAmount = 2;
     private int damage = 2;
     private int slow = 2;

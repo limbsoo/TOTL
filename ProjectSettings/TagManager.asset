@@ -25,6 +25,7 @@ TagManager:
   - EffectRange
   - Swamp
   - Item
+  - Gate
   layers:
   - Default
   - TransparentFX

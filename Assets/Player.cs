@@ -10,7 +10,7 @@ using UnityEngine.Events;
 using UnityEngine.Rendering.VirtualTexturing;
 
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, Spawn
 {
     //public UnityEvent OnUseTeleport;
     public UnityEvent OnUseAttack;
@@ -117,6 +117,33 @@ public class Player : MonoBehaviour
 
 
     private GameObject playerFBX;
+
+
+
+
+    Vector3[] _gridCenters;
+    Transform _mapTransform;
+
+
+
+
+
+
+    public void Init(Vector3[] gridCenters, Transform mapTransform)
+    {
+        _gridCenters = gridCenters;
+        _mapTransform = mapTransform;
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 

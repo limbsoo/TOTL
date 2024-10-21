@@ -7,24 +7,33 @@ using UnityEngine;
 
 public class LevelConstructSet : ScriptableObject
 {
-    public int targetScore;
-
-    public int enemyCnt;
-
-    public int increaseEnemyPerWave;
-
-
-
     public List<GameObject> map;
     public List<GameObject> player;
     public List<GameObject> enemy;
-    public List<GameObject> FieldEffectLight;
     public List<GameObject> Goal;
-
-
     public List<GameObject> FieldEffect;
-
     public List<GameObject> Item;
+
+    public List<GameObject> gate;
+
+    public int numOfInitkeysRequired;
+    public int numOfInitEnemy;
+    public int InitrerollCost;
+
+    public int enemyIncreasePerWave;
+    public int goldIncreasePerWave;
+    public int costIncreasePerWave;
+    public int EliteEnemyIncreasePerWave;
+
+    //public int targetScore;
+
+    //public int enemyCnt;
+
+    //public int increaseEnemyPerWave;
+
+
+
+
 }
 
 
