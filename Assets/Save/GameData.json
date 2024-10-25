@@ -1,0 +1,30 @@
+{
+    "playerCharacterIdx": 0,
+    "stageModeIdx": 0,
+    "skill": 0,
+    "gold": 0,
+    "name": "Player",
+    "maxWave": 0,
+    "curWave": 1,
+    "health": 100.0,
+    "moveSpeed": 20.0,
+    "damamge": 2.0,
+    "coolDown": 2.0,
+    "febs": [
+        {
+            "m_upperIdx": 2,
+            "m_downerIdx": 2,
+            "blockName": "movingslow",
+            "lineNum": 0,
+            "start": 3,
+            "end": 8,
+            "weight": 0,
+            "position": {
+                "x": 1015.8499755859375,
+                "y": 783.5999755859375,
+                "z": 0.0
+            }
+        }
+    ],
+    "FEs": []
+}

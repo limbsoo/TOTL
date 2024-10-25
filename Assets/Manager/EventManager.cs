@@ -13,12 +13,22 @@ public class EventManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (this.name == "EventManager")
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            //else Destroy(gameObject);
         }
-        else Destroy(gameObject);
+
+        //if (instance == null)
+        //{
+        //    instance = this;
+        //    DontDestroyOnLoad(gameObject);
+        //}
+        //else Destroy(gameObject);
     }
 
 
@@ -52,15 +62,15 @@ public class EventManager : MonoBehaviour
     //    UIManager.instance.StartCooldown(Player.instance.coolDown);
     //}
 
-    public void UseAttack()
-    {
-        Player.instance.UseAttack();
-    }
+    //public void UseAttack()
+    //{
+    //    Player.instance.UseAttack();
+    //}
 
-    public void playerUnderAttack()
-    {
-        Player.instance.underAttack();
-    }
+    //public void playerUnderAttack()
+    //{
+    //    Player.instance.underAttack();
+    //}
 
     public void stageClear()
     {

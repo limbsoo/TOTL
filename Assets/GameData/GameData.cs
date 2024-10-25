@@ -3,9 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable] // 직렬화
-
 public class GameData
 {
+    public int playerCharacterIdx;
+
+    public int stageModeIdx;
+
+
+
+
+
+
+
+
     //public PlayerData pd;
 
     //public List<FieldEffectBlock> febs;
@@ -33,7 +43,7 @@ public class GameData
     public List<BlockData> febs;
 
 
-
+    public List<FieldEffect> FEs;
 
 
     //// 각 챕터의 잠금여부를 저장할 배열
@@ -49,20 +59,13 @@ public class BlockData
 {
     public int m_upperIdx;
     public int m_downerIdx;
-
-
-
     public string blockName;
     public int lineNum;
     public int start;
     public int end;
-
-
-
+    public int weight;
     public Vector3 position;
-
 }
-
 
 
 

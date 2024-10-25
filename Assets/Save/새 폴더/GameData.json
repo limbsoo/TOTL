@@ -1,0 +1,13 @@
+{
+    "skill": 0,
+    "gold": 0,
+    "name": "Player",
+    "maxWave": 0,
+    "curWave": 0,
+    "health": 100.0,
+    "moveSpeed": 20.0,
+    "damamge": 2.0,
+    "coolDown": 2.0,
+    "febs": [],
+    "FEs": []
+}

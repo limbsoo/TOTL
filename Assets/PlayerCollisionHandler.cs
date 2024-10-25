@@ -133,9 +133,17 @@ public class PlayerCollisionHandler : MonoBehaviour
             switch (other.gameObject.tag)
             {
                 case ("Enemy"):
-                    if(gameObject.tag == "Player")
+                    if (gameObject.tag == "Player")
                     {
-                        EventManager.instance.playerCollisionEnemy(gameObject);
+                        Player p = gameObject.GetComponent<Player>();
+
+                        if (!p.haveDamaged())
+                        {
+                            p.underAttack();
+                        }
+                        
+
+                        //EventManager.instance.playerCollisionEnemy(gameObject);
                     }
 
 

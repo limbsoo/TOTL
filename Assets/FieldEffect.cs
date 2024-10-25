@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
+[Serializable]
 public class FieldEffect : MonoBehaviour, Spawn
 {
 

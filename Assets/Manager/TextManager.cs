@@ -40,6 +40,7 @@ public class TextManager : MonoBehaviour
     {
     }
 
+
     public void InitText()
     {
         curStage.text = /*"CurWave : " + */DataManager.Instance.data.curWave.ToString();
@@ -69,12 +70,19 @@ public class TextManager : MonoBehaviour
         if(StageManager.Sstate == StageState.Play)
         {
             curScore.text = StageManager.instance.currentScore.ToString() + " / " + StageManager.instance.targetScore.ToString();
-            health.text = /*"Health : " +*/ Player.instance.health.ToString();
-            damage.text = "Damage : " + Player.instance.damamge.ToString();
-            speed.text = "Speed : " + Player.instance.moveSpeed.ToString();
-            coolDown.text = "CoolDown : " + Player.instance.coolDown.ToString();
-            penealtyCoolDown.text = "Penealty : " + Player.instance.PenealtyTime.ToString();
-            
+
+            health.text = /*"Health : " +*/ StageManager.instance.p.health.ToString();
+            damage.text = "Damage : " + StageManager.instance.p.damamge.ToString();
+            speed.text = "Speed : " + StageManager.instance.p.moveSpeed.ToString();
+            coolDown.text = "CoolDown : " + StageManager.instance.p.coolDown.ToString();
+            penealtyCoolDown.text = "Penealty : " + StageManager.instance.p.PenealtyTime.ToString();
+
+            //health.text = /*"Health : " +*/ Player.instance.health.ToString();
+            //damage.text = "Damage : " + Player.instance.damamge.ToString();
+            //speed.text = "Speed : " + Player.instance.moveSpeed.ToString();
+            //coolDown.text = "CoolDown : " + Player.instance.coolDown.ToString();
+            //penealtyCoolDown.text = "Penealty : " + Player.instance.PenealtyTime.ToString();
+
 
             waveTimer.text = (StageManager.instance.waveTime).ToString();
 
@@ -108,8 +116,8 @@ public class TextManager : MonoBehaviour
                 nextGoals.text += " ";
             }
 
-
-            gold.text = Player.instance.gold.ToString();
+            gold.text = StageManager.instance.p.gold.ToString();
+            //gold.text = Player.instance.gold.ToString();
 
 
             //if (waveTimeCoroutine == null)

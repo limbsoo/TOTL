@@ -36,3 +36,11 @@ MonoBehaviour:
   goldIncreasePerWave: 0
   costIncreasePerWave: 0
   EliteEnemyIncreasePerWave: 1
+  UpperSprites:
+  - {fileID: 21300000, guid: fb004b2216643d04ea735d95438ea7b6, type: 3}
+  - {fileID: 21300000, guid: 1cba0a413b348e24f88f16234d20cbdd, type: 3}
+  - {fileID: 21300000, guid: c20ce61f9de1caa4c9d36a6a27c29a13, type: 3}
+  DownerSprites:
+  - {fileID: 21300000, guid: 7fb1127c88189b445ae5582aa4b5c9b6, type: 3}
+  - {fileID: 21300000, guid: c25ca8a5c0b2fd44da7401753bd48c84, type: 3}
+  - {fileID: 21300000, guid: 3fc2fe0d11816944689ebea3fbf814a9, type: 3}

@@ -8,13 +8,13 @@ public class WinController : MonoBehaviour
 
     public void loadPlayScene()
     {
-        SceneManager.LoadScene("PlayScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("PlayScene");
         EventManager.instance.TriggerOnGameReStart();
     }
 
     public void loadMainScene()
     {
-        SceneManager.LoadScene("MainScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene");
         
         //GameManager.instance.Start()
     }

@@ -65,6 +65,10 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
 
 
 
+    public int weight;
+
+
+
     private Rigidbody2D rb2;
 
     private void Start()
@@ -143,12 +147,28 @@ public class FieldEffectBlock : MonoBehaviour, IPointerDownHandler, IBeginDragHa
 
     public void changeSelected()
     {
-        FieldEffectBlock feb =  FieldEffectPopUpManager.instance.blocks[FieldEffectPopUpManager.instance.curBlockIdx].GetComponent<FieldEffectBlock>();
-        feb.ChangeColor(false);
+        if (DataManager.Instance.data.curWave < FieldEffectPopUpManager.instance.EndPhase)
+        {
+            FieldEffectBlock feb = FieldEffectPopUpManager.instance.blocks[FieldEffectPopUpManager.instance.curBlockIdx].GetComponent<FieldEffectBlock>();
+            feb.ChangeColor(false);
+            feb.weight -= 1;
+
+            ChangeColor(true);
+            FieldEffectPopUpManager.instance.curBlockIdx = _idx;
+            weight += 1;
+        }
+
+        else
+        {
+            FieldEffectBlock feb = FieldEffectPopUpManager.instance.blocks[FieldEffectPopUpManager.instance.curBlockIdx].GetComponent<FieldEffectBlock>();
+            feb.ChangeColor(false);
 
 
-        ChangeColor(true);
-        FieldEffectPopUpManager.instance.curBlockIdx = _idx;
+            ChangeColor(true);
+            FieldEffectPopUpManager.instance.curBlockIdx = _idx;
+        }
+
+
     }
 
     public void ChangeColor(bool isTrue)

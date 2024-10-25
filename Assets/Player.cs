@@ -31,9 +31,9 @@ public class Player : MonoBehaviour, Spawn
 
     public float teleportLength = 10;
 
-    public static bool canUseSkill = true; // 스킬 사용 가능 여부
+    public static bool canUseSkill; // 스킬 사용 가능 여부
 
-    public static bool playerDamaged = false;
+    public static bool playerDamaged;
 
     private Vector3 movement;
     
@@ -72,45 +72,101 @@ public class Player : MonoBehaviour, Spawn
 
 
 
-    public static Player instance { get; private set; }
+    //public static Player instance { get; private set; }
     private void Awake()
     {
-        if (instance == null)
+        playerDamaged = false;
+        canUseSkill = true;
+
+        GameData data = DataManager.Instance.data;
+
+        //data.playerCharacterIdx
+
+
+        //PlayerData playerData = GameManager.instance.playerData;
+        health = data.health;
+        moveSpeed = data.moveSpeed;
+        damamge = data.damamge;
+        coolDown = data.coolDown;
+        gold = data.gold;
+
+
+        switch (data.playerCharacterIdx)
         {
-            instance = this;
-
-            GameData data = DataManager.Instance.data;
-
-            //PlayerData playerData = GameManager.instance.playerData;
-            health = data.health;
-            moveSpeed = data.moveSpeed;
-            damamge = data.damamge;
-            coolDown = data.coolDown;
-            gold = data.gold;
-
-            switch (data.skill)
-            {
-                case 0:
-                    psState = PlayerSkillState.Teleport;
-                    break;
-                case 1:
-                    psState = PlayerSkillState.Hide;
-                    break;
-                case 2:
-                    psState = PlayerSkillState.Decoy;
-                    break;
-            }
-
-            psState = PlayerSkillState.Decoy;
-
-
-            PenealtyTime = 0;
-            animator = GetComponent<Animator>();
-            rb = GetComponent<Rigidbody>();
-            pState = PlayerState.Original;
-            DontDestroyOnLoad(gameObject);
+            case 0:
+                psState = PlayerSkillState.Teleport;
+                break;
+            case 1:
+                psState = PlayerSkillState.Decoy;
+                break;
+            case 2:
+                psState = PlayerSkillState.Hide;
+                break;
         }
-        else Destroy(gameObject);
+
+        //psState = PlayerSkillState.Decoy;
+
+
+
+
+
+
+        //switch (data.skill)
+        //{
+        //    case 0:
+        //        psState = PlayerSkillState.Teleport;
+        //        break;
+        //    case 1:
+        //        psState = PlayerSkillState.Hide;
+        //        break;
+        //    case 2:
+        //        psState = PlayerSkillState.Decoy;
+        //        break;
+        //}
+
+        //psState = PlayerSkillState.Decoy;
+
+
+        PenealtyTime = 0;
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+
+        //if (instance == null)
+        //{
+        //    instance = this;
+
+        //    GameData data = DataManager.Instance.data;
+
+        //    //PlayerData playerData = GameManager.instance.playerData;
+        //    health = data.health;
+        //    moveSpeed = data.moveSpeed;
+        //    damamge = data.damamge;
+        //    coolDown = data.coolDown;
+        //    gold = data.gold;
+
+        //    switch (data.skill)
+        //    {
+        //        case 0:
+        //            psState = PlayerSkillState.Teleport;
+        //            break;
+        //        case 1:
+        //            psState = PlayerSkillState.Hide;
+        //            break;
+        //        case 2:
+        //            psState = PlayerSkillState.Decoy;
+        //            break;
+        //    }
+
+        //    psState = PlayerSkillState.Decoy;
+
+
+        //    PenealtyTime = 0;
+        //    animator = GetComponent<Animator>();
+        //    rb = GetComponent<Rigidbody>();
+        //    pState = PlayerState.Original;
+        //    DontDestroyOnLoad(gameObject);
+        //}
+        //else Destroy(gameObject);
     }
 
     private float attackDuration;
@@ -500,7 +556,7 @@ public class Player : MonoBehaviour, Spawn
 
     Coroutine runningCoroutine = null;
 
-    void HandleCollisionResult(GameObject collidedObject)
+    public void HandleCollisionResult(GameObject collidedObject)
     {
         Debug.Log("Received collision with: " + collidedObject.name);
 
@@ -594,6 +650,12 @@ public class Player : MonoBehaviour, Spawn
         }
     }
 
+
+    public bool haveDamaged()
+    {
+        if(playerDamaged) return true;
+        else return false;
+    }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

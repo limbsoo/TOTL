@@ -32,8 +32,8 @@ public class FieldEffectPopUpManager : MonoBehaviour
     //private int idx;
 
     //public Button[] buttons;
-    public Color normalColor;
-    public Color disabledColor;
+    //public Color normalColor;
+    //public Color disabledColor;
 
     public GameObject block;
     public Sprite[] idle;
@@ -74,9 +74,9 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
 
         if (DataManager.Instance.data.curWave >=1 ) SetBlocks(DataManager.Instance.data);
-        
-        
-        if (DataManager.Instance.data.curWave <= 7) CreateBlock();
+        CreateBlock();
+
+        //if (DataManager.Instance.data.curWave <= 7) CreateBlock();
 
         //StageManager.instance.OnContinueWave += SetBlocks;
 
@@ -181,7 +181,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
                 break;
         }
 
-        s += " Block.";
+        s += " Block.a부터 b 기간 동안 활성화되는";
 
 
         //if (blocks[blocks.Count - 1])
@@ -319,80 +319,30 @@ public class FieldEffectPopUpManager : MonoBehaviour
             go.transform.SetParent(rectTransform, false);
             blocks.Add(go);
             FieldEffectBlock feb = go.GetComponent<FieldEffectBlock>();
-
-            //Vector3 newPos = new Vector3();
-
-            //if (DataManager.Instance.data.slots.Count == 0)
-            //{
-            //    newPos = TL[1].rectTransform.position;
-            //}
-
-            //else
-            //{
-            //    for (int i = 0; i < DataManager.Instance.data.slots.Count; i++)
-            //    {
-            //        if (DataManager.Instance.data.slots[i] == 0)
-            //        {
-            //            newPos = TL[i].rectTransform.position;
-            //            break;
-            //        }
-
-
-
-            //        //if (!TL[i].haveBlock)
-            //        //{
-            //        //    //newPos = new Vector3(StageManager.instance.gridCenters[i].x, StageManager.instance.gridCenters[i].y, StageManager.instance.gridCenters[i].z);
-            //        //    //feb.
-
-            //        //    newPos = TL[i].rectTransform.position;
-            //        //    break;
-            //        //}
-            //    }
-            //}
-
-
-
-
-
-            //List<int> Idxes = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
-            //for(int i = 0; i < blocks.Count; i++)
-            //{
-            //    //FieldEffectBlock feb = blocks[blocks.Count - 1].GetComponent<FieldEffectBlock>();
-            //}
-
-
-
-            //while(true)
-            //{
-            //    int ranIdx = UnityEngine.Random.Range(0, 10);
-
-
-
-            //    Vector3 newPos = new Vector3(0f, 0f, 0f);
-
-
-
-
-            //    if (StageManager.instance.gridCenters[ranIdx].xyz)
-
-            //}
-
-            //StartCoroutine(CoWaitForPosition()); //코루틴 시작
-
             feb.Init(null, blocks.Count - 1);
-
             StartCoroutine(CoWaitForPosition(feb));
-            //feb.SetPos(newPos);
-
             feb.changeSelected();
         }
 
         else
         {
+
+            FieldEffectBlock feb = blocks[curBlockIdx].GetComponent<FieldEffectBlock>();
+            feb.ChangeColor(false);
+
+            curBlockIdx = UnityEngine.Random.Range(0, 9);
+            feb = blocks[curBlockIdx].GetComponent<FieldEffectBlock>();
+            feb.ChangeColor(true);
+            feb.weight += 1;
+
             //강화버전
         }
 
+
+    }
+
+    public void RandomSelect()
+    {
 
     }
 

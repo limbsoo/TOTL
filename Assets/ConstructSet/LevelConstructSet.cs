@@ -31,7 +31,8 @@ public class LevelConstructSet : ScriptableObject
 
     //public int increaseEnemyPerWave;
 
-
+    public Sprite[] UpperSprites;
+    public Sprite[] DownerSprites;
 
 
 }
