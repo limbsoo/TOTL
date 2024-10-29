@@ -69,6 +69,8 @@ public class TextManager : MonoBehaviour
     {
         if(StageManager.Sstate == StageState.Play)
         {
+            curStage.text = /*"CurWave : " + */StageManager.instance.GetCurWave().ToString();
+
             curScore.text = StageManager.instance.currentScore.ToString() + " / " + StageManager.instance.targetScore.ToString();
 
             health.text = /*"Health : " +*/ StageManager.instance.p.health.ToString();

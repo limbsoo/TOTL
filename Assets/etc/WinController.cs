@@ -8,8 +8,8 @@ public class WinController : MonoBehaviour
 
     public void loadPlayScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("PlayScene");
-        EventManager.instance.TriggerOnGameReStart();
+        //UnityEngine.SceneManagement.SceneManager.LoadScene("PlayScene");
+        //EventManager.instance.TriggerOnGameReStart();
     }
 
     public void loadMainScene()

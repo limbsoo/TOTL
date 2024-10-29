@@ -7,12 +7,13 @@ using TMPro;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
+using System.Drawing;
 
 public class FieldEffectPopUpManager : MonoBehaviour
 {
     public static FieldEffectPopUpManager instance { get; private set; }
 
-    private void Awake()
+    void Awake()
     {
         if (instance == null)
         {
@@ -21,6 +22,11 @@ public class FieldEffectPopUpManager : MonoBehaviour
         }
         else Destroy(gameObject);
     }
+
+    TimeLine[] m_timelines;
+    ButtonEvents m_buttonEvents;
+    public int EndPhase;
+
 
     public List<GameObject> blocks { get; private set; }
 
@@ -41,12 +47,12 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     public GridLayoutGroup slots;
 
-    public int EndPhase = 9;
+
 
     public bool isSelected;
 
 
-    public TimeLine[] TL;
+
 
     public List<TMP_Text> slotEffectExplans = new List<TMP_Text>();
 
@@ -60,9 +66,11 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     RectTransform rectTransform;
 
+
+
     private void Start()
     {
-        TL = slots.GetComponentsInChildren<TimeLine>();
+        m_timelines = slots.GetComponentsInChildren<TimeLine>();
 
         UIManager.instance.OnInitializeUI += CreateBlock;
 
@@ -80,6 +88,11 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
         //StageManager.instance.OnContinueWave += SetBlocks;
 
+        m_buttonEvents = GetComponent<ButtonEvents>();
+        m_buttonEvents.OnCheckMoney?.Invoke(DataManager.Instance.data.gold);
+
+
+        //EventManager.OnCheckMoney?.Invoke(DataManager.Instance.data.gold);
     }
 
 
@@ -119,13 +132,39 @@ public class FieldEffectPopUpManager : MonoBehaviour
                 if(feeeeb.lineNum != -1)
                 {
                     string s = "";
+                    s += feeeeb.UpperSprites[feeeeb.m_upperIdx].name + " & " + feeeeb.DownerSprites[feeeeb.m_downerIdx].name + " field effect occurs from ";
+
+
+
+
                     s += feeeeb.start.ToString();
                     s += " to ";
                     s += feeeeb.end.ToString();
-                    s += " ";
-                    s += feeeeb.UpperSprites[feeeeb.m_upperIdx].name + " + " + feeeeb.DownerSprites[feeeeb.m_downerIdx].name + " block";
+
+
+                    //s += " ";
+                    //s += feeeeb.UpperSprites[feeeeb.m_upperIdx].name + " & " + feeeeb.DownerSprites[feeeeb.m_downerIdx].name + " Field Effect";
 
                     slotEffectExplans[feeeeb.lineNum].text = s;
+
+
+
+
+
+
+
+
+
+
+
+                    //string s = "";
+                    //s += feeeeb.start.ToString();
+                    //s += " to ";
+                    //s += feeeeb.end.ToString();
+                    //s += " ";
+                    //s += feeeeb.UpperSprites[feeeeb.m_upperIdx].name + " & " + feeeeb.DownerSprites[feeeeb.m_downerIdx].name + " Field Effect";
+
+                    //slotEffectExplans[feeeeb.lineNum].text = s;
                 }
 
 
@@ -141,27 +180,41 @@ public class FieldEffectPopUpManager : MonoBehaviour
     public void UpdateTexts()
     {
         FieldEffectBlock feb = blocks[curBlockIdx].GetComponent<FieldEffectBlock>();
-        selectBlockName.text = feb.UpperSprites[feb.m_upperIdx].name + " + " + feb.DownerSprites[feb.m_downerIdx].name + " block";
+        selectBlockName.text = feb.UpperSprites[feb.m_upperIdx].name + " & " + feb.DownerSprites[feb.m_downerIdx].name;
+
+
 
         string s = "";
 
+        s += "<color=red>";
+
         s += feb.start.ToString();
-        s += " to ";
+
+        s += "</color>";
+
+        s += " 부터 ";
+
+        s += "<color=red>";
+
+
         s += feb.end.ToString();
 
+        s += "</color>";
+
+        s += " 까지 활성화되며 ";
 
         switch (feb.m_upperIdx)
         {
             case (0): //0 Blink
-                s += " Blink ";
+                s += " 활성화 된 동안 필드 효과가 발생한다. 해당 필드 효과 범위 안에 플레이어 존재 시";
                 break;
 
             case (1): //0 Delay
-                s += " Delay ";
+                s += " 활성화 된 동안 필드 효과가 발생한다. 해당 필드 효과 범위 안에 플레이어 존재 시 3초 뒤에 필드 효과가 적용되며 효과 범위를 벗어나도 발생";
                 break;
 
             case (2): //0 Moving
-                s += " Moving ";
+                s += " 활성화 된 동안 필드 효과가 발생한다. 필드 효과 범위가 움직이며, 해당 필드 효과 범위 안에 플레이어 존재 시";
                 break;
         }
 
@@ -169,29 +222,96 @@ public class FieldEffectPopUpManager : MonoBehaviour
         switch (feb.m_downerIdx)
         {
             case (0): //0 Damage
-                s += "Damage";
+                s += " 일정 데미지를 준다.";
                 break;
 
             case (1): //0 Seal
-                s += "Seal";
+                s += " 5초간 스킬을 봉인한다.";
                 break;
 
             case (2): //0 Slow
-                s += "Slow";
+                s += " 3초간 이동속도를 낮춘다.";
                 break;
         }
 
-        s += " Block.a부터 b 기간 동안 활성화되는";
-
-
-        //if (blocks[blocks.Count - 1])
-        //{
-
-        //}
+        //s += " Block.a부터 b 기간 동안 활성화되는";
 
         selectBlockInformation.text = s;
 
-        //slotEffectExplans[feb.lineNum].text = feb.UpperSprites[feb.m_upperIdx].name + " + " + feb.DownerSprites[feb.m_downerIdx].name + " block";
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //string s = "";
+
+        //s += feb.start.ToString();
+        //s += " To ";
+        //s += feb.end.ToString();
+
+
+        //switch (feb.m_upperIdx)
+        //{
+        //    case (0): //0 Blink
+        //        s += " Blink & ";
+        //        break;
+
+        //    case (1): //0 Delay
+        //        s += " Delay & ";
+        //        break;
+
+        //    case (2): //0 Moving
+        //        s += " Moving & ";
+        //        break;
+        //}
+
+
+        //switch (feb.m_downerIdx)
+        //{
+        //    case (0): //0 Damage
+        //        s += "Damage";
+        //        break;
+
+        //    case (1): //0 Seal
+        //        s += "Seal";
+        //        break;
+
+        //    case (2): //0 Slow
+        //        s += "Slow";
+        //        break;
+        //}
+
+        //s += " Block.a부터 b 기간 동안 활성화되는";
+
+
+        ////if (blocks[blocks.Count - 1])
+        ////{
+
+        ////}
+
+        //selectBlockInformation.text = s;
+
+        ////slotEffectExplans[feb.lineNum].text = feb.UpperSprites[feb.m_upperIdx].name + " + " + feb.DownerSprites[feb.m_downerIdx].name + " block";
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -248,7 +368,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
         ////}
 
         //selectBlockInformation.text = s;
-    }    
+    }
 
 
 
@@ -358,7 +478,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
         if (DataManager.Instance.data.febs.Count == 0)
         {
-            feb.SetPos(TL[0].rectTransform.position);
+            feb.SetPos(m_timelines[0].rectTransform.position);
         }
 
         else
@@ -378,7 +498,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
                 else break;
             }
 
-            feb.SetPos(TL[idx].rectTransform.position);
+            feb.SetPos(m_timelines[idx].rectTransform.position);
         }
 
 

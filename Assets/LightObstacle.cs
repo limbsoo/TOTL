@@ -229,38 +229,38 @@ public class LightObstacle : MonoBehaviour
     public void DetectSpotlightArea()
     {
 
-        Light spotLightComponent = GetComponent<Light>();
+        //Light spotLightComponent = GetComponent<Light>();
 
-        // 스포트라이트의 위치와 방향
-        Vector3 spotlightPosition = transform.position;
-        Vector3 spotlightDirection = transform.forward;
+        //// 스포트라이트의 위치와 방향
+        //Vector3 spotlightPosition = transform.position;
+        //Vector3 spotlightDirection = transform.forward;
 
 
-        // 스포트라이트의 반경과 각도
-        float spotAngle = spotLightComponent.spotAngle / 2.0f;
-        float spotRange = spotLightComponent.range;
+        //// 스포트라이트의 반경과 각도
+        //float spotAngle = spotLightComponent.spotAngle / 2.0f;
+        //float spotRange = spotLightComponent.range;
 
-        // 게임 오브젝트가 스포트라이트의 범위 내에 있는지 체크
-        Vector3 toObject = StageManager.instance.player.transform.position - spotlightPosition;
-        float distanceToObject = toObject.magnitude;
+        //// 게임 오브젝트가 스포트라이트의 범위 내에 있는지 체크
+        //Vector3 toObject = StageManager.instance.player.transform.position - spotlightPosition;
+        //float distanceToObject = toObject.magnitude;
 
-        // 범위 내에 있는지 확인
-        if (distanceToObject <= spotRange)
-        {
-            // 각도 내에 있는지 확인
-            float angleToObject = Vector3.Angle(spotlightDirection, toObject);
-            if (angleToObject <= spotAngle)
-            {
-                //Debug.Log("Object is within the spotlight area: " + transform.name);
+        //// 범위 내에 있는지 확인
+        //if (distanceToObject <= spotRange)
+        //{
+        //    // 각도 내에 있는지 확인
+        //    float angleToObject = Vector3.Angle(spotlightDirection, toObject);
+        //    if (angleToObject <= spotAngle)
+        //    {
+        //        //Debug.Log("Object is within the spotlight area: " + transform.name);
 
-                EventManager.instance.playerEnterTherLight();
-            }
+        //        EventManager.instance.playerEnterTherLight();
+        //    }
 
-            //else
-            //{
-            //    EventManager.instance.playerEnterTherLight(false);
-            //}
-        }
+        //    //else
+        //    //{
+        //    //    EventManager.instance.playerEnterTherLight(false);
+        //    //}
+        //}
     }
 
 

@@ -309,9 +309,9 @@ public class Player : MonoBehaviour, Spawn
     // ÀÌº¥Æ®
     private void OnEnable()
     {
-        EventManager.instance.OnPlayerEnterTheLightRange += changeFigure;
-        EventManager.instance.OnCollisionResult += HandleCollisionResult;
-        EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
+        //EventManager.instance.OnPlayerEnterTheLightRange += changeFigure;
+        //EventManager.instance.OnCollisionResult += HandleCollisionResult;
+        //EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
 
         UIManager.instance.OnUseSkill += useSkill;
         //JoyStickController.instance.JoyStickMove += Move;
@@ -319,9 +319,9 @@ public class Player : MonoBehaviour, Spawn
 
     private void OnDisable()
     {
-        EventManager.instance.OnPlayerEnterTheLightRange -= changeFigure;
-        EventManager.instance.OnCollisionResult -= HandleCollisionResult;
-        EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
+        //EventManager.instance.OnPlayerEnterTheLightRange -= changeFigure;
+        //EventManager.instance.OnCollisionResult -= HandleCollisionResult;
+        //EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
 
         UIManager.instance.OnUseSkill -= useSkill;
     }
@@ -351,33 +351,42 @@ public class Player : MonoBehaviour, Spawn
                         Destroy(go);
                     }));
 
-                    SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
-                    {
-                        SkillCoolDownCoroutine = null;
+                    //SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
+                    //{
+                    //    SkillCoolDownCoroutine = null;
 
-                        ////UIManager.instance.IdleSkillButton(true);
-                        ////canUseSkill = !canUseSkill;
-                        //summonDecoy = !summonDecoy;
-                        //Destroy(go);
-                    }));
-
-                    UIManager.instance.StartCooldown(coolDown);
-
-
-                    ////UIManager.instance.IdleSkillButton(false);
-
-                    //StartCoroutine(Function.instance.CountDown(coolDown, () => {
-                    //    //UIManager.instance.IdleSkillButton(true);
-                    //    //canUseSkill = !canUseSkill;
-                    //    summonDecoy = !summonDecoy;
-                    //    Destroy(go);
+                    //    ////UIManager.instance.IdleSkillButton(true);
+                    //    ////canUseSkill = !canUseSkill;
+                    //    //summonDecoy = !summonDecoy;
+                    //    //Destroy(go);
                     //}));
+
+                    //UIManager.instance.StartCooldown(coolDown);
+
 
 
 
                     //UseDecoy();
                     break;
+
+
+
+
+
+
             }
+
+            SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
+            {
+                SkillCoolDownCoroutine = null;
+
+                ////UIManager.instance.IdleSkillButton(true);
+                ////canUseSkill = !canUseSkill;
+                //summonDecoy = !summonDecoy;
+                //Destroy(go);
+            }));
+
+            UIManager.instance.StartCooldown(coolDown);
         }
 
 

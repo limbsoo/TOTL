@@ -119,7 +119,7 @@ public class Enemy : MonoBehaviour
 
     public void Update()
     {
-        if(curTarget == "")
+        if(curTarget == "" && Math.Abs(nmAgent.destination.x - transform.position.x) <= 1 && Math.Abs(nmAgent.destination.z - transform.position.z) <= 1 )
         {
             animator.SetInteger("Idle", 0);
         }
@@ -178,48 +178,36 @@ public class Enemy : MonoBehaviour
 
     }
 
-    private void OnEnable()
-    {
-        EventManager.instance.OnPlayerDetectedMonster += chasePlayer;
-    }
+    //private void OnEnable()
+    //{
+    //    EventManager.instance.OnPlayerDetectedMonster += chasePlayer;
+    //}
 
-    private void OnDisable()
-    {
-        EventManager.instance.OnPlayerDetectedMonster -= chasePlayer;
-    }
+    //private void OnDisable()
+    //{
+    //    EventManager.instance.OnPlayerDetectedMonster -= chasePlayer;
+    //}
 
-    public void chasePlayer(GameObject detectObject)
-    {
-        if(StageManager.Sstate == StageState.Play)
-        {
-            //if (this.nmAgent == null) return;
+    //public void chasePlayer(GameObject detectObject)
+    //{
+    //    if(StageManager.Sstate == StageState.Play)
+    //    {
 
-            //if (detectObject == null) return;
+    //        Enemy enemy = detectObject.transform.parent.GetComponent<Enemy>();
 
-            Enemy enemy = detectObject.transform.parent.GetComponent<Enemy>();
-
-            
-
-            //if (enemy == null) return;
-
-            //if (enemy.onceDamaged) return;
+    //        if()
 
 
 
-            //if (StageManager.currentPlayerIdx != 0) return;
 
 
 
-            //Rigidbody rb = StageManager.instance.player.GetComponent<Rigidbody>();
-            //enemy.updateDestination(rb.transform);
+    //        //if (StageManager.instance.player == null) return;
+    //        //enemy.updateDestination(StageManager.instance.player.transform);
+    //    }
 
 
-            if (StageManager.instance.player == null) return;
-            enemy.updateDestination(StageManager.instance.player.transform);
-        }
-
-
-    }
+    //}
  
 
 

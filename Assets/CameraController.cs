@@ -52,9 +52,9 @@ public class CameraController : MonoBehaviour
         //this.transform.position = new Vector3(Vector3.x, Vector3.y + 60, Vector3.z - 35);
         this.transform.position = new Vector3(Vector3.x - playerCameraDistance.x, Vector3.y - playerCameraDistance.y, Vector3.z - playerCameraDistance.z); 
 
-        if (thisCamera.fieldOfView <= 20.0f && scroll < 0) thisCamera.fieldOfView = 20.0f; //최대 줌인
-        else if (thisCamera.fieldOfView >= 60.0f && scroll > 0) thisCamera.fieldOfView = 60.0f; // 최대 줌 아웃
-        else thisCamera.fieldOfView += scroll; // 줌인 아웃 하기.
+        //if (thisCamera.fieldOfView <= 20.0f && scroll < 0) thisCamera.fieldOfView = 20.0f; //최대 줌인
+        //else if (thisCamera.fieldOfView >= 60.0f && scroll > 0) thisCamera.fieldOfView = 60.0f; // 최대 줌 아웃
+        //else thisCamera.fieldOfView += scroll; // 줌인 아웃 하기.
 
 
         // 일정 구간 줌으로 들어가면 캐릭터를 바라보도록 한다.

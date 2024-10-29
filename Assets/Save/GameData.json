@@ -2,10 +2,10 @@
     "playerCharacterIdx": 0,
     "stageModeIdx": 0,
     "skill": 0,
-    "gold": 0,
+    "gold": 10000,
     "name": "Player",
     "maxWave": 0,
-    "curWave": 1,
+    "curWave": 9,
     "health": 100.0,
     "moveSpeed": 20.0,
     "damamge": 2.0,
@@ -15,13 +15,125 @@
             "m_upperIdx": 2,
             "m_downerIdx": 2,
             "blockName": "movingslow",
-            "lineNum": 0,
+            "lineNum": 3,
             "start": 3,
             "end": 8,
+            "weight": -1,
+            "position": {
+                "x": 1015.8499755859375,
+                "y": 540.5999755859375,
+                "z": 0.0
+            }
+        },
+        {
+            "m_upperIdx": 0,
+            "m_downerIdx": 2,
+            "blockName": "blinkslow",
+            "lineNum": 2,
+            "start": 5,
+            "end": 0,
+            "weight": 0,
+            "position": {
+                "x": 1555.8499755859375,
+                "y": 783.5999755859375,
+                "z": 0.0
+            }
+        },
+        {
+            "m_upperIdx": 1,
+            "m_downerIdx": 1,
+            "blockName": "delayseal",
+            "lineNum": 4,
+            "start": 6,
+            "end": 1,
+            "weight": 0,
+            "position": {
+                "x": 1285.8499755859375,
+                "y": 540.5999755859375,
+                "z": 0.0
+            }
+        },
+        {
+            "m_upperIdx": 0,
+            "m_downerIdx": 0,
+            "blockName": "blinkdamage",
+            "lineNum": 5,
+            "start": 5,
+            "end": 0,
+            "weight": 0,
+            "position": {
+                "x": 1555.8499755859375,
+                "y": 540.5999755859375,
+                "z": 0.0
+            }
+        },
+        {
+            "m_upperIdx": 0,
+            "m_downerIdx": 0,
+            "blockName": "blinkdamage",
+            "lineNum": 1,
+            "start": 9,
+            "end": 4,
+            "weight": 0,
+            "position": {
+                "x": 1285.8499755859375,
+                "y": 783.5999755859375,
+                "z": 0.0
+            }
+        },
+        {
+            "m_upperIdx": 2,
+            "m_downerIdx": 0,
+            "blockName": "movingdamage",
+            "lineNum": 0,
+            "start": 7,
+            "end": 2,
             "weight": 0,
             "position": {
                 "x": 1015.8499755859375,
                 "y": 783.5999755859375,
+                "z": 0.0
+            }
+        },
+        {
+            "m_upperIdx": 0,
+            "m_downerIdx": 2,
+            "blockName": "blinkslow",
+            "lineNum": 6,
+            "start": 0,
+            "end": 5,
+            "weight": 0,
+            "position": {
+                "x": 1015.8499755859375,
+                "y": 297.5999755859375,
+                "z": 0.0
+            }
+        },
+        {
+            "m_upperIdx": 2,
+            "m_downerIdx": 2,
+            "blockName": "movingslow",
+            "lineNum": 7,
+            "start": 1,
+            "end": 6,
+            "weight": 0,
+            "position": {
+                "x": 1285.8499755859375,
+                "y": 297.5999755859375,
+                "z": 0.0
+            }
+        },
+        {
+            "m_upperIdx": 1,
+            "m_downerIdx": 0,
+            "blockName": "delaydamage",
+            "lineNum": 8,
+            "start": 4,
+            "end": 9,
+            "weight": 1,
+            "position": {
+                "x": 1555.8499755859375,
+                "y": 297.5999755859375,
                 "z": 0.0
             }
         }

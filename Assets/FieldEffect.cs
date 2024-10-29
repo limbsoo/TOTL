@@ -100,6 +100,8 @@ public class FieldEffect : MonoBehaviour, Spawn
         //RangeMaterial
 
         //EffectRange = transform.GetChild(0).gameObject;
+
+        StartCoroutine(StartEffectTimerFirst(startTime));
     }
 
     public void Init(int start, int end, int idx, int upperIdx, int downerIdx)
@@ -146,7 +148,20 @@ public class FieldEffect : MonoBehaviour, Spawn
 
     }
 
+    private IEnumerator StartEffectTimerFirst(float duration)
+    {
+        float elapsed = 0f;
 
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            EffectActiveTimer.value = Mathf.Clamp01(elapsed / duration);
+            yield return null;
+        }
+        EffectActiveTimer.value = 0;
+
+    }
 
 
 
