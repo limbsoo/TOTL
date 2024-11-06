@@ -22,7 +22,7 @@ public class TimeLine : MonoBehaviour
 
     public int savedIdx;
 
-    public FieldEffectBlock feb;
+    public MapPlacementBlock feb;
 
     private void Start()
     {

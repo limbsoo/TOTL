@@ -5,39 +5,25 @@ using UnityEngine;
 public class EffectSensor : MonoBehaviour
 {
 
-
-    private bool isDelayTriggered = false;
-    public float triggerTime = 2.0f; // 효과를 발동시키기 위한 시간 (초)
-    private float triggerEnterTime = 0.0f; // Trigger가 시작된 시간
-
-    private void OnTriggerEnter(Collider other)
+    public void SetEffectPerField(Player p, EffectKinds effectKinds, float value)
     {
-
-        if (StageManager.Sstate == StageState.Play)
+        switch (effectKinds)
         {
-            switch (other.gameObject.tag)
-            {
-                case ("Player"):
+            case EffectKinds.Damage:
+                p.Damaged(value);
+                break;
 
-                    FieldEffect fe = gameObject.transform.parent.GetComponent<FieldEffect>();
+            case EffectKinds.Slow:
+                p.Slowed(value);
+                break;
 
-                    if (fe == null)
-                    {
-                        isDelayTriggered = false;
-                        triggerEnterTime = 0.0f;
-                    }
-
-
-
-                    else if (fe.m_upperIdx == 1)
-                    {
-                        isDelayTriggered = true;
-                        triggerEnterTime = Time.time;
-                    }
-                    break;
-            }
+            case EffectKinds.Seal:
+                p.Sealed(value);
+                break;
         }
+
     }
+
 
 
 
@@ -49,51 +35,63 @@ public class EffectSensor : MonoBehaviour
             {
                 FieldEffect fe = gameObject.transform.parent.GetComponent<FieldEffect>();
 
-                if (fe == null)
+                if (fe.IsActivated())
                 {
-                    isDelayTriggered = false;
-                    triggerEnterTime = 0.0f;
-                }
+                    Player p = other.gameObject.GetComponent<Player>();
+                    BlockData blockdata = fe.GetBlockData();
 
-                else if (fe.m_upperIdx == 1)
-                {
-                    if (isDelayTriggered)
+                    if(blockdata.fieldKinds == FieldKinds.Stack)
                     {
-                        if (Time.time - triggerEnterTime >= triggerTime)
+                        if(fe.stack > blockdata.fieldValue)
                         {
-
-                            triggerEnterTime = 0.0f;
-
-                            Player P = other.gameObject.GetComponent<Player>();
-
-                            P.ApplyDelayEffect(fe);
+                            SetEffectPerField(p, blockdata.effectKinds, blockdata.fieldValue * (blockdata.effectValue + blockdata.weight));
+                            //fe.stack = 0;
                         }
-                    }
-                }
 
-                else
-                {
-                    if (fe.IsActivated())
-                    //if(other.gameObject.GetComponent<CapsuleCollider>().enabled)
-                    {
-
-                        Player P = other.gameObject.GetComponent<Player>();
-                        P.setEffected(fe.m_downerIdx);
+                        else { fe.stack += Time.deltaTime; }
                     }
 
-
+                    else { SetEffectPerField(p, blockdata.effectKinds, blockdata.effectValue + blockdata.weight); }
                 }
+
+
+
+
+                //if (fe == null)
+                //{
+                //    isDelayTriggered = false;
+                //    triggerEnterTime = 0.0f;
+                //}
+
+                //else if (fe.m_upperIdx == 1)
+                //{
+                //    if (isDelayTriggered)
+                //    {
+                //        if (Time.time - triggerEnterTime >= triggerTime)
+                //        {
+
+                //            triggerEnterTime = 0.0f;
+
+                //            Player P = other.gameObject.GetComponent<Player>();
+
+                //            P.ApplyDelayEffect(fe);
+                //        }
+                //    }
+                //}
+
+                //else
+                //{
+                //    if (fe.IsActivated())
+                //    //if(other.gameObject.GetComponent<CapsuleCollider>().enabled)
+                //    {
+
+                //        Player P = other.gameObject.GetComponent<Player>();
+                //        P.setEffected(fe.m_downerIdx);
+                //    }
+
+
+                //}
             }
-
-
-
-
-            //if (other.gameObject.tag == "Player")
-            //{
-            //    Player P = other.gameObject.GetComponent<Player>();
-            //    P.gold += value;
-            //    Destroy(gameObject);
-            //}
 
         }
     }
@@ -101,15 +99,113 @@ public class EffectSensor : MonoBehaviour
 
 
 
-    //// Start is called before the first frame update
-    //void Start()
+
+
+
+    //private bool isDelayTriggered = false;
+    //public float triggerTime = 2.0f; // 효과를 발동시키기 위한 시간 (초)
+    //private float triggerEnterTime = 0.0f; // Trigger가 시작된 시간
+
+    //private void OnTriggerEnter(Collider other)
     //{
 
+    //    if (StageManager.Sstate == StageState.Play)
+    //    {
+    //        switch (other.gameObject.tag)
+    //        {
+    //            case ("Player"):
+
+    //                FieldEffect fe = gameObject.transform.parent.GetComponent<FieldEffect>();
+
+    //                if (fe == null)
+    //                {
+    //                    isDelayTriggered = false;
+    //                    triggerEnterTime = 0.0f;
+    //                }
+
+
+
+    //                else if (fe.m_upperIdx == 1)
+    //                {
+    //                    isDelayTriggered = true;
+    //                    triggerEnterTime = Time.time;
+    //                }
+    //                break;
+    //        }
+    //    }
     //}
 
-    //// Update is called once per frame
-    //void Update()
+
+
+    //private void OnTriggerStay(Collider other)
     //{
+    //    if (gameObject != null && StageManager.Sstate == StageState.Play)
+    //    {
+    //        if (other.gameObject.tag == "Player")
+    //        {
+    //            FieldEffect fe = gameObject.transform.parent.GetComponent<FieldEffect>();
 
+    //            if (fe == null)
+    //            {
+    //                isDelayTriggered = false;
+    //                triggerEnterTime = 0.0f;
+    //            }
+
+    //            else if (fe.m_upperIdx == 1)
+    //            {
+    //                if (isDelayTriggered)
+    //                {
+    //                    if (Time.time - triggerEnterTime >= triggerTime)
+    //                    {
+
+    //                        triggerEnterTime = 0.0f;
+
+    //                        Player P = other.gameObject.GetComponent<Player>();
+
+    //                        P.ApplyDelayEffect(fe);
+    //                    }
+    //                }
+    //            }
+
+    //            else
+    //            {
+    //                if (fe.IsActivated())
+    //                //if(other.gameObject.GetComponent<CapsuleCollider>().enabled)
+    //                {
+
+    //                    Player P = other.gameObject.GetComponent<Player>();
+    //                    P.setEffected(fe.m_downerIdx);
+    //                }
+
+
+    //            }
+    //        }
+
+
+
+
+    //        //if (other.gameObject.tag == "Player")
+    //        //{
+    //        //    Player P = other.gameObject.GetComponent<Player>();
+    //        //    P.gold += value;
+    //        //    Destroy(gameObject);
+    //        //}
+
+    //    }
     //}
+
+
+
+
+    ////// Start is called before the first frame update
+    ////void Start()
+    ////{
+
+    ////}
+
+    ////// Update is called once per frame
+    ////void Update()
+    ////{
+
+    ////}
 }

@@ -8,42 +8,42 @@ public class GameData
     public int playerCharacterIdx;
 
     public int stageModeIdx;
+    public int maxWave;
+    public int gold;
+    public int curWave;
 
+    public List<BlockData> blockdata;
 
-
-
-
-
-
+    public PlayerStats playerStats;
 
     //public PlayerData pd;
 
     //public List<FieldEffectBlock> febs;
 
-    public int skill;
+    //public int skill;
 
     //public int maxStage;
     //public int curStage;
 
-    public int gold;
 
-    public string name;
-    public int maxWave;
-    public int curWave;
-    public float health;
-    public float moveSpeed;
-    public float damamge;
-    public float coolDown;
+
+    //public string name;
+
+
+    //public float health;
+    //public float moveSpeed;
+    //public float damamge;
+    //public float coolDown;
 
 
     //public List<SetBlock> setBlocks;
 
 
 
-    public List<BlockData> febs;
 
 
-    public List<FieldEffect> FEs;
+
+    //public List<FieldEffect> FEs;
 
 
     //// 각 챕터의 잠금여부를 저장할 배열
@@ -57,14 +57,43 @@ public class GameData
 [Serializable]
 public class BlockData
 {
-    public int m_upperIdx;
-    public int m_downerIdx;
-    public string blockName;
+    public FieldKinds fieldKinds;
+    public EffectKinds effectKinds;
+    public WeightKinds weightKinds;
+
+    public float start;
+    public float end;
+    public float weight;
+
+    public float fieldValue;
+    public float fieldDuration;
+
+    public float effectValue;
+    public float effectDuration;
+
     public int lineNum;
-    public int start;
-    public int end;
-    public int weight;
     public Vector3 position;
+}
+
+
+[Serializable]
+public class BlockInfo
+{
+    public FieldKinds fieldKinds;
+    public EffectKinds effectKinds;
+
+    public float value;
+    public float duration;
+}
+
+[Serializable]
+public class PlayerStats
+{
+    public float health;
+    public float moveSpeed;
+    public float coolDown;
+
+    public PlayerSkillKinds playerSkillKind;
 }
 
 

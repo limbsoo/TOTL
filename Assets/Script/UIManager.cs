@@ -78,6 +78,8 @@ public class UIManager : MonoBehaviour
 
     public GameObject playerDamaged;
 
+    public GameObject GameOverPopUp;
+
     public void UseSkill()
     {
 

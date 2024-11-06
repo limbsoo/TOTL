@@ -5,9 +5,6 @@ using UnityEngine;
 public class Gold : MonoBehaviour
 {
 
-
-
-
     [SerializeField] private int value;
     [SerializeField] private int lifeCycle;
 
@@ -27,8 +24,10 @@ public class Gold : MonoBehaviour
         {
             if (other.gameObject.tag == "Player")
             {
-                Player P = other.gameObject.GetComponent<Player>();
-                P.gold += value;
+                StageManager.instance.gold += value;
+                TextManager.instance.UpdateTexts();
+                //Player P = other.gameObject.GetComponent<Player>();
+                //P.gold += value;
                 Destroy(gameObject);
             }
 

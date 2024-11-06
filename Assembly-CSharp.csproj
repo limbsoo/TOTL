@@ -58,12 +58,12 @@
   <ItemGroup>
     <Compile Include="Assets\GameData\GameData.cs" />
     <Compile Include="Assets\AnimationManager.cs" />
-    <Compile Include="Assets\ConstructSet\GameConstructSet.cs" />
+    <Compile Include="Assets\Resources\ConstructSet\GameConstructSet.cs" />
     <Compile Include="Assets\Script\PopupController.cs" />
     <Compile Include="Assets\JsonDataManager.cs" />
     <Compile Include="Assets\Script\StageManager.cs" />
     <Compile Include="Assets\Gold.cs" />
-    <Compile Include="Assets\ConstructSet\Inventory.cs" />
+    <Compile Include="Assets\Resources\ConstructSet\Inventory.cs" />
     <Compile Include="Assets\DragAndDrop.cs" />
     <Compile Include="Assets\EffectSensor.cs" />
     <Compile Include="Assets\Annoation.cs" />
@@ -80,12 +80,13 @@
     <Compile Include="Assets\Script\ButtonEvents.cs" />
     <Compile Include="Assets\Script\SceneManager.cs" />
     <Compile Include="Assets\Manager\EventManager.cs" />
-    <Compile Include="Assets\FieldEffectBlock.cs" />
+    <Compile Include="Assets\MapPlacementBlock.cs" />
     <Compile Include="Assets\etc\Skill.cs" />
     <Compile Include="Assets\PlayerData.cs" />
-    <Compile Include="Assets\ConstructSet\UIConstructSet.cs" />
-    <Compile Include="Assets\ConstructSet\LevelEditor.cs" />
+    <Compile Include="Assets\Resources\ConstructSet\UIConstructSet.cs" />
+    <Compile Include="Assets\Resources\ConstructSet\LevelEditor.cs" />
     <Compile Include="Assets\Script\DataManager.cs" />
+    <Compile Include="Assets\FieldEffectBlock.cs" />
     <Compile Include="Assets\Script\MainSceneUIManager.cs" />
     <Compile Include="Assets\Funcs\Function.cs" />
     <Compile Include="Assets\GenericClass.cs" />
@@ -93,23 +94,24 @@
     <Compile Include="Assets\Enemy.cs" />
     <Compile Include="Assets\Script\UIManager.cs" />
     <Compile Include="Assets\Augmenter.cs" />
-    <Compile Include="Assets\ConstructSet\ItemContainer.cs" />
+    <Compile Include="Assets\Resources\ConstructSet\ItemContainer.cs" />
     <Compile Include="Assets\ButtonClickEvent.cs" />
     <Compile Include="Assets\GameObject\EnemySensor.cs" />
     <Compile Include="Assets\Manager\TextManager.cs" />
     <Compile Include="Assets\Prepartion.cs" />
-    <Compile Include="Assets\ConstructSet\ScriptableItem.cs" />
+    <Compile Include="Assets\Resources\ConstructSet\ScriptableItem.cs" />
     <Compile Include="Assets\Script\ButtonController.cs" />
     <Compile Include="Assets\CameraController.cs" />
     <Compile Include="Assets\attack.cs" />
     <Compile Include="Assets\etc\WinController.cs" />
     <Compile Include="Assets\Script\ButtonStateController.cs" />
-    <Compile Include="Assets\ConstructSet\LevelConstructSet.cs" />
+    <Compile Include="Assets\Resources\ConstructSet\LevelConstructSet.cs" />
     <Compile Include="Assets\PlayerController.cs" />
     <Compile Include="Assets\etc\GameSet.cs" />
     <Compile Include="Assets\LightObstacle.cs" />
     <Compile Include="Assets\DragAndDropItem.cs" />
     <Compile Include="Assets\FieldEffect.cs" />
+    <Compile Include="Assets\PlayerStat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

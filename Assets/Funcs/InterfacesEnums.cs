@@ -29,4 +29,14 @@ public enum StageState { Edit, Play }
 
 public enum PlayerSkillState { Teleport, Hide, Decoy}
 
-public enum FieldEffectState { Damage, Seal, Slow}
+//public enum FieldEffectState { Damage, Seal, Slow}
+
+
+
+
+public enum FieldKinds { None = 0, Long = 1, Stack = 2, Move = 3 }
+public enum EffectKinds { None = 0, Damage = 1, Slow = 2, Seal = 3 }
+public enum WeightKinds { None = 0, ActiveTime = 1, Value = 2 }
+
+
+public enum PlayerSkillKinds { None = 0, Teleport = 1, Decoy = 2 }

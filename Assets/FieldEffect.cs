@@ -14,43 +14,35 @@ public class FieldEffect : MonoBehaviour, Spawn
     Vector3[] _gridCenters;
     Transform _mapTransform;
 
-
-
-
-
-
     public void Init(Vector3[] gridCenters, Transform mapTransform)
     {
-
         _gridCenters = gridCenters;
         _mapTransform = mapTransform;
     }
 
+    //BlockInfo blockinfo;
 
 
+    BlockData m_blockData;
 
 
+    //[SerializeField] FieldKinds fieldKinds;
+    //[SerializeField] EffectKinds effectKinds;
+    //[SerializeField] WeightKinds weightKinds;
+    //int startTime;
+    //int endTime;
+    //int weight;
+    //[SerializeField] int value;
+    //[SerializeField] int duration;
 
-
-
-
-
-
-
-
-
-    private int delayEffectAmount = 2;
-    private int damage = 2;
-    private int slow = 2;
-    private int seal = 2;
-    private float speed = 15f;
-
-    private int endTime;
-    private int startTime;
-    private int gridIdx;
-
-    public int m_upperIdx;
-    public int m_downerIdx;
+    //private int delayEffectAmount = 2;
+    //private int damage = 2;
+    //private int slow = 2;
+    //private int seal = 2;
+    //private float speed = 15f;
+    //private int gridIdx;
+    //public int m_upperIdx;
+    //public int m_downerIdx;
 
     private GameObject EffectRange;
 
@@ -63,56 +55,76 @@ public class FieldEffect : MonoBehaviour, Spawn
     public void Start()
     {
         EffectRange = transform.Find("EffectRange").gameObject;
-
-
-
-
-        //EffectRange = GameObject.Find("EffectRange");
-
-
         var asd = transform.Find("EffectCoolDownUI");
 
         if(asd != null) 
         {
-            //asd = 
-
-
-
             GameObject go = transform.Find("EffectCoolDownUI").gameObject;
-
-
-            //GameObject go1 = go.transform.Find("EffectCoolDown").gameObject;
-
             EffectTime = go.transform.Find("EffectCoolDown").gameObject;
-            //EffectTime.GetComponent<Slider>();
-
             EffectTimer = EffectTime.GetComponent<Slider>();
-
             EffectActiveTimer = go.transform.Find("EffectActiveCoolDown").gameObject.GetComponent<Slider>();
         }
 
-
-
         RangeMaterial = EffectRange.gameObject.GetComponent<Renderer>().material;
-
         RangeMaterial.SetFloat("_curState", 0.1f);
 
-        //RangeMaterial
-
-        //EffectRange = transform.GetChild(0).gameObject;
-
-        StartCoroutine(StartEffectTimerFirst(startTime));
+        //StartCoroutine(StartEffectTimerFirst(m_blockData.start));
     }
 
-    public void Init(int start, int end, int idx, int upperIdx, int downerIdx)
+
+    //public int GetValue()
+    //{
+    //    return value;
+    //}
+
+    //public int GetDuration()
+    //{
+    //    return duration;
+    //}
+
+    public BlockData GetBlockData()
     {
-        m_upperIdx = upperIdx;
-        m_downerIdx = downerIdx;
-
-        startTime = start;
-        endTime = end;
-        gridIdx = idx;
+        return m_blockData;
     }
+
+
+    public void Init(BlockData bd)
+    {
+        m_blockData = new BlockData();
+
+        m_blockData = bd;
+
+        //fieldKinds = bd.fieldKinds;
+        //effectKinds = bd.effectKinds;
+        //weightKinds = bd.weightKinds;
+        //startTime = bd.start;
+        //endTime = bd.end;
+        //weight = bd.weight;
+        //value = bd.value;
+        //duration = bd.duration;
+        //gridIdx = bd.lineNum;
+
+
+
+
+        //m_upperIdx = upperIdx;
+        //m_downerIdx = downerIdx;
+
+        //startTime = start;
+        //endTime = end;
+        //gridIdx = idx;
+    }
+
+
+    //public void Init(int start, int end, int idx, int upperIdx, int downerIdx)
+    //{
+    //    m_upperIdx = upperIdx;
+    //    m_downerIdx = downerIdx;
+
+    //    startTime = start;
+    //    endTime = end;
+    //    gridIdx = idx;
+    //}
 
 
     public Material RangeMaterial;
@@ -121,110 +133,189 @@ public class FieldEffect : MonoBehaviour, Spawn
 
     Coroutine FieldEffectCoroutine = null;
 
-    private IEnumerator StartEffectTimer(float duration)
+    //private IEnumerator StartEffectTimer(float duration)
+    //{
+    //    float elapsed = 0f;
+    //    while (elapsed < duration)
+    //    {
+    //        elapsed += Time.deltaTime;
+
+    //        EffectTimer.value = Mathf.Clamp01(elapsed / duration);
+    //        yield return null;
+    //    }
+    //    EffectTimer.value = 0;
+    //    //EffectTimer = null;
+
+
+
+    //    elapsed = 0f;
+    //    while (elapsed < 5)
+    //    {
+    //        elapsed += Time.deltaTime;
+
+    //        EffectActiveTimer.value = Mathf.Clamp01(elapsed / duration);
+    //        yield return null;
+    //    }
+    //    EffectActiveTimer.value = 0;
+
+    //}
+
+    //private IEnumerator StartEffectTimerFirst(float duration)
+    //{
+    //    float elapsed = 0f;
+
+    //    while (elapsed < duration)
+    //    {
+    //        elapsed += Time.deltaTime;
+
+    //        EffectActiveTimer.value = Mathf.Clamp01(elapsed / duration);
+    //        yield return null;
+    //    }
+    //    EffectActiveTimer.value = 0;
+
+    //}
+
+    public float stack;
+
+    private IEnumerator StackEffectActive(int start, int end)
     {
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
+        EffectRange.SetActive(true);
 
-            EffectTimer.value = Mathf.Clamp01(elapsed / duration);
-            yield return null;
-        }
-        EffectTimer.value = 0;
-        //EffectTimer = null;
+        stack = 0;
 
+        RangeMaterial.SetFloat("_curState", 1f);
+        if (end > start) { yield return new WaitForSeconds(end - start); }
+        else { yield return new WaitForSeconds(10 - end + start); }
 
+        EffectRange.SetActive(false);
+        RangeMaterial.SetFloat("_curState", 0.2f);
+        FieldEffectCoroutine = null;
 
-        elapsed = 0f;
-        while (elapsed < 5)
-        {
-            elapsed += Time.deltaTime;
-
-            EffectActiveTimer.value = Mathf.Clamp01(elapsed / duration);
-            yield return null;
-        }
-        EffectActiveTimer.value = 0;
-
+        stack = 0;
     }
 
-    private IEnumerator StartEffectTimerFirst(float duration)
+
+
+    private IEnumerator EffectActive(float duration)
     {
-        float elapsed = 0f;
+        EffectRange.SetActive(true);
 
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
+        stack = 0;
 
-            EffectActiveTimer.value = Mathf.Clamp01(elapsed / duration);
-            yield return null;
-        }
-        EffectActiveTimer.value = 0;
+        RangeMaterial.SetFloat("_curState", 1f);
 
+        yield return new WaitForSeconds(duration);
+
+        EffectRange.SetActive(false);
+        RangeMaterial.SetFloat("_curState", 0.2f);
+        FieldEffectCoroutine = null;
+
+        stack = 0;
     }
+
 
 
 
     void Update()
     {
-        if(StageManager.Sstate == StageState.Play)
+        if (StageManager.Sstate == StageState.Play)
         {
             //이걸로하지말고 이벤트로 하면 성능향상?
-            if(StageManager.instance.waveTime == startTime)
+            if (StageManager.instance.waveTime == m_blockData.start)
             {
                 if (FieldEffectCoroutine == null)
                 {
-                    switch (m_upperIdx)
+                    switch (m_blockData.fieldKinds)
                     {
-                        case (0): //0 Blink
-                            FieldEffectCoroutine = StartCoroutine(blinkEffect(startTime, endTime));
-                            //EffectRange.SetActive(true);
-                            //RangeMaterial.SetFloat("_curState", 1f);
-
-                            //FieldEffectCoroutine = StartCoroutine(EffectStart(startTime, endTime, () =>
-                            //{
-                            //    EffectRange.SetActive(false);
-                            //    RangeMaterial.SetFloat("_curState", 0.2f);
-                            //    FieldEffectCoroutine = null;
-                            //}));
-
-
+                        case (FieldKinds.Long):
+                            FieldEffectCoroutine = StartCoroutine(EffectActive(m_blockData.fieldDuration));
                             break;
 
-                        case (1): //1 Delay
-
-                            //EffectRange.SetActive(true);
-                            //RangeMaterial.SetFloat("_curState", 1f);
-
-
-                            FieldEffectCoroutine = StartCoroutine(Delay(startTime, endTime));
-
-
-
-                            
+                        case (FieldKinds.Stack): 
+                            FieldEffectCoroutine = StartCoroutine(EffectActive(m_blockData.fieldDuration));
                             break;
 
-                        case (2): //2 Moving
-                            FieldEffectCoroutine = StartCoroutine(moveRange(startTime, endTime, gridIdx));
-
-
-
-
-
+                        case (FieldKinds.Move): //2 Moving
+                            FieldEffectCoroutine = StartCoroutine(moveRange(m_blockData.start, m_blockData.end, m_blockData.lineNum));
                             break;
                     }
-
-                    StartCoroutine(StartEffectTimer(5));
-
+                    //StartCoroutine(StartEffectTimer(5));
                 }
-
-                
-
             }
-
-
-
         }
+
+
+
+
+
+
+
+
+
+
+
+        //if(StageManager.Sstate == StageState.Play)
+        //{
+        //    //이걸로하지말고 이벤트로 하면 성능향상?
+        //    if(StageManager.instance.waveTime == m_blockData.start)
+        //    {
+        //        if (FieldEffectCoroutine == null)
+        //        {
+        //            switch (m_blockData.fieldKinds)
+        //            {
+        //                case (FieldKinds.Long): //0 Blink
+
+
+
+
+        //                    FieldEffectCoroutine = StartCoroutine(blinkEffect(m_blockData.start, m_blockData.end));
+        //                    //EffectRange.SetActive(true);
+        //                    //RangeMaterial.SetFloat("_curState", 1f);
+
+        //                    //FieldEffectCoroutine = StartCoroutine(EffectStart(startTime, endTime, () =>
+        //                    //{
+        //                    //    EffectRange.SetActive(false);
+        //                    //    RangeMaterial.SetFloat("_curState", 0.2f);
+        //                    //    FieldEffectCoroutine = null;
+        //                    //}));
+
+
+        //                    break;
+
+        //                case (1): //1 Delay
+
+        //                    //EffectRange.SetActive(true);
+        //                    //RangeMaterial.SetFloat("_curState", 1f);
+
+
+        //                    FieldEffectCoroutine = StartCoroutine(Delay(m_blockData.start, m_blockData.end));
+
+
+
+
+        //                    break;
+
+        //                case (2): //2 Moving
+        //                    FieldEffectCoroutine = StartCoroutine(moveRange(m_blockData.start, m_blockData.end, m_blockData.lineNum));
+
+
+
+
+
+        //                    break;
+        //            }
+
+        //            StartCoroutine(StartEffectTimer(5));
+
+        //        }
+
+
+
+        //    }
+
+
+
+        //}
 
     }
 
@@ -249,23 +340,23 @@ public class FieldEffect : MonoBehaviour, Spawn
 
 
 
-    private IEnumerator Delay(int start, int end)
-    {
-        EffectRange.gameObject.GetComponent<CapsuleCollider>().enabled = true;
+    //private IEnumerator Delay(int start, int end)
+    //{
+    //    EffectRange.gameObject.GetComponent<CapsuleCollider>().enabled = true;
 
-        RangeMaterial.SetFloat("_curState", 1f);
+    //    RangeMaterial.SetFloat("_curState", 1f);
 
-        //yield return new WaitForSeconds(end - start);
-        yield return new WaitForSeconds(Math.Abs(end - start));
-        EffectRange.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+    //    //yield return new WaitForSeconds(end - start);
+    //    yield return new WaitForSeconds(Math.Abs(end - start));
+    //    EffectRange.gameObject.GetComponent<CapsuleCollider>().enabled = false;
 
 
-        RangeMaterial.SetFloat("_curState", 0.2f);
+    //    RangeMaterial.SetFloat("_curState", 0.2f);
 
-        FieldEffectCoroutine = null;
-    }
+    //    FieldEffectCoroutine = null;
+    //}
 
-    private IEnumerator moveRange(int start, int end, int idx)
+    private IEnumerator moveRange(float start, float end, int idx)
     {
         RangeMaterial.SetFloat("_curState", 1f);
 
@@ -295,7 +386,7 @@ public class FieldEffect : MonoBehaviour, Spawn
                 if (end == StageManager.instance.waveTime) break;
 
                 // 현재 프레임에서 이동할 비율 계산
-                travelPercent += speed * Time.deltaTime / distance;
+                travelPercent += m_blockData.fieldValue * Time.deltaTime / distance;
 
                 // 새 위치 계산
                 Vector3 newPos = Vector3.Lerp(startPosition, targetPosition, travelPercent);
@@ -303,12 +394,12 @@ public class FieldEffect : MonoBehaviour, Spawn
                 // 경계 감지 후 튕기기
                 if (newPos.x <= boundaryLeft || newPos.x >= boundaryRight)
                 {
-                    speed = -speed; // 속도 반전
+                    m_blockData.fieldValue = -m_blockData.fieldValue; // 속도 반전
                     ApplyRandomDirection(ref newPos, boundaryLeft, boundaryRight, boundaryTop, boundaryBottom); // 랜덤 방향 적용
                 }
                 if (newPos.z <= boundaryBottom || newPos.z >= boundaryTop)
                 {
-                    speed = -speed; // 속도 반전
+                    m_blockData.fieldValue = -m_blockData.fieldValue; // 속도 반전
                     ApplyRandomDirection(ref newPos, boundaryLeft, boundaryRight, boundaryTop, boundaryBottom); // 랜덤 방향 적용
                 }
 
@@ -421,39 +512,34 @@ public class FieldEffect : MonoBehaviour, Spawn
     }
 
 
-    private IEnumerator blinkEffect(int start, int end)
-    {
-
-        EffectRange.SetActive(true);
-        RangeMaterial.SetFloat("_curState", 1f);
-        yield return new WaitForSeconds(Math.Abs(end - start));
-
-
-        EffectRange.SetActive(false);
-        RangeMaterial.SetFloat("_curState", 0.2f);
+    //private IEnumerator blinkEffect(int start, int end)
+    //{
+    //    EffectRange.SetActive(true);
+    //    RangeMaterial.SetFloat("_curState", 1f);
+    //    yield return new WaitForSeconds(Math.Abs(end - start));
 
 
-        FieldEffectCoroutine = null;
-    }
+    //    EffectRange.SetActive(false);
+    //    RangeMaterial.SetFloat("_curState", 0.2f);
 
-    private IEnumerator swampEffect(int start, int end)
-    {
-        EffectRange.SetActive(true);
 
-        yield return new WaitForSeconds(end - start);
+    //    FieldEffectCoroutine = null;
+    //}
 
-        EffectRange.SetActive(false);
-        FieldEffectCoroutine = null;
-    }
+    //private IEnumerator swampEffect(int start, int end)
+    //{
+    //    EffectRange.SetActive(true);
+
+    //    yield return new WaitForSeconds(end - start);
+
+    //    EffectRange.SetActive(false);
+    //    FieldEffectCoroutine = null;
+    //}
 
     public bool IsActivated()
     {
-        if (FieldEffectCoroutine == null)
-        {
-            return false;
-        }
-
-        else return true;
+        if (FieldEffectCoroutine == null) { return false; }
+        else { return true; }
     }
 
 

@@ -19,11 +19,17 @@ public class Player : MonoBehaviour, Spawn
     //도망치는게임
     //디코이 : 제자리를 목표 지점으로 두고 일정 시간이 지난 뒤 플레이어를 다시 추적
 
-    public float health { get; private set; }
-    public float moveSpeed { get; private set; }
+    //public float health { get; private set; }
+    //public float moveSpeed { get; private set; }
 
-    public float damamge { get; private set; }
-    public float coolDown { get; private set; }
+    //public float damamge { get; private set; }
+    //public float coolDown { get; private set; }
+
+
+
+    PlayerStats playerStats;
+
+
 
 
     public static bool useAttack = false;
@@ -67,9 +73,15 @@ public class Player : MonoBehaviour, Spawn
     public GameObject Decoy;
 
 
-    public int gold;
+    //public int gold;
 
 
+    public float stack;
+
+    public PlayerStats GetPlayerStats()
+    {
+        return playerStats;
+    }
 
 
     //public static Player instance { get; private set; }
@@ -77,96 +89,11 @@ public class Player : MonoBehaviour, Spawn
     {
         playerDamaged = false;
         canUseSkill = true;
-
-        GameData data = DataManager.Instance.data;
-
-        //data.playerCharacterIdx
-
-
-        //PlayerData playerData = GameManager.instance.playerData;
-        health = data.health;
-        moveSpeed = data.moveSpeed;
-        damamge = data.damamge;
-        coolDown = data.coolDown;
-        gold = data.gold;
-
-
-        switch (data.playerCharacterIdx)
-        {
-            case 0:
-                psState = PlayerSkillState.Teleport;
-                break;
-            case 1:
-                psState = PlayerSkillState.Decoy;
-                break;
-            case 2:
-                psState = PlayerSkillState.Hide;
-                break;
-        }
-
-        //psState = PlayerSkillState.Decoy;
-
-
-
-
-
-
-        //switch (data.skill)
-        //{
-        //    case 0:
-        //        psState = PlayerSkillState.Teleport;
-        //        break;
-        //    case 1:
-        //        psState = PlayerSkillState.Hide;
-        //        break;
-        //    case 2:
-        //        psState = PlayerSkillState.Decoy;
-        //        break;
-        //}
-
-        //psState = PlayerSkillState.Decoy;
-
+        playerStats = DataManager.Instance.saveData.playerStats;
 
         PenealtyTime = 0;
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-
-        //if (instance == null)
-        //{
-        //    instance = this;
-
-        //    GameData data = DataManager.Instance.data;
-
-        //    //PlayerData playerData = GameManager.instance.playerData;
-        //    health = data.health;
-        //    moveSpeed = data.moveSpeed;
-        //    damamge = data.damamge;
-        //    coolDown = data.coolDown;
-        //    gold = data.gold;
-
-        //    switch (data.skill)
-        //    {
-        //        case 0:
-        //            psState = PlayerSkillState.Teleport;
-        //            break;
-        //        case 1:
-        //            psState = PlayerSkillState.Hide;
-        //            break;
-        //        case 2:
-        //            psState = PlayerSkillState.Decoy;
-        //            break;
-        //    }
-
-        //    psState = PlayerSkillState.Decoy;
-
-
-        //    PenealtyTime = 0;
-        //    animator = GetComponent<Animator>();
-        //    rb = GetComponent<Rigidbody>();
-        //    pState = PlayerState.Original;
-        //    DontDestroyOnLoad(gameObject);
-        //}
-        //else Destroy(gameObject);
     }
 
     private float attackDuration;
@@ -179,8 +106,6 @@ public class Player : MonoBehaviour, Spawn
 
     Vector3[] _gridCenters;
     Transform _mapTransform;
-
-
 
 
 
@@ -205,7 +130,7 @@ public class Player : MonoBehaviour, Spawn
 
     private void Start()
     {
-
+        stack = 0;
 
         playerFBX = transform.Find("Player").gameObject;
 
@@ -249,51 +174,7 @@ public class Player : MonoBehaviour, Spawn
         //Debug.Log($"Movement: {movement}, LastRotation: {lastRotation.eulerAngles}");
     }
 
-    public void destoryEnemy(GameObject g)
-    {
-        if (!useAttack) return;
 
-        Enemy e = g.gameObject.GetComponent<Enemy>();
-
-        if (e.onceDamaged) return;
-
-        e.damaged(damamge, transform.forward);
-
-        //StageManager.instance.psystem.transform.position = rb.position;
-
-
-
-        //if (e.health - damamge <= 0)
-        //{
-        //    //e.startEffect();
-        //    StageManager.currentScore++;
-        //    Debug.Log("Destroy");
-
-        //    e.setNullNMagent();
-        //    //Destroy(g.gameObject);
-        //    Debug.Log("적 하나 삭제완료");
-        //}
-
-        //else
-        //{
-        //    e.startEffect();
-        //    e.health -= damamge;
-        //    e.transform.position += new Vector3(transform.forward.x * 2, 0, transform.forward.z * 2);
-
-        //    e.updateDestination(e.transform);
-
-        //    //e.transform.position -= new Vector3(5, 0, 0);
-
-        //    e.onceDamaged = true;
-        //    StartCoroutine(Dameged(e));
-
-
-
-        //}
-
-
-
-    }
 
     //private IEnumerator Dameged(Enemy e)
     //{
@@ -350,33 +231,11 @@ public class Player : MonoBehaviour, Spawn
                         summonDecoy = !summonDecoy;
                         Destroy(go);
                     }));
-
-                    //SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
-                    //{
-                    //    SkillCoolDownCoroutine = null;
-
-                    //    ////UIManager.instance.IdleSkillButton(true);
-                    //    ////canUseSkill = !canUseSkill;
-                    //    //summonDecoy = !summonDecoy;
-                    //    //Destroy(go);
-                    //}));
-
-                    //UIManager.instance.StartCooldown(coolDown);
-
-
-
-
-                    //UseDecoy();
                     break;
-
-
-
-
-
 
             }
 
-            SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
+            SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(playerStats.coolDown, () =>
             {
                 SkillCoolDownCoroutine = null;
 
@@ -386,7 +245,7 @@ public class Player : MonoBehaviour, Spawn
                 //Destroy(go);
             }));
 
-            UIManager.instance.StartCooldown(coolDown);
+            UIManager.instance.StartCooldown(playerStats.coolDown);
         }
 
 
@@ -430,7 +289,7 @@ public class Player : MonoBehaviour, Spawn
         if (Mathf.Abs(moveHorizontal) < inputThreshold) moveHorizontal = 0;
         if (Mathf.Abs(moveVertical) < inputThreshold) moveVertical = 0;
 
-        movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * moveSpeed;
+        movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * playerStats.moveSpeed;
 
         //Debug.Log($"Horizontal: {moveHorizontal}, Vertical: {moveVertical}");
 
@@ -589,7 +448,7 @@ public class Player : MonoBehaviour, Spawn
 
         UIManager.instance.IdleSkillButton(false);
 
-        StartCoroutine(Function.instance.CountDown(coolDown, () => {
+        StartCoroutine(Function.instance.CountDown(playerStats.coolDown, () => {
             UIManager.instance.IdleSkillButton(true);
             canUseSkill = !canUseSkill;
             summonDecoy = !summonDecoy;
@@ -605,7 +464,7 @@ public class Player : MonoBehaviour, Spawn
         Debug.Log("Teleport used!");
 
         canUseSkill = false;
-        StartCoroutine(Function.instance.CountDown(coolDown, () => { canUseSkill = !canUseSkill; }));
+        StartCoroutine(Function.instance.CountDown(playerStats.coolDown, () => { canUseSkill = !canUseSkill; }));
         //Function.instance.ChangeStateAndDelay(ref canUseSkill, coolDown, () => { canUseSkill = !canUseSkill;});
     }
 
@@ -630,34 +489,34 @@ public class Player : MonoBehaviour, Spawn
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    public void ApplyFieldEffect(FieldEffect fe)
-    {
-        switch (fe.m_downerIdx)
-        {
-            case 0: // Damage
+    //public void ApplyFieldEffect(FieldEffect fe)
+    //{
+    //    //switch (fe.m_downerIdx)
+    //    //{
+    //    //    case 0: // Damage
 
-                if (!playerDamaged) underAttack();
-
-
-                //health -= 1;
-                break;
-            case 1: // Seal
-                StartCoroutine(Weakning());
-                break;
-            case 2: // Slow
-
-                if (slowEffectedCoroutine != null)
-                {
-                    StopCoroutine(slowEffectedCoroutine);
-                }
-
-                slowEffectedCoroutine = StartCoroutine(ApplySlow(5));
+    //    //        if (!playerDamaged) underAttack();
 
 
+    //    //        //health -= 1;
+    //    //        break;
+    //    //    case 1: // Seal
+    //    //        StartCoroutine(Weakning());
+    //    //        break;
+    //    //    case 2: // Slow
 
-                break;
-        }
-    }
+    //    //        if (slowEffectedCoroutine != null)
+    //    //        {
+    //    //            StopCoroutine(slowEffectedCoroutine);
+    //    //        }
+
+    //    //        slowEffectedCoroutine = StartCoroutine(ApplySlow(5));
+
+
+
+    //    //        break;
+    //    //}
+    //}
 
 
     public bool haveDamaged()
@@ -685,7 +544,10 @@ public class Player : MonoBehaviour, Spawn
         }));
 
 
-        health--;
+        playerStats.health--;
+
+        TextManager.instance.health.text = playerStats.health.ToString();
+
         StartCoroutine(Function.instance.CountDown(1f, () => {
 
             playerDamaged = false;
@@ -699,45 +561,45 @@ public class Player : MonoBehaviour, Spawn
 
 
 
-    public IEnumerator Weakning()
-    {
-        //while(PenealtyTime > 0)
-        //{
+    //public IEnumerator Weakning()
+    //{
+    //    //while(PenealtyTime > 0)
+    //    //{
 
-        //}
+    //    //}
 
-        PenealtyTime = 3;
-        yield return new WaitForSecondsRealtime(1);
-        PenealtyTime = 2;
-        yield return new WaitForSecondsRealtime(1);
-        PenealtyTime = 1;
-        yield return new WaitForSecondsRealtime(1);
-        PenealtyTime = 0;
-
-
-        weakning = false;
-        damamge = 1;
-    }
+    //    PenealtyTime = 3;
+    //    yield return new WaitForSecondsRealtime(1);
+    //    PenealtyTime = 2;
+    //    yield return new WaitForSecondsRealtime(1);
+    //    PenealtyTime = 1;
+    //    yield return new WaitForSecondsRealtime(1);
+    //    PenealtyTime = 0;
 
 
-    public IEnumerator slowliy() //딜레이는 시간도 더 길게 패널티를 주자
-    {
-        moveSpeed = 10;
-        //yield return new WaitForSecondsRealtime(1);
-        yield return new WaitForSecondsRealtime(0.1f);
-        moveSpeed = 20;
-    }
+    //    weakning = false;
+    //    damamge = 1;
+    //}
+
+
+    //public IEnumerator slowliy() //딜레이는 시간도 더 길게 패널티를 주자
+    //{
+    //    moveSpeed = 10;
+    //    //yield return new WaitForSecondsRealtime(1);
+    //    yield return new WaitForSecondsRealtime(0.1f);
+    //    moveSpeed = 20;
+    //}
 
     private Coroutine slowEffectedCoroutine;
 
 
-    public IEnumerator ApplySlow(float delay) //딜레이는 시간도 더 길게 패널티를 주자
-    {
-        moveSpeed = 10;
-        //yield return new WaitForSecondsRealtime(1);
-        yield return new WaitForSecondsRealtime(delay);
-        moveSpeed = 20;
-    }
+    //public IEnumerator ApplySlow(float delay) //딜레이는 시간도 더 길게 패널티를 주자
+    //{
+    //    moveSpeed = 10;
+    //    //yield return new WaitForSecondsRealtime(1);
+    //    yield return new WaitForSecondsRealtime(delay);
+    //    moveSpeed = 20;
+    //}
 
 
     private Coroutine SealSkillCoroutine;
@@ -746,147 +608,147 @@ public class Player : MonoBehaviour, Spawn
 
     public void ApplyDelayEffect(FieldEffect fe)
     {
-        switch (fe.m_downerIdx)
-        {
-            case 0: // Damage
+        //switch (fe.m_downerIdx)
+        //{
+        //    case 0: // Damage
 
-                if (!playerDamaged) underAttack();
-
-
-                //health -= 1;
-                break;
-            case 1: // Seal
-                    //StartCoroutine(Weakning());
-
-                if (SealSkillCoroutine != null)
-                {
-                    //GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
-
-                    //canUseSkill = false;
-                    //summonDecoy = true;
-
-                    //UIManager.instance.IdleSkillButton(false);
-
-                    //StartCoroutine(Function.instance.CountDown(coolDown, () => {
-                    //    UIManager.instance.IdleSkillButton(true);
-                    //    canUseSkill = !canUseSkill;
-                    //    summonDecoy = !summonDecoy;
-                    //    Destroy(go);
-                    //}));
+        //        if (!playerDamaged) underAttack();
 
 
+        //        //health -= 1;
+        //        break;
+        //    case 1: // Seal
+        //            //StartCoroutine(Weakning());
 
+        //        if (SealSkillCoroutine != null)
+        //        {
+        //            //GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
 
-                    StopCoroutine(SealSkillCoroutine);
-                }
+        //            //canUseSkill = false;
+        //            //summonDecoy = true;
 
-                SealSkillCoroutine = StartCoroutine(UIManager.instance.SEalCoroutine(5));
+        //            //UIManager.instance.IdleSkillButton(false);
+
+        //            //StartCoroutine(Function.instance.CountDown(coolDown, () => {
+        //            //    UIManager.instance.IdleSkillButton(true);
+        //            //    canUseSkill = !canUseSkill;
+        //            //    summonDecoy = !summonDecoy;
+        //            //    Destroy(go);
+        //            //}));
 
 
 
-                break;
-            case 2: // Slow
 
-                if (slowEffectedCoroutine != null)
-                {
-                    StopCoroutine(slowEffectedCoroutine);
-                }
+        //            StopCoroutine(SealSkillCoroutine);
+        //        }
 
-                slowEffectedCoroutine = StartCoroutine(ApplySlow(5));
+        //        SealSkillCoroutine = StartCoroutine(UIManager.instance.SEalCoroutine(5));
 
 
 
-                break;
-        }
+        //        break;
+        //    case 2: // Slow
+
+        //        if (slowEffectedCoroutine != null)
+        //        {
+        //            StopCoroutine(slowEffectedCoroutine);
+        //        }
+
+        //        slowEffectedCoroutine = StartCoroutine(ApplySlow(5));
+
+
+
+        //        break;
+        //}
     }
 
 
 
-    public void setEffected(int idx)
-    {
-        switch (idx)
-        {
-            case 0: // Damage
+    //public void setEffected(int idx)
+    //{
+    //    switch (idx)
+    //    {
+    //        case 0: // Damage
 
-                if(!playerDamaged) underAttack();
-
-
-                //health -= 1;
-                break;
-            case 1: // Seal
-                    //StartCoroutine(Weakning());
-
-                if(SkillCoolDownCoroutine != null)
-                {
-                    if(UIManager.instance.CheckCoolDown(5))
-                    {
-                        StopCoroutine(SkillCoolDownCoroutine);
-
-                        SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
-                        {
-                            SkillCoolDownCoroutine = null;
-                        }));
-                    }
-                }
-
-                else
-                {
-                    SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
-                    {
-                        SkillCoolDownCoroutine = null;
-                    }));
-
-                    UIManager.instance.StartCooldown(coolDown);
-                }
+    //            if(!playerDamaged) underAttack();
 
 
-                //if (SealSkillCoroutine != null)
-                //{
-                //    StopCoroutine(SealSkillCoroutine);
-                //}
+    //            //health -= 1;
+    //            break;
+    //        case 1: // Seal
+    //                //StartCoroutine(Weakning());
 
-                //SealSkillCoroutine = StartCoroutine(UIManager.instance.SEalCoroutine(5));
+    //            if(SkillCoolDownCoroutine != null)
+    //            {
+    //                if(UIManager.instance.CheckCoolDown(5))
+    //                {
+    //                    StopCoroutine(SkillCoolDownCoroutine);
+
+    //                    SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
+    //                    {
+    //                        SkillCoolDownCoroutine = null;
+    //                    }));
+    //                }
+    //            }
+
+    //            else
+    //            {
+    //                SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
+    //                {
+    //                    SkillCoolDownCoroutine = null;
+    //                }));
+
+    //                UIManager.instance.StartCooldown(coolDown);
+    //            }
+
+
+    //            //if (SealSkillCoroutine != null)
+    //            //{
+    //            //    StopCoroutine(SealSkillCoroutine);
+    //            //}
+
+    //            //SealSkillCoroutine = StartCoroutine(UIManager.instance.SEalCoroutine(5));
 
 
 
-                break;
-            case 2: // Slow
+    //            break;
+    //        case 2: // Slow
 
-                if (slowEffectedCoroutine != null)
-                {
-                    StopCoroutine(slowEffectedCoroutine);
-                }
+    //            if (slowEffectedCoroutine != null)
+    //            {
+    //                StopCoroutine(slowEffectedCoroutine);
+    //            }
 
-                slowEffectedCoroutine = StartCoroutine(slowliy());
+    //            slowEffectedCoroutine = StartCoroutine(slowliy());
 
 
                 
-                break;
-        }
-    }
+    //            break;
+    //    }
+    //}
 
 
 
-    void changeFigure()
-    {
-        if (!weakning)
-        {
-            damamge = LightObstacle.minusDamage;
-            weakning = true;
-        } 
+    //void changeFigure()
+    //{
+    //    if (!weakning)
+    //    {
+    //        damamge = LightObstacle.minusDamage;
+    //        weakning = true;
+    //    } 
 
-        else
-        {
-            if (runningCoroutine != null)
-            {
-                StopCoroutine(runningCoroutine);
-            }
+    //    else
+    //    {
+    //        if (runningCoroutine != null)
+    //        {
+    //            StopCoroutine(runningCoroutine);
+    //        }
 
-            runningCoroutine = StartCoroutine(Weakning());
-        }
+    //        runningCoroutine = StartCoroutine(Weakning());
+    //    }
 
 
-    }
+    //}
 
     //void suffleFigure(int a, int b)
     //{
@@ -912,6 +774,101 @@ public class Player : MonoBehaviour, Spawn
     //    suffleFigure(1, 0);
 
     //}
+
+
+
+
+
+
+
+    public void Damaged(float value)
+    {
+        if(playerDamaged == false)
+        {
+            playerDamaged = true;
+            gameObject.GetComponent<MeshRenderer>().material = mat[1];
+
+            UIManager.instance.playerDamaged.SetActive(true);
+
+            StartCoroutine(Function.instance.CountDown(0.5f, () => {
+
+                UIManager.instance.playerDamaged.SetActive(false);
+            }));
+
+            playerStats.health -= value;
+
+            if(playerStats.health <= 0)
+            {
+                UIManager.instance.GameOverPopUp.SetActive(true);
+            }
+
+
+            TextManager.instance.UpdateTexts();
+
+            StartCoroutine(Function.instance.CountDown(1f, () => {
+                playerDamaged = false;
+                gameObject.GetComponent<MeshRenderer>().material = mat[0];
+            }));
+
+        }
+    }
+
+    public void Sealed(float value)
+    {
+        if (SkillCoolDownCoroutine != null)
+        {
+            if (UIManager.instance.CheckCoolDown(value))
+            {
+                StopCoroutine(SkillCoolDownCoroutine);
+
+                SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(value, () =>
+                {
+                    SkillCoolDownCoroutine = null;
+                }));
+            }
+        }
+
+        else
+        {
+            SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(value, () =>
+            {
+                SkillCoolDownCoroutine = null;
+            }));
+
+            UIManager.instance.StartCooldown(value);
+        }
+    }
+
+
+    public void Slowed(float value)
+    {
+        if (slowEffectedCoroutine != null)
+        {
+            StopCoroutine(slowEffectedCoroutine);
+        }
+
+        slowEffectedCoroutine = StartCoroutine(Slow(value));
+
+    }
+
+
+
+    public IEnumerator Slow(float value) //딜레이는 시간도 더 길게 패널티를 주자
+    {
+        playerStats.moveSpeed = 15f;
+
+        //playerStats.moveSpeed = DataManager.Instance.saveData.playerStats.moveSpeed  - 15f;
+        //yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        playerStats.moveSpeed = 30f;
+
+        //playerStats.moveSpeed = DataManager.Instance.saveData.playerStats.moveSpeed;
+    }
+
+
+
+
 
 }
 

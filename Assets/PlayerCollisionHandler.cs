@@ -137,10 +137,14 @@ public class PlayerCollisionHandler : MonoBehaviour
                     {
                         Player p = gameObject.GetComponent<Player>();
 
-                        if (!p.haveDamaged())
-                        {
-                            p.underAttack();
-                        }
+                        p.Damaged(1);
+
+                        //if (!p.haveDamaged())
+                        //{
+                        //    //p.underAttack();
+
+                           
+                        //}
                         
 
                         //EventManager.instance.playerCollisionEnemy(gameObject);

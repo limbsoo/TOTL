@@ -25,7 +25,7 @@ public class MainScene : MonoBehaviour
 
     public void StartGame()
     {
-        DataManager.Instance.InitailizeData(playerIdx);
+        DataManager.Instance.InitSelectCharacter(playerIdx);
         //나중에 게임모드도
 
         SceneManager.instance.LoadScene("PlayScene");

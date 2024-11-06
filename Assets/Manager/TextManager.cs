@@ -36,28 +36,37 @@ public class TextManager : MonoBehaviour
     public TMP_Text gold;
 
 
-    private void Start()
-    {
-    }
-
-
     public void InitText()
     {
-        curStage.text = /*"CurWave : " + */DataManager.Instance.data.curWave.ToString();
-        //countDown
+        curStage.text = DataManager.Instance.saveData.curWave.ToString();
         waveTimer.text = "";
         stageTimer.text = "";
         targetScore.text = "TargetScore : " + StageManager.instance.targetScore.ToString();
-        curScore.text = "";
-        health.text = /*"Health : " +*/ DataManager.Instance.data.health.ToString();
-        damage.text = "Damage : " + DataManager.Instance.data.damamge.ToString();
-        speed.text = "Speed : " + DataManager.Instance.data.moveSpeed.ToString();
-        coolDown.text = "CoolDown : " + DataManager.Instance.data.coolDown.ToString();
-        penealtyCoolDown.text = "Penealty : ";
-        nextGoals.text = "";
+        curScore.text = StageManager.instance.currentScore.ToString() + " / " + StageManager.instance.targetScore.ToString();
 
-        gold.text = "";
+        health.text = /*"Health : " +*/ DataManager.Instance.saveData.playerStats.health.ToString();
+        //speed.text = "Speed : " + DataManager.Instance.saveData.playerStats.moveSpeed.ToString();
+        //coolDown.text = "CoolDown : " + DataManager.Instance.saveData.playerStats.coolDown.ToString();
+        //penealtyCoolDown.text = "Penealty : ";
+        //nextGoals.text = "";
+
+        gold.text = DataManager.Instance.saveData.gold.ToString();
     }
+
+    public void UpdateTexts()
+    {
+        curStage.text = StageManager.instance.GetCurWave().ToString();
+        curScore.text = StageManager.instance.currentScore.ToString() + " / " + StageManager.instance.targetScore.ToString();
+
+        PlayerStats playerStats = StageManager.instance.GetPlayerStats();
+
+        health.text = playerStats.health.ToString();
+        speed.text = playerStats.moveSpeed.ToString();
+        coolDown.text = playerStats.coolDown.ToString();
+
+        gold.text = StageManager.instance.gold.ToString();
+    }
+
 
 
     int waveTime = 0;
@@ -67,90 +76,57 @@ public class TextManager : MonoBehaviour
 
     private void Update()
     {
-        if(StageManager.Sstate == StageState.Play)
+        if (StageManager.Sstate == StageState.Play)
         {
-            curStage.text = /*"CurWave : " + */StageManager.instance.GetCurWave().ToString();
+            //curStage.text = StageManager.instance.GetCurWave().ToString();
+            //curScore.text = StageManager.instance.currentScore.ToString() + " / " + StageManager.instance.targetScore.ToString();
 
-            curScore.text = StageManager.instance.currentScore.ToString() + " / " + StageManager.instance.targetScore.ToString();
+            ////PlayerStats playerStats = StageManager.instance.GetPlayerStats();
 
-            health.text = /*"Health : " +*/ StageManager.instance.p.health.ToString();
-            damage.text = "Damage : " + StageManager.instance.p.damamge.ToString();
-            speed.text = "Speed : " + StageManager.instance.p.moveSpeed.ToString();
-            coolDown.text = "CoolDown : " + StageManager.instance.p.coolDown.ToString();
-            penealtyCoolDown.text = "Penealty : " + StageManager.instance.p.PenealtyTime.ToString();
+            ////health.text = playerStats.health.ToString();
 
-            //health.text = /*"Health : " +*/ Player.instance.health.ToString();
-            //damage.text = "Damage : " + Player.instance.damamge.ToString();
-            //speed.text = "Speed : " + Player.instance.moveSpeed.ToString();
-            //coolDown.text = "CoolDown : " + Player.instance.coolDown.ToString();
-            //penealtyCoolDown.text = "Penealty : " + Player.instance.PenealtyTime.ToString();
+
+
+            ////speed.text = playerStats.moveSpeed.ToString();
+            ////coolDown.text = playerStats.coolDown.ToString();
+            ////penealtyCoolDown.text = "Penealty : " + StageManager.instance.p.PenealtyTime.ToString();
 
 
             waveTimer.text = (StageManager.instance.waveTime).ToString();
-
-            int minute = StageManager.instance.stageTime / 60;
-            int second = StageManager.instance.stageTime % 60;
-
-            string s = "";
-
-            if (minute < 10) s += "0";
-            s += minute.ToString();
-
-            s += " : ";
-
-            if (second < 10) s += "0";
-            s += second.ToString();
-
-            stageTimer.text = s;
-
-            //stageTimer.text = (StageManager.instance.stageTime).ToString();
+            stageTimer.text = ConvertTime(StageManager.instance.stageTime);
 
 
+            //nextGoals.text = "";
 
-
-
-
-            nextGoals.text = "";
-
-            for(int i = 0; i < StageManager.instance.goalList.Count;i++)
-            {
-                nextGoals.text += StageManager.instance.goalList[i].ToString();
-                nextGoals.text += " ";
-            }
-
-            gold.text = StageManager.instance.p.gold.ToString();
-            //gold.text = Player.instance.gold.ToString();
-
-
-            //if (waveTimeCoroutine == null)
+            //for (int i = 0; i < StageManager.instance.goalList.Count; i++)
             //{
-            //    waveTimeCoroutine = StartCoroutine(Function.instance.CountDown(1, () =>
-            //    {
-            //        waveTime++;
-            //        waveTimer.text = (waveTime).ToString();
-            //        waveTimeCoroutine = null;
-            //    }));
+            //    nextGoals.text += StageManager.instance.goalList[i].ToString();
+            //    nextGoals.text += " ";
             //}
 
-            //if (stageTimeCoroutine == null)
-            //{
-            //    stageTimeCoroutine = StartCoroutine(Function.instance.CountDown(1, () =>
-            //    {
-            //        stageTime++;
-            //        stageTimer.text = (stageTime).ToString();
-            //        stageTimeCoroutine = null;
-            //    }));
-            //}
+            //gold.text = StageManager.instance.gold.ToString();
+
         }
 
-        //else
-        //{
-        //    if(stageTimeCoroutine != null) StopCoroutine(stageTimeCoroutine);
-        //    if(waveTimeCoroutine != null) StopCoroutine(waveTimeCoroutine);
+    }
 
 
-        //}
+    public string ConvertTime(int time)
+    {
+        string s = "";
 
+        int minute = time / 60;
+        int second = time % 60;
+
+        if (minute < 10) { s += "0"; }
+        s += minute.ToString();
+
+        s += " : ";
+
+        if (second < 10) { s += "0"; }
+        s += second.ToString();
+
+        return s;
     }
 
 }

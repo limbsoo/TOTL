@@ -115,13 +115,18 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     public bool IsArriveGate = false;
 
 
+    public int gold;
+
+
     public void Start()
     {
+        LoadLevelSet();
+
         //if (DataManager.Instance.data == null) { DataManager.Instance.LoadGameData();}
         DataManager.Instance.LoadGameData();
         Init();
-
-        m_curWave = DataManager.Instance.data.curWave;
+        gold = DataManager.Instance.saveData.gold;
+        m_curWave = DataManager.Instance.saveData.curWave;
         InitStage();
     }
 
@@ -140,11 +145,13 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
                 {
                     Sstate = StageState.Edit;
                     m_curWave++;
-                    DataManager.Instance.SaveGameData();
+                    DataManager.Instance.saveData.curWave = m_curWave;
+                    DataManager.Instance.UpdateStageData();
+
+                    //DataManager.Instance.SaveGameData();
 
                     currentScore = 0;
                     DestroyObjects(m_enemies);
-                    //DestroyObjects(fieldEffectLights);
                     DestroyObjects(m_fieldEffects);
 
                     IsArriveGate = false;
@@ -159,17 +166,23 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
     }
 
-
-    public int GetCurWave()
+    public float GetPlayerHealth()
     {
-        return m_curWave;
+        return m_player.GetComponent<Player>().GetPlayerStats().health;
     }
 
+    public PlayerStats GetPlayerStats()
+    {
+        return m_player.GetComponent<Player>().GetPlayerStats();
+    }
+
+
+    public int GetCurWave() { return m_curWave; }
 
     public void InitStage()
     {
 
-        LoadLevelSet();
+
         gridCenters = Function.instance.GenerateGrid(divide, mapTransform);
 
         goals = new List<GameObject>();
@@ -196,20 +209,24 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         if (m_player == null)
         {
             m_player = InstantiateObject<Player>(LCS.player[0], LCS.player[0].transform.position, LCS.player[0].transform.rotation);
-
             p = m_player.GetComponent<Player>();
         }
  
-        
-
         for (int i = 0; i < FieldEffectPopUpManager.instance.blocks.Count; i++)
         {
-            FieldEffectBlock feb = FieldEffectPopUpManager.instance.blocks[i].GetComponent<FieldEffectBlock>();
-            Vector3 pos = new Vector3(gridCenters[feb.lineNum].x, LCS.FieldEffect[0].transform.position.y, gridCenters[feb.lineNum].z);
-            GameObject go = InstantiateObject<FieldEffect>(LCS.FieldEffect[feb.m_upperIdx], pos, LCS.FieldEffect[0].transform.rotation);
+            MapPlacementBlock mpb = FieldEffectPopUpManager.instance.blocks[i].GetComponent<MapPlacementBlock>();
+            BlockData bd = mpb.GetBlockData();
+
+
+            Vector3 pos = new Vector3(gridCenters[bd.lineNum].x, LCS.FieldEffect[0].transform.position.y, gridCenters[bd.lineNum].z);
+            GameObject go = InstantiateObject<FieldEffect>(LCS.FieldEffect[(int)bd.fieldKinds - 1], pos, LCS.FieldEffect[0].transform.rotation);
 
             FieldEffect fe = go.GetComponent<FieldEffect>();
-            fe.Init(feb.start, feb.end, feb.lineNum, feb.m_upperIdx, feb.m_downerIdx);
+            //fe.Init(feb.start, feb.end, feb.lineNum, feb.m_upperIdx, feb.m_downerIdx);
+
+            fe.Init(bd);
+
+
             m_fieldEffects.Add(go);
         }
 
@@ -220,12 +237,55 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
             //enemies = InstantiateEnemies<Enemy>(LCS.enemy, LCS.enemyCnt + LCS.increaseEnemyPerWave * (m_curWave + 1));
             m_enemies = InstantiateEnemies<Enemy>(LCS.enemy, LCS.numOfInitEnemy + LCS.enemyIncreasePerWave * (m_curWave + 1));
         }
-        
-        int randomnumber = UnityEngine.Random.Range(0, 9);
 
-        Vector3 newPos = new Vector3(gridCenters[randomnumber].x, LCS.Item[0].transform.position.y, gridCenters[randomnumber].z);
-        GameObject go1 = Instantiate(LCS.Item[0], newPos, LCS.Item[0].transform.rotation);
-        m_items.Add(go1);
+        //얘도 랜덤한 위치에 떨굴까
+
+
+
+        for(int i = 0; i < LCS.Item.Count;i++)
+        {
+            Vector3 randomPos = Function.instance.GetRandomPositionInMap(LCS.Item[i], mapTransform);
+            randomPos.y = LCS.Item[i].transform.position.y;
+
+            GameObject go1 = Instantiate(LCS.Item[i], randomPos, LCS.Item[i].transform.rotation);
+            m_items.Add(go1);
+        }
+
+        //goalList.Clear();
+
+        //for (int i = 0; i < targetScore; i++)
+        //{
+        //    while (true)
+        //    {
+        //        int randNum = UnityEngine.Random.Range(0, 9);
+
+        //        while (randNum == 4)
+        //        {
+        //            randNum = UnityEngine.Random.Range(0, 9);
+        //        }
+
+
+        //        int num = goalList.Find(x => x == randNum);
+
+        //        if (num == 0)
+        //        {
+        //            goalList.Add(randNum);
+        //            goals[randNum].SetActive(true);
+        //            break;
+        //        }
+        //    }
+        //}
+
+
+
+
+
+
+        //int randomnumber = UnityEngine.Random.Range(0, 9);
+
+        //Vector3 newPos = new Vector3(gridCenters[randomnumber].x, LCS.Item[0].transform.position.y, gridCenters[randomnumber].z);
+        //GameObject go1 = Instantiate(LCS.Item[0], newPos, LCS.Item[0].transform.rotation);
+        //m_items.Add(go1);
 
 
         Sstate = StageState.Play;
@@ -313,8 +373,9 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     {
         g.gameObject.SetActive(false);
         currentScore++;
+        TextManager.instance.UpdateTexts();
 
-        if(currentScore == targetScore)
+        if (currentScore == targetScore)
         {
             Instantiate(LCS.gate[0], LCS.gate[0].transform.position, LCS.gate[0].transform.rotation);
         }
