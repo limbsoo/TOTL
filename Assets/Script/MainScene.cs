@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MainScene : MonoBehaviour
@@ -7,6 +8,8 @@ public class MainScene : MonoBehaviour
     public static MainScene instance { get; private set; }
 
     //public ButtonController controller;
+
+    public TMP_Text test;
 
 
     private void Awake()
@@ -25,8 +28,12 @@ public class MainScene : MonoBehaviour
 
     public void StartGame()
     {
+        test.text = "캐릭터 선택";
+
         DataManager.Instance.InitSelectCharacter(playerIdx);
         //나중에 게임모드도
+
+        test.text = "신 로드 시작";
 
         SceneManager.instance.LoadScene("PlayScene");
     }
@@ -36,6 +43,11 @@ public class MainScene : MonoBehaviour
         SceneManager.instance.LoadScene("PlayScene");
     }
 
+    public void ResetData()
+    {
+        DataManager.Instance.ResetStage();
+        //gameObject.transform.parent.gameObject.SetActive(false);
+    }
 
 
     private void OnEnable()

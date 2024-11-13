@@ -19,6 +19,7 @@ MonoBehaviour:
   - {fileID: 793001626749674294, guid: dbb325897c97e0148a728509ed53a867, type: 3}
   enemy:
   - {fileID: 2763794255627545027, guid: e323209cf3f2dec45a101427ab9408cc, type: 3}
+  - {fileID: 2763794255627545027, guid: d49538b9be075f94792b3aa87cf31af4, type: 3}
   Goal:
   - {fileID: 3446381173838501712, guid: ca5412122a6f263428b4d402edad1ada, type: 3}
   FieldEffect:

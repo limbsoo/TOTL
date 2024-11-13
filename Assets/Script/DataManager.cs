@@ -8,6 +8,15 @@ public class DataManager : MonoBehaviour
     static GameObject container;
 
     static DataManager instance;
+
+
+    string filePath;
+
+    private void Awake()
+    {
+        filePath = Application.persistentDataPath + "GameData.json";
+    }
+
     public static DataManager Instance
     {
         get
@@ -24,7 +33,7 @@ public class DataManager : MonoBehaviour
     }
 
     // --- 게임 데이터 파일이름 설정 ("원하는 이름(영문).json") --- //
-    string GameDataFileName = "GameData.json";
+    //string GameDataFileName = "GameData.json";
 
     // --- 저장용 클래스 변수 --- //
     public GameData saveData = new GameData();
@@ -32,7 +41,7 @@ public class DataManager : MonoBehaviour
 
     public void LoadGameData()
     {
-        string filePath = Application.dataPath + "/Save/" + GameDataFileName;
+        //string filePath = Application.dataPath + "/Save/" + GameDataFileName;
 
         if (File.Exists(filePath))
         {
@@ -76,7 +85,7 @@ public class DataManager : MonoBehaviour
 
     public bool HaveSaveData()
     {
-        string filePath = Application.dataPath + "/Save/" + GameDataFileName;
+        //string filePath = Application.dataPath + "/Save/" + GameDataFileName;
 
         if (File.Exists(filePath)) { return true; }
         return false;
@@ -118,12 +127,29 @@ public class DataManager : MonoBehaviour
         SaveFile();
     }
 
+    public void ResetStage()
+    {
+        saveData.playerCharacterIdx = 0;
+        saveData.stageModeIdx = 0;
+        saveData.gold = 1000;
+        saveData.curWave = 1;
+
+        saveData.playerStats = new PlayerStats();
+        saveData.blockdata = new List<BlockData>();
+
+
+        SaveFile();
+    }
+
+
 
     public void SelectPlayer(int idx)
     {
         //string filePath = Application.dataPath + "ContstructSet/GCS";
 
         GameConstructSet gcs = Resources.Load<GameConstructSet>("ConstructSet/GCS");
+
+
 
         LevelConstructSet lcs = gcs.LevelConstructSet[gcs.currentLevel];
 
@@ -134,6 +160,8 @@ public class DataManager : MonoBehaviour
         saveData.playerStats.playerSkillKind = playerStat.playerSkillKind;
         saveData.playerStats.coolDown = playerStat.coolDown;
 
+        //MainScene.instance.test.text = "data";
+
         //saveData.playerStats = StageManager.instance.LCS.player[idx].GetComponent<PlayerStat>();
     }
 
@@ -141,9 +169,26 @@ public class DataManager : MonoBehaviour
 
     public void SaveFile()
     {
+
+        //if (!File.Exists(filePath))
+        //{
+        //    File.Create(filePath).Close();
+        //}
+
         string ToJsonData = JsonUtility.ToJson(saveData, true);
-        string filePath = Application.dataPath + "/Save/" + GameDataFileName;
+
+        if (!File.Exists(filePath))
+        {
+            File.Create(filePath).Close();
+            File.WriteAllText(filePath, "myJsonText");
+        }
+
+
+
+        //string ToJsonData = JsonUtility.ToJson(saveData, true);
+        //string filePath = Application.dataPath + "/Save/" + GameDataFileName;
         File.WriteAllText(filePath, ToJsonData);
+
     }
 
 

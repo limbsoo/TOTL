@@ -193,7 +193,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
                 break;
             case FieldKinds.Stack:
                 s += "플레이어가 해당구역을 진입하여 ";
-                s += bd.fieldDuration.ToString() + " 초 이상 머무를 경우 " + bd.fieldValue.ToString() + " * ";
+                s += bd.fieldDuration.ToString() + " 초 이상 머무를 경우 " /*+ bd.fieldValue.ToString() + " * "*/;
 
                 break;
             case FieldKinds.Move:

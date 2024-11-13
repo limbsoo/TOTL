@@ -13,8 +13,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using static UnityEditor.Progress;
+//using static UnityEditor.Experimental.GraphView.GraphView;
+//using static UnityEditor.Progress;
 using static UnityEngine.EventSystems.EventTrigger;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.UI.CanvasScaler;
@@ -305,26 +305,99 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
     public List<GameObject> InstantiateEnemies<T>(List<GameObject> list, int cnt)
     {
+        int eliteCnt = m_curWave - LCS.endArrage;
         List<GameObject> lgo = new List<GameObject>();
 
-        for (int i = 0; i < cnt; i++)
-        {
-            int randIdx = UnityEngine.Random.Range(0, list.Count);
-         
-            Vector3 randomPos = Function.instance.GetRandomPositionInMap(m_fieldEffects[UnityEngine.Random.Range(0, m_fieldEffects.Count)], mapTransform);
 
-            while (Function.instance.IsInsideCircle(randomPos, new Vector3(gridCenters[4].x, 0, gridCenters[4].z), 10f))
+        if (eliteCnt > 0) 
+        {
+            for (int i = 0; i < cnt - eliteCnt; i++)
             {
-                randomPos = Function.instance.GetRandomPositionInMap(m_fieldEffects[UnityEngine.Random.Range(0, m_fieldEffects.Count)], mapTransform);
+                int randIdx = 0;
+
+                Vector3 randomPos = Function.instance.GetRandomPositionInMap(m_fieldEffects[UnityEngine.Random.Range(0, m_fieldEffects.Count)], mapTransform);
+
+                while (Function.instance.IsInsideCircle(randomPos, new Vector3(gridCenters[4].x, 0, gridCenters[4].z), 10f))
+                {
+                    randomPos = Function.instance.GetRandomPositionInMap(m_fieldEffects[UnityEngine.Random.Range(0, m_fieldEffects.Count)], mapTransform);
+                }
+
+
+                randomPos.y = list[randIdx].transform.position.y;
+                GameObject go = Instantiate(list[randIdx], randomPos, list[randIdx].transform.rotation);
+                T p = go.GetComponent<T>();
+                lgo.Add(go);
             }
 
+            for (int i = 0; i < eliteCnt; i++)
+            {
+                int randIdx = 1;
 
-            randomPos.y = list[randIdx].transform.position.y;
-            GameObject go = Instantiate(list[randIdx], randomPos, list[randIdx].transform.rotation);
-            T p = go.GetComponent<T>();
-            lgo.Add(go);
+                Vector3 randomPos = Function.instance.GetRandomPositionInMap(m_fieldEffects[UnityEngine.Random.Range(0, m_fieldEffects.Count)], mapTransform);
+
+                while (Function.instance.IsInsideCircle(randomPos, new Vector3(gridCenters[4].x, 0, gridCenters[4].z), 10f))
+                {
+                    randomPos = Function.instance.GetRandomPositionInMap(m_fieldEffects[UnityEngine.Random.Range(0, m_fieldEffects.Count)], mapTransform);
+                }
+
+
+                randomPos.y = list[randIdx].transform.position.y;
+                GameObject go = Instantiate(list[randIdx], randomPos, list[randIdx].transform.rotation);
+                T p = go.GetComponent<T>();
+                lgo.Add(go);
+            }
         }
+
+        else
+        {
+            for (int i = 0; i < cnt; i++)
+            {
+                int randIdx = 0;
+
+                Vector3 randomPos = Function.instance.GetRandomPositionInMap(m_fieldEffects[UnityEngine.Random.Range(0, m_fieldEffects.Count)], mapTransform);
+
+                while (Function.instance.IsInsideCircle(randomPos, new Vector3(gridCenters[4].x, 0, gridCenters[4].z), 10f))
+                {
+                    randomPos = Function.instance.GetRandomPositionInMap(m_fieldEffects[UnityEngine.Random.Range(0, m_fieldEffects.Count)], mapTransform);
+                }
+
+
+                randomPos.y = list[randIdx].transform.position.y;
+                GameObject go = Instantiate(list[randIdx], randomPos, list[randIdx].transform.rotation);
+                T p = go.GetComponent<T>();
+                lgo.Add(go);
+            }
+        }
+
+
+
+
+
         return lgo;
+
+
+
+
+        //List<GameObject> lgo = new List<GameObject>();
+
+        //for (int i = 0; i < cnt; i++)
+        //{
+        //    int randIdx = UnityEngine.Random.Range(0, list.Count);
+
+        //    Vector3 randomPos = Function.instance.GetRandomPositionInMap(m_fieldEffects[UnityEngine.Random.Range(0, m_fieldEffects.Count)], mapTransform);
+
+        //    while (Function.instance.IsInsideCircle(randomPos, new Vector3(gridCenters[4].x, 0, gridCenters[4].z), 10f))
+        //    {
+        //        randomPos = Function.instance.GetRandomPositionInMap(m_fieldEffects[UnityEngine.Random.Range(0, m_fieldEffects.Count)], mapTransform);
+        //    }
+
+
+        //    randomPos.y = list[randIdx].transform.position.y;
+        //    GameObject go = Instantiate(list[randIdx], randomPos, list[randIdx].transform.rotation);
+        //    T p = go.GetComponent<T>();
+        //    lgo.Add(go);
+        //}
+        //return lgo;
     }
 
 

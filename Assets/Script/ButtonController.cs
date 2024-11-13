@@ -39,7 +39,6 @@ public class ButtonController : MonoBehaviour
 
 
 
-
     public void ActivateButtonAction()
     {
         switch (buttonAction)
