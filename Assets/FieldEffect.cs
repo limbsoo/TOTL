@@ -52,6 +52,9 @@ public class FieldEffect : MonoBehaviour, Spawn
 
     private Slider EffectActiveTimer;
 
+    private TMP_Text EffectClock;
+    private GameObject EffectClockCanvas;
+
     public void Start()
     {
         EffectRange = transform.Find("EffectRange").gameObject;
@@ -65,10 +68,16 @@ public class FieldEffect : MonoBehaviour, Spawn
             EffectActiveTimer = go.transform.Find("EffectActiveCoolDown").gameObject.GetComponent<Slider>();
         }
 
+        EffectClockCanvas = transform.Find("EffectTime").gameObject;
+        EffectClock = EffectClockCanvas.transform.Find("Text").GetComponent<TMP_Text>();
+        EffectClock.text = m_blockData.start.ToString();
+
         RangeMaterial = EffectRange.gameObject.GetComponent<Renderer>().material;
         RangeMaterial.SetFloat("_curState", 0.1f);
 
         //StartCoroutine(StartEffectTimerFirst(m_blockData.start));
+
+
     }
 
 
@@ -199,6 +208,8 @@ public class FieldEffect : MonoBehaviour, Spawn
     private IEnumerator EffectActive(float duration)
     {
         EffectRange.SetActive(true);
+        EffectClock.text = SetTextColor("red",m_blockData.end.ToString());
+
 
         stack = 0;
 
@@ -210,10 +221,21 @@ public class FieldEffect : MonoBehaviour, Spawn
         RangeMaterial.SetFloat("_curState", 0.2f);
         FieldEffectCoroutine = null;
 
+        EffectClock.text = m_blockData.start.ToString();
+
         stack = 0;
     }
 
-
+    public string SetTextColor(string color, string value)
+    {
+        string s = "";
+        s += "<color=";
+        s += color;
+        s += ">";
+        s += value;
+        s += "</color>";
+        return s;
+    }
 
 
     void Update()
@@ -242,6 +264,9 @@ public class FieldEffect : MonoBehaviour, Spawn
                     //StartCoroutine(StartEffectTimer(5));
                 }
             }
+
+
+
         }
 
 
@@ -359,6 +384,11 @@ public class FieldEffect : MonoBehaviour, Spawn
     private IEnumerator moveRange(float start, float end, int idx)
     {
         RangeMaterial.SetFloat("_curState", 1f);
+        EffectRange.SetActive(true);
+        GameObject go = transform.Find("EffectTime").gameObject;
+
+        //EffectClock.text = m_blockData.end.ToString();
+        EffectClock.text = SetTextColor("red", m_blockData.end.ToString());
 
         // 이동 반경 설정
         float radius = 20;
@@ -406,12 +436,17 @@ public class FieldEffect : MonoBehaviour, Spawn
                 // 새로운 위치를 적용
                 EffectRange.transform.position = newPos;
 
+                EffectClockCanvas.transform.position = new Vector3(newPos.x, EffectClockCanvas.transform.position.y, newPos.z);
+
                 // 다음 프레임까지 대기
                 yield return null;
             }
         }
 
         RangeMaterial.SetFloat("_curState", 0.2f);
+        EffectRange.SetActive(false);
+        EffectClock.text = m_blockData.start.ToString();
+
         FieldEffectCoroutine = null;
     }
 

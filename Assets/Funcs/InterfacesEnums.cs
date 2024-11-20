@@ -40,3 +40,31 @@ public enum WeightKinds { None = 0, ActiveTime = 1, Value = 2 }
 
 
 public enum PlayerSkillKinds { None = 0, Teleport = 1, Decoy = 2 }
+
+
+
+
+public enum PopupType
+{
+    SelectCharacter,
+    DataIsExist,
+    DataIsNotExist
+
+    //Warning,
+    //Confirmation,
+    //Information,
+    //Error
+}
+
+//public enum ButtonType
+//{
+//    ShowPopUP,
+//    Confirm,
+//    Close
+//}
+
+//public enum CondtionType
+//{
+//    None,
+//    HaveSaveData
+//}

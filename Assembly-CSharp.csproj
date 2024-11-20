@@ -59,7 +59,7 @@
     <Compile Include="Assets\GameData\GameData.cs" />
     <Compile Include="Assets\AnimationManager.cs" />
     <Compile Include="Assets\Resources\ConstructSet\GameConstructSet.cs" />
-    <Compile Include="Assets\Script\PopupController.cs" />
+    <Compile Include="Assets\AAA\Main\PopUp\PopupController.cs" />
     <Compile Include="Assets\JsonDataManager.cs" />
     <Compile Include="Assets\Script\StageManager.cs" />
     <Compile Include="Assets\Gold.cs" />
@@ -72,6 +72,7 @@
     <Compile Include="Assets\Gate.cs" />
     <Compile Include="Assets\Script\MainScene.cs" />
     <Compile Include="Assets\Funcs\InterfacesEnums.cs" />
+    <Compile Include="Assets\AAA\Main\MainUIManager.cs" />
     <Compile Include="Assets\GameObject\controller\JoyStickController.cs" />
     <Compile Include="Assets\etc\Controller.cs" />
     <Compile Include="Assets\PlayerStat.cs" />
@@ -102,6 +103,8 @@
     <Compile Include="Assets\Prepartion.cs" />
     <Compile Include="Assets\Resources\ConstructSet\ScriptableItem.cs" />
     <Compile Include="Assets\Script\ButtonController.cs" />
+    <Compile Include="Assets\AAA\Main\ButtonEvent.cs" />
+    <Compile Include="Assets\AAA\Main\SceneConstructSet.cs" />
     <Compile Include="Assets\CameraController.cs" />
     <Compile Include="Assets\attack.cs" />
     <Compile Include="Assets\etc\WinController.cs" />

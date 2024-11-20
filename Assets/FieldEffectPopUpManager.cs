@@ -70,6 +70,12 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     public TMP_Text Cost;
 
+    public TMP_Text GoldCnt;
+
+    public TMP_Text SelectedBlockNaming;
+
+
+
     private void Start()
     {
         UIManager.instance.OnInitializeUI += CreateBlock;
@@ -82,6 +88,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
         MapPlacementBlock mpb = blocks[blocks.Count - 1].GetComponent<MapPlacementBlock>();
         mpb.changeSelected();
+
 
 
         //if (DataManager.Instance.data.curWave > 1) 
@@ -111,6 +118,8 @@ public class FieldEffectPopUpManager : MonoBehaviour
     public TMP_Text selectBlockInformation;
     public TMP_Text selectBlockWeight;
 
+    //public UnityEngine.UI.Image SelectBlockImage;
+
     //private void Update()
     //{
 
@@ -136,7 +145,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
         BlockData bd;
 
         Cost.text = StageManager.instance.LCS.InitrerollCost.ToString();
-
+        GoldCnt.text = StageManager.instance.gold.ToString();
 
         for (int i = 0; i < slotEffectExplans.Count; i++)
         {
@@ -167,17 +176,23 @@ public class FieldEffectPopUpManager : MonoBehaviour
             slotEffectExplans[bd.lineNum].text = s;
         }
 
-
+        //까지 
 
 
 
         bd = blocks[curBlockIdx].GetComponent<MapPlacementBlock>().GetBlockData();
         s = "";
 
-        s += "필드 시간 " + bd.start.ToString() + " 초에 활성화되어 ";
+        //s += "필드 시간 " + bd.start.ToString() + "초 부터 ";
+        //s += bd.end.ToString() + "초 까지 ";
 
 
-        s +=  bd.fieldDuration.ToString() /*+ " +(" + bd.weight.ToString() + ")"*/ + " 초 동안  ";
+
+        s += string.Format("필드 시간 {0}초 부터 {1}초 까지", bd.start.ToString(), bd.end.ToString());
+
+
+
+        //s +=  bd.fieldDuration.ToString() /*+ " +(" + bd.weight.ToString() + ")"*/ + " 초 동안  ";
 
         //if (bd.weightKinds == WeightKinds.ActiveTime)
         //{
@@ -193,7 +208,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
                 break;
             case FieldKinds.Stack:
                 s += "플레이어가 해당구역을 진입하여 ";
-                s += bd.fieldDuration.ToString() + " 초 이상 머무를 경우 " /*+ bd.fieldValue.ToString() + " * "*/;
+                s += bd.fieldValue.ToString() + " 초 이상 머무를 경우 " /*+ bd.fieldValue.ToString() + " * "*/;
 
                 break;
             case FieldKinds.Move:
@@ -227,6 +242,14 @@ public class FieldEffectPopUpManager : MonoBehaviour
         selectBlockInformation.text = s;
 
         selectBlockWeight.text = bd.weight.ToString();
+
+
+        //s = "";
+
+        //s += string.Format("{0} + {1} Block", bd.fieldKinds.ToString(), bd.effectKinds.ToString());
+
+        SelectedBlockNaming.text = string.Format("{0} + {1}", bd.fieldKinds.ToString(), bd.effectKinds.ToString());
+
     }
 
 
@@ -327,6 +350,13 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     public void SetBlocks(GameData PlayData)
     {
+        if (StageManager.instance.gold >= StageManager.instance.LCS.InitrerollCost)
+        {
+            Reroll.interactable = true;
+        }
+
+
+
         if (PlayData.blockdata.Count >= 1)
         {
             for (int i = 0; i < PlayData.blockdata.Count; i++)
@@ -515,6 +545,18 @@ public class FieldEffectPopUpManager : MonoBehaviour
     {
         MapPlacementBlock feb = blocks[curBlockIdx].GetComponent<MapPlacementBlock>();
         feb.Reroll();
+        StageManager.instance.ReduceGold();
+
+        if(StageManager.instance.gold < StageManager.instance.LCS.InitrerollCost)
+        {
+            Reroll.interactable = false;
+        }
+
+        //if (Player.instance.gold < 50)
+        //{
+        //    Reroll.interactable = false;
+        //}
+
     }
 }
 

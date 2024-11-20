@@ -35,6 +35,9 @@ public class TextManager : MonoBehaviour
 
     public TMP_Text gold;
 
+    public TMP_Text EnemyCnt;
+    public TMP_Text EnforcedEnemyCnt;
+
 
     public void InitText()
     {
@@ -51,6 +54,17 @@ public class TextManager : MonoBehaviour
         //nextGoals.text = "";
 
         gold.text = DataManager.Instance.saveData.gold.ToString();
+
+
+
+
+
+    }
+
+    public void UpdateEnemyCnt(int enemy, int enforcedEnemy)
+    {
+        EnemyCnt.text = string.Format("X {0}", enemy.ToString());
+        EnforcedEnemyCnt.text = string.Format("X {0}", enforcedEnemy.ToString());
     }
 
     public void UpdateTexts()

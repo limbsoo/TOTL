@@ -36,7 +36,7 @@ public class ButtonController : MonoBehaviour
         btn.onClick.AddListener(ActivateButtonAction);
     }
 
-
+    public Action abd;
 
 
     public void ActivateButtonAction()
@@ -88,7 +88,7 @@ public class ButtonController : MonoBehaviour
 
                 TargetObjects[curIdx].SetActive(true);
 
-                MainScene.instance.playerIdx = curIdx;
+                //MainScene.instance.playerIdx = curIdx;
 
                 break;
 

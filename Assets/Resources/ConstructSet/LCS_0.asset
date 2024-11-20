@@ -18,7 +18,7 @@ MonoBehaviour:
   - {fileID: 793001626749674294, guid: 2fc42ea707e8cf24d8292519bc171302, type: 3}
   - {fileID: 793001626749674294, guid: dbb325897c97e0148a728509ed53a867, type: 3}
   enemy:
-  - {fileID: 2763794255627545027, guid: e323209cf3f2dec45a101427ab9408cc, type: 3}
+  - {fileID: 2763794255627545027, guid: 92fa08b0299166842a9ee3716c9ff54a, type: 3}
   - {fileID: 2763794255627545027, guid: d49538b9be075f94792b3aa87cf31af4, type: 3}
   Goal:
   - {fileID: 3446381173838501712, guid: ca5412122a6f263428b4d402edad1ada, type: 3}
@@ -28,7 +28,7 @@ MonoBehaviour:
   - {fileID: 8976493157502958342, guid: f2d12433e4b657441a8eedc4a5d5ed15, type: 3}
   Item:
   - {fileID: 7910582084679339359, guid: bf04ba4c14ac0a44c97cbba389f8edfe, type: 3}
-  - {fileID: 7910582084679339359, guid: 8aa8c96f5a320bd48999df5ad219da4c, type: 3}
+  - {fileID: 8397477644624834160, guid: a578ac4177aa1f34da5852010d312717, type: 3}
   gate:
   - {fileID: 1150117686112970776, guid: ef238dd02c03efe4d9d9c18f21f86f45, type: 3}
   numOfInitkeysRequired: 2

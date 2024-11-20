@@ -309,6 +309,8 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         List<GameObject> lgo = new List<GameObject>();
 
 
+        TextManager.instance.UpdateEnemyCnt(cnt, eliteCnt < 0 ? 0 : eliteCnt);
+
         if (eliteCnt > 0) 
         {
             for (int i = 0; i < cnt - eliteCnt; i++)
@@ -459,6 +461,12 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     {
         IsArriveGate = true;
         Destroy(g );
+    }
+
+
+    public void ReduceGold()
+    {
+        gold -= LCS.InitrerollCost;
     }
 
 
