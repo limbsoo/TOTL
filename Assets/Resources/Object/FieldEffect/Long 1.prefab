@@ -284,6 +284,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EffectTime
       objectReference: {fileID: 0}
+    - target: {fileID: 8953878212553906651, guid: a297077e3ce143e4bb062021996b2217, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a297077e3ce143e4bb062021996b2217, type: 3}
 --- !u!224 &1341844453471364875 stripped

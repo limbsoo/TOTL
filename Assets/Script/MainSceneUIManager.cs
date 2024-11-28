@@ -1,60 +1,244 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using static ButtonEvent;
+using static PopupController;
 
 public class MainSceneUIManager : MonoBehaviour
 {
-    // 팝업 창들을 관리할 Dictionary
-    private Dictionary<string, GameObject> popups = new Dictionary<string, GameObject>();
+    public static MainSceneUIManager instance { get; private set; }
 
-    // 팝업 프리팹 경로 (Resources 폴더 내)
-    public string popupPrefabPath = "UI/Popups/";
+    public ScenePopups PopupSet;
 
-    // 특정 팝업을 동적으로 불러와 보여주는 함수
-    public void ShowPopup(string popupID)
+    private void Awake()
     {
-        // 팝업이 이미 로드되어 있는지 확인
-        if (popups.ContainsKey(popupID))
+        if (this.name == "MainScene")
         {
-            popups[popupID].SetActive(true);
-        }
-        else
-        {
-            // Resources 폴더에서 팝업 프리팹을 로드하여 인스턴스화
-            GameObject popupPrefab = Resources.Load<GameObject>($"{popupPrefabPath}{popupID}");
-            if (popupPrefab != null)
+            if (instance == null)
             {
-                GameObject popupInstance = Instantiate(popupPrefab, transform); // UI 매니저 하위에 생성
-                popups.Add(popupID, popupInstance);
-                popupInstance.SetActive(true); // 생성 후 활성화
-            }
-            else
-            {
-                Debug.LogError($"Popup Prefab with ID {popupID} not found at {popupPrefabPath}");
+                instance = this;
+                DontDestroyOnLoad(gameObject);
             }
         }
     }
 
-    // 팝업을 끄는 함수
-    public void HidePopup(string popupID)
+
+    public Dictionary<PopupType, GameObject> dicPopups;
+
+    private ButtonClickEvent[] _buttons;
+
+
+    private void Start()
     {
-        // 팝업이 로드되어 있는지 확인
-        if (popups.ContainsKey(popupID))
+        //두번이벤트확인
+        _buttons = GetComponentsInChildren<ButtonClickEvent>();
+
+        if (_buttons.Length != 0)
         {
-            popups[popupID].SetActive(false);
+            foreach (var button in _buttons)
+            {
+                button.OnButtonClicked += (buttonType, name) => HandleButtonEvent(buttonType, name);
+            }
         }
-        else
+
+
+        dicPopups = new Dictionary<PopupType, GameObject>();
+        RectTransform rectTransform = GetComponent<RectTransform>();
+
+        for (int i = 0; i < PopupSet.popups.Count; i++)
         {
-            Debug.LogWarning($"Popup with ID {popupID} is not loaded.");
+            GameObject go = Instantiate(PopupSet.popups[i].popup);
+            go.transform.SetParent(rectTransform, false);
+
+            PopUp popUp = go.GetComponent<PopUp>();
+            popUp.OnPopupEvent += HandlePopupEvent;
+
+            //if (popUp != null ) 
+            //{
+            //    popUp.OnPopupEvent += HandlePopupEvent;
+            //}
+
+            //else
+            //{
+            //    SelectCharacter selectCharacter = go.GetComponent<SelectCharacter>();
+
+            //    if (selectCharacter != null)
+            //    {
+            //        selectCharacter.OnPopupEvent += HandlePopupEvent;
+            //    }
+            //}
+
+            
+
+            go.SetActive(false);
+            dicPopups.Add(PopupSet.popups[i].popupType, go);
+        }
+
+    }
+
+    public void ActivatePopup(PopupType PopupType)
+    {
+        dicPopups[PopupType].SetActive(true);
+    }
+
+
+    //public void RegisterPopup(Popup popup)
+    //{
+    //    if (!_activePopups.Contains(popup))
+    //    {
+    //        _activePopups.Add(popup);
+    //        popup.OnPopupEvent += HandlePopupEvent;
+    //    }
+    //}
+
+    //public void UnregisterPopup(Popup popup)
+    //{
+    //    if (_activePopups.Contains(popup))
+    //    {
+    //        _activePopups.Remove(popup);
+    //        popup.OnPopupEvent -= HandlePopupEvent;
+    //    }
+    //}
+
+
+    private void HandleButtonEvent(ButtonType buttonType, string name)
+    {
+        ActivateEvent(buttonType, name);
+    }
+
+
+    private void HandlePopupEvent(PopUp popup, ButtonType buttonType, string name)
+    {
+        ActivateEvent(buttonType, name);
+
+        if(buttonType == ButtonType.Close)
+        {
+            popup.gameObject.SetActive(false);
         }
     }
 
-    // 팝업을 제거하는 함수 (메모리 관리용)
-    public void DestroyPopup(string popupID)
+
+
+    void ActivateEvent(ButtonType buttonType, string name)
     {
-        if (popups.ContainsKey(popupID))
+        switch (buttonType)
         {
-            Destroy(popups[popupID]);
-            popups.Remove(popupID);
+            case ButtonType.StartOrWarn:
+                if (DataManager.Instance.HaveSaveData()) { ActivatePopup(PopupType.DataIsExist); }
+                else { ActivatePopup(PopupType.SelectCharacter); }
+                break;
+
+            case ButtonType.ContinueOrWarn:
+
+                if (DataManager.Instance.HaveSaveData()) 
+                {
+                    SceneManager.instance.LoadScene("PlayScene");
+                }
+                else { ActivatePopup(PopupType.DataIsNotExist); }
+                break;
+
+
+            case ButtonType.Open:
+
+                foreach(PopupType popupType in dicPopups.Keys) 
+                {
+                    if(name == popupType.ToString())
+                    {
+                        ActivatePopup(popupType); 
+                        break;
+                    }
+                }
+                break;
+
+            case ButtonType.LoadScene:
+                SceneManager.instance.LoadScene("PlayScene");
+                break;
+
+
         }
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public int playerIdx;
+
+    public void StartGame()
+    {
+        //test.text = "캐릭터 선택";
+
+        DataManager.Instance.InitSelectCharacter(playerIdx);
+        //나중에 게임모드도
+
+        //test.text = "신 로드 시작";
+
+        SceneManager.instance.LoadScene("PlayScene");
+    }
+
+    public void LoadGame()
+    {
+        SceneManager.instance.LoadScene("PlayScene");
+    }
+
+    public void ResetData()
+    {
+        DataManager.Instance.ResetStage();
+        //gameObject.transform.parent.gameObject.SetActive(false);
+    }
+
+
+    private void OnEnable()
+    {
+        ButtonController.OnLoadScene += LoadGame;
+    }
+
+    private void OnDisable()
+    {
+        ButtonController.OnLoadScene -= LoadGame;
+
+        //EventManager.instance.OnStageEnd -= EndStage;
+    }
+
+
+    //private void Start()
+    //{
+
+    //}
+
+
+
+
+    //// Start is called before the first frame update
+    //void Start()
+    //{
+
+    //}
+
+    //// Update is called once per frame
+    //void Update()
+    //{
+
+    //}
 }

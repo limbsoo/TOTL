@@ -119,7 +119,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   teleportLength: 10
-  animator: {fileID: 8418733224931950773, guid: a0d7d9165628ae34080813486597b439, type: 3}
+  animator: {fileID: 0}
   Decoy: {fileID: 7556202531076509471, guid: a0ca2608fb4d52747a426aff3a759807, type: 3}
   stack: 0
   summonDecoy: 0
