@@ -30,8 +30,6 @@ public class Player : MonoBehaviour, Spawn
     PlayerStats playerStats;
 
 
-
-
     public static bool useAttack = false;
 
 
@@ -39,7 +37,7 @@ public class Player : MonoBehaviour, Spawn
 
     public static bool canUseSkill; // 스킬 사용 가능 여부
 
-    public static bool playerDamaged;
+    public static bool IsplayerDamaged;
 
     private Vector3 movement;
     
@@ -60,7 +58,7 @@ public class Player : MonoBehaviour, Spawn
 
     public Animator animator;
 
-    Material[] mat = new Material[2];
+    //Material[] mat = new Material[2];
 
     //prePlayer꺼
 
@@ -87,7 +85,7 @@ public class Player : MonoBehaviour, Spawn
     //public static Player instance { get; private set; }
     private void Awake()
     {
-        playerDamaged = false;
+        IsplayerDamaged = false;
         canUseSkill = true;
         playerStats = DataManager.Instance.saveData.playerStats;
 
@@ -139,7 +137,7 @@ public class Player : MonoBehaviour, Spawn
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
         //clips[0].
 
-        mat = this.GetComponent<Renderer>().materials;
+        //mat = this.GetComponent<Renderer>().materials;
 
         ////gameObject.GetComponent<MeshRenderer>().material = mat[1];
         //AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
@@ -194,7 +192,7 @@ public class Player : MonoBehaviour, Spawn
         //EventManager.instance.OnCollisionResult += HandleCollisionResult;
         //EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
 
-        UIManager.instance.OnUseSkill += useSkill;
+        StageUI.instance.OnUseSkill += useSkill;
         //JoyStickController.instance.JoyStickMove += Move;
     }
 
@@ -204,7 +202,7 @@ public class Player : MonoBehaviour, Spawn
         //EventManager.instance.OnCollisionResult -= HandleCollisionResult;
         //EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
 
-        UIManager.instance.OnUseSkill -= useSkill;
+        StageUI.instance.OnUseSkill -= useSkill;
     }
 
 
@@ -245,7 +243,7 @@ public class Player : MonoBehaviour, Spawn
                 //Destroy(go);
             }));
 
-            UIManager.instance.StartCooldown(playerStats.coolDown);
+            StageUI.instance.StartCooldown(playerStats.coolDown);
         }
 
 
@@ -428,7 +426,7 @@ public class Player : MonoBehaviour, Spawn
     {
         Debug.Log("Received collision with: " + collidedObject.name);
 
-        if(!playerDamaged)
+        if(!IsplayerDamaged)
         {
             OnPlayerUnderAttack?.Invoke();
         }
@@ -446,10 +444,10 @@ public class Player : MonoBehaviour, Spawn
         canUseSkill = false;
         summonDecoy = true;
 
-        UIManager.instance.IdleSkillButton(false);
+        StageUI.instance.IdleSkillButton(false);
 
         StartCoroutine(Function.instance.CountDown(playerStats.coolDown, () => {
-            UIManager.instance.IdleSkillButton(true);
+            StageUI.instance.IdleSkillButton(true);
             canUseSkill = !canUseSkill;
             summonDecoy = !summonDecoy;
             Destroy(go);
@@ -521,303 +519,76 @@ public class Player : MonoBehaviour, Spawn
 
     public bool haveDamaged()
     {
-        if(playerDamaged) return true;
+        if(IsplayerDamaged) return true;
         else return false;
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void underAttack()
-    {
-        playerDamaged = true;
-
-        gameObject.GetComponent<MeshRenderer>().material = mat[1];
-
-        UIManager.instance.playerDamaged.SetActive(true);
-
-        //gameObject.GetComponent<BoxCollider>().enabled = false;
-
-
-        StartCoroutine(Function.instance.CountDown(0.5f, () => {
-
-            UIManager.instance.playerDamaged.SetActive(false);
-        }));
-
-
-        playerStats.health--;
-
-        TextManager.instance.health.text = playerStats.health.ToString();
-
-        StartCoroutine(Function.instance.CountDown(1f, () => {
-
-            playerDamaged = false;
-            gameObject.GetComponent<MeshRenderer>().material = mat[0];
-            //gameObject.GetComponent<BoxCollider>().enabled = true;
-        }));
-
-        //iskientic으로?
-        //transform.position += new Vector3(collidedObject.transform.forward.x * 2, 0, collidedObject.transform.forward.z * 2);
-    }
-
-
-
-    //public IEnumerator Weakning()
+    //public void underAttack()
     //{
-    //    //while(PenealtyTime > 0)
-    //    //{
+    //    playerDamaged = true;
 
-    //    //}
+    //    gameObject.GetComponent<MeshRenderer>().material = mat[1];
 
-    //    PenealtyTime = 3;
-    //    yield return new WaitForSecondsRealtime(1);
-    //    PenealtyTime = 2;
-    //    yield return new WaitForSecondsRealtime(1);
-    //    PenealtyTime = 1;
-    //    yield return new WaitForSecondsRealtime(1);
-    //    PenealtyTime = 0;
+    //    StageUI.instance.playerDamaged.SetActive(true);
+
+    //    //gameObject.GetComponent<BoxCollider>().enabled = false;
 
 
-    //    weakning = false;
-    //    damamge = 1;
+    //    StartCoroutine(Function.instance.CountDown(0.5f, () => {
+
+    //        StageUI.instance.playerDamaged.SetActive(false);
+    //    }));
+
+
+    //    playerStats.health--;
+
+    //    TextManager.instance.health.text = playerStats.health.ToString();
+
+    //    StartCoroutine(Function.instance.CountDown(1f, () => {
+
+    //        playerDamaged = false;
+    //        gameObject.GetComponent<MeshRenderer>().material = mat[0];
+    //        //gameObject.GetComponent<BoxCollider>().enabled = true;
+    //    }));
+
+    //    //iskientic으로?
+    //    //transform.position += new Vector3(collidedObject.transform.forward.x * 2, 0, collidedObject.transform.forward.z * 2);
     //}
 
 
-    //public IEnumerator slowliy() //딜레이는 시간도 더 길게 패널티를 주자
-    //{
-    //    moveSpeed = 10;
-    //    //yield return new WaitForSecondsRealtime(1);
-    //    yield return new WaitForSecondsRealtime(0.1f);
-    //    moveSpeed = 20;
-    //}
 
     private Coroutine slowEffectedCoroutine;
 
 
-    //public IEnumerator ApplySlow(float delay) //딜레이는 시간도 더 길게 패널티를 주자
-    //{
-    //    moveSpeed = 10;
-    //    //yield return new WaitForSecondsRealtime(1);
-    //    yield return new WaitForSecondsRealtime(delay);
-    //    moveSpeed = 20;
-    //}
-
-
-    private Coroutine SealSkillCoroutine;
-
-
-
-    public void ApplyDelayEffect(FieldEffect fe)
-    {
-        //switch (fe.m_downerIdx)
-        //{
-        //    case 0: // Damage
-
-        //        if (!playerDamaged) underAttack();
-
-
-        //        //health -= 1;
-        //        break;
-        //    case 1: // Seal
-        //            //StartCoroutine(Weakning());
-
-        //        if (SealSkillCoroutine != null)
-        //        {
-        //            //GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
-
-        //            //canUseSkill = false;
-        //            //summonDecoy = true;
-
-        //            //UIManager.instance.IdleSkillButton(false);
-
-        //            //StartCoroutine(Function.instance.CountDown(coolDown, () => {
-        //            //    UIManager.instance.IdleSkillButton(true);
-        //            //    canUseSkill = !canUseSkill;
-        //            //    summonDecoy = !summonDecoy;
-        //            //    Destroy(go);
-        //            //}));
-
-
-
-
-        //            StopCoroutine(SealSkillCoroutine);
-        //        }
-
-        //        SealSkillCoroutine = StartCoroutine(UIManager.instance.SEalCoroutine(5));
-
-
-
-        //        break;
-        //    case 2: // Slow
-
-        //        if (slowEffectedCoroutine != null)
-        //        {
-        //            StopCoroutine(slowEffectedCoroutine);
-        //        }
-
-        //        slowEffectedCoroutine = StartCoroutine(ApplySlow(5));
-
-
-
-        //        break;
-        //}
-    }
-
-
-
-    //public void setEffected(int idx)
-    //{
-    //    switch (idx)
-    //    {
-    //        case 0: // Damage
-
-    //            if(!playerDamaged) underAttack();
-
-
-    //            //health -= 1;
-    //            break;
-    //        case 1: // Seal
-    //                //StartCoroutine(Weakning());
-
-    //            if(SkillCoolDownCoroutine != null)
-    //            {
-    //                if(UIManager.instance.CheckCoolDown(5))
-    //                {
-    //                    StopCoroutine(SkillCoolDownCoroutine);
-
-    //                    SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
-    //                    {
-    //                        SkillCoolDownCoroutine = null;
-    //                    }));
-    //                }
-    //            }
-
-    //            else
-    //            {
-    //                SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(coolDown, () =>
-    //                {
-    //                    SkillCoolDownCoroutine = null;
-    //                }));
-
-    //                UIManager.instance.StartCooldown(coolDown);
-    //            }
-
-
-    //            //if (SealSkillCoroutine != null)
-    //            //{
-    //            //    StopCoroutine(SealSkillCoroutine);
-    //            //}
-
-    //            //SealSkillCoroutine = StartCoroutine(UIManager.instance.SEalCoroutine(5));
-
-
-
-    //            break;
-    //        case 2: // Slow
-
-    //            if (slowEffectedCoroutine != null)
-    //            {
-    //                StopCoroutine(slowEffectedCoroutine);
-    //            }
-
-    //            slowEffectedCoroutine = StartCoroutine(slowliy());
-
-
-                
-    //            break;
-    //    }
-    //}
-
-
-
-    //void changeFigure()
-    //{
-    //    if (!weakning)
-    //    {
-    //        damamge = LightObstacle.minusDamage;
-    //        weakning = true;
-    //    } 
-
-    //    else
-    //    {
-    //        if (runningCoroutine != null)
-    //        {
-    //            StopCoroutine(runningCoroutine);
-    //        }
-
-    //        runningCoroutine = StartCoroutine(Weakning());
-    //    }
-
-
-    //}
-
-    //void suffleFigure(int a, int b)
-    //{
-    //    StageManager.instance.players[b].SetActive(true);
-    //    StageManager.instance.players[b].transform.position = StageManager.instance.players[a].transform.position;
-    //    StageManager.instance.players[b].transform.rotation = StageManager.instance.players[a].transform.rotation;
-
-    //    //rb = StageManager.instance.players[a].GetComponent<Rigidbody>();
-
-    //    StageManager.instance.players[a].SetActive(false);
-    //    StageManager.currentPlayerIdx = b;
-
-    //    //CameraController.instance.transform.position = new Vector3(StageManager.instance.players[b].transform.position.x, StageManager.instance.players[b].transform.position.y + 50, StageManager.instance.players[b].transform.position.z - 30);
-
-    //}
-
-
-    //private IEnumerator transforming()
-    //{
-    //    yield return new WaitForSecondsRealtime(3);
-
-    //    Debug.Log("호출코루틴");
-    //    suffleFigure(1, 0);
-
-    //}
-
-
-
-
+    public Action<float> OnPlayerDamaged;
 
 
 
     public void Damaged(float value)
     {
-        if(playerDamaged == false)
+        if(IsplayerDamaged == false)
         {
-            playerDamaged = true;
-            gameObject.GetComponent<MeshRenderer>().material = mat[1];
-
-            UIManager.instance.playerDamaged.SetActive(true);
-
-            StartCoroutine(Function.instance.CountDown(0.5f, () => {
-
-                UIManager.instance.playerDamaged.SetActive(false);
-            }));
-
+            IsplayerDamaged = true;
             playerStats.health -= value;
 
-            if(playerStats.health <= 0)
-            {
-                UIManager.instance.GameOverPopUp.SetActive(true);
-            }
-
-
-            TextManager.instance.UpdateTexts();
+            OnPlayerDamaged.Invoke(playerStats.health);
 
             StartCoroutine(Function.instance.CountDown(1f, () => {
-                playerDamaged = false;
-                gameObject.GetComponent<MeshRenderer>().material = mat[0];
+                IsplayerDamaged = false;
             }));
 
         }
     }
 
+
+
     public void Sealed(float value)
     {
         if (SkillCoolDownCoroutine != null)
         {
-            if (UIManager.instance.CheckCoolDown(value))
+            if (StageUI.instance.CheckCoolDown(value))
             {
                 StopCoroutine(SkillCoolDownCoroutine);
 
@@ -835,7 +606,7 @@ public class Player : MonoBehaviour, Spawn
                 SkillCoolDownCoroutine = null;
             }));
 
-            UIManager.instance.StartCooldown(value);
+            StageUI.instance.StartCooldown(value);
         }
     }
 

@@ -6,52 +6,130 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 
-public class UIManager : MonoBehaviour
+public class StageUI : UIEvent
 {
-    public static UIManager instance { get; private set; }
+    public static StageUI instance { get; private set; }
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
+        if (instance == null) { instance = this; }
         else Destroy(gameObject);
     }
-
-
 
     public Action OnDecideBlock;
     public Action OnInitializeUI;
 
 
-    public void LoadMainScene()
+    public Button _skill;
+    Image _skillCoolDown;
+    public Slider stageTimeSlider;
+    public GameObject fieldEffectPopUp;
+    public GameObject damagedPopUp;
+
+    void Start()
     {
-        SceneManager.instance.LoadScene("MainScene");
-        //GameManager.instance.loadMainScene();
+        base.Start();
+        ShowFieldEffectPopup();
+        StageManager.instance.OnStageEnd += CompleteStage;
+        //TextManager.instance.InitText();
+
+        InitTexts();
+
+        _skillCoolDown = _skill.gameObject.transform.GetChild(0).GetComponent<Image>();
+
+        StageManager.instance.OnPlayerDamaged += PlayerDamaged;
+        StageManager.instance.OnPopUpOpen += OnPopUpOpen;
+        StageManager.instance.OnEnemyCnt += OnEnemyCnt;
+        StageManager.instance.OnUpadateText += UpdateText;
     }
 
-    //public Action OnLoadMainScene;
 
-    //public static bool isReady = false;
-
-    public Image skillCoolDown;
-
-    public Button Skill;
-
-
-    public Button DecideButton;
-
-    public void IdleDecideButton(bool DidDecide)
+    void Update()
     {
-        DecideButton.interactable = DidDecide;
+        if (StageManager.Sstate == StageState.Play)
+        {
+            if (StageTimeSliderCoroutine == null)
+            {
+                StageTimeSliderCoroutine = StartCoroutine(stageTimer(10f));
+            }
+        }
+
+        else
+        {
+            if (StageTimeSliderCoroutine != null)
+            {
+                StopCoroutine(StageTimeSliderCoroutine);
+                stageTimeSlider.value = 0;
+                StageTimeSliderCoroutine = null;
+            }
+
+        }
+    }
+
+    public TMP_Text curStage;
+    public TMP_Text waveTimer;
+    public TMP_Text curScore;
+    public TMP_Text health;
+    public TMP_Text gold;
+    public TMP_Text EnemyCnt;
+    public TMP_Text EnforcedEnemyCnt;
+
+    void InitTexts()
+    {
+        curStage.text = DataManager.Instance.saveData.curWave.ToString();
+        waveTimer.text = "";
+        curScore.text = string.Format("{0} / {1}", StageManager.instance.currentScore.ToString(), StageManager.instance.targetScore.ToString());
+        health.text = DataManager.Instance.saveData.playerStats.health.ToString();
+        gold.text = DataManager.Instance.saveData.gold.ToString();
+        EnemyCnt.text = "";
+        EnforcedEnemyCnt.text = "";
+    }
+
+    public void OnEnemyCnt(float enemy, float enforcedEnemy)
+    {
+        EnemyCnt.text = string.Format("X {0}", enemy.ToString());
+        EnforcedEnemyCnt.text = string.Format("X {0}", enforcedEnemy.ToString());
     }
 
 
-    public void IdleSkillButton(bool CanUseSkill)
+    void UpdateText(string s, float f)
     {
-        Skill.interactable = CanUseSkill;
+        switch (s) 
+        {
+            case "curStage":
+                curStage.text = f.ToString();
+                break;
+            case "curScore":
+                curScore.text = string.Format("{0} / {1}",f.ToString(), StageManager.instance.targetScore.ToString());
+                break;
+            case "health":
+                health.text = f.ToString();
+                break;
+            case "gold":
+                gold.text = f.ToString();
+                break;
+        }
+
     }
+
+
+    void OnPopUpOpen(PopupType popupType)
+    {
+        _popups[popupType].SetActive(true);
+    }
+
+    void PlayerDamaged(float f)
+    {
+        UpdateText("health", f);
+
+        damagedPopUp.SetActive(true);
+
+        StartCoroutine(Function.instance.CountDown(0.5f, () => {
+            damagedPopUp.SetActive(false);
+        }));
+    }
+
 
 
     public void CompleteStage()
@@ -62,23 +140,9 @@ public class UIManager : MonoBehaviour
 
 
 
-    public Image SealCoolDown;
-
-
-    public Slider cooldownSlider;
-    public GameObject fieldEffectPopUp;
-
-    public Action OnUIisReady;
-
-
-    public Slider stageTimeSlider;
-
     public Action OnUseSkill;
 
 
-    public GameObject playerDamaged;
-
-    public GameObject GameOverPopUp;
 
     public void UseSkill()
     {
@@ -86,22 +150,6 @@ public class UIManager : MonoBehaviour
         OnUseSkill?.Invoke();
     }
 
-
-    private void Start()
-    {
-        ShowFieldEffectPopup();
-
-
-        //StageManager.instance.stageLevelSetEnd += ShowFieldEffectPopup;
-        StageManager.instance.OnStageEnd += CompleteStage;
-        TextManager.instance.InitText();
-
-
-        
-
-        //isReady = true;
-        //OnUIisReady.Invoke();
-    }
 
 
     private void ShowFieldEffectPopup()
@@ -117,61 +165,25 @@ public class UIManager : MonoBehaviour
 
 
 
-    Coroutine timerCoroutine = null;
-    Coroutine StageTimerCoroutine = null;
-
-    int time = 0;
-    int stageTime = 0;
-
-
-
-
-
-
-
-
-
-
-
-    public IEnumerator SEalCoroutine(float duration)
-    {
-        SealCoolDown.gameObject.SetActive(true);
-
-
-        SealCoolDown.fillAmount = 1;
-
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            SealCoolDown.fillAmount = 1 - Mathf.Clamp01(elapsed / duration);
-
-            yield return null;
-        }
-
-
-
-        SealCoolDown.gameObject.SetActive(false);
-
-    }
-
 
     public Coroutine SkillCoolDownCoroutine;
     public float MaxCoolDown;
 
+    public void IdleSkillButton(bool CanUseSkill)
+    {
+        _skill.interactable = CanUseSkill;
+    }
 
     public bool CheckCoolDown(float duration)
     {
         if (SkillCoolDownCoroutine != null)
         {
-            if ((1 - skillCoolDown.fillAmount) * MaxCoolDown < duration)
+            if ((1 - _skillCoolDown.fillAmount) * MaxCoolDown < duration)
             {
                 StopCoroutine(SkillCoolDownCoroutine);
                 SkillCoolDownCoroutine = StartCoroutine(CooldownCoroutine(duration));
                 return true;
             }
-
-
         }
 
         else
@@ -183,47 +195,17 @@ public class UIManager : MonoBehaviour
         return false;
     }
 
-
-
-
     //플레이어 이벤트
     public void StartCooldown(float duration)
     {
-        //if (StageManager.Sstate == StageState.Play)
-        //{
-        //    if (StageTimeSliderCoroutine == null)
-        //    {
-        //        StageTimeSliderCoroutine = StartCoroutine(stageTimer(10f));
-        //    }
-        //}
-
-        //else
-        //{
-        //    if (StageTimeSliderCoroutine != null)
-        //    {
-        //        StopCoroutine(StageTimeSliderCoroutine);
-        //        stageTimeSlider.value = 0;
-        //        StageTimeSliderCoroutine = null;
-        //    }
-
-
-        //}
-
-
 
         if (SkillCoolDownCoroutine != null)
         {
-            if((1 - skillCoolDown.fillAmount) * MaxCoolDown < duration)
+            if((1 - _skillCoolDown.fillAmount) * MaxCoolDown < duration)
             {
                 StopCoroutine(SkillCoolDownCoroutine);
                 SkillCoolDownCoroutine = StartCoroutine(CooldownCoroutine(duration));
             }
-
-
-            //SkillCoolDownCoroutine.Yield();
-
-
-            
         }
 
         else
@@ -231,10 +213,6 @@ public class UIManager : MonoBehaviour
             MaxCoolDown = duration;
             SkillCoolDownCoroutine = StartCoroutine(CooldownCoroutine(duration));
         }
-
-
-
-        //StartCoroutine(CooldownCoroutine(duration));
     }
 
 
@@ -242,66 +220,25 @@ public class UIManager : MonoBehaviour
     {
         IdleSkillButton(false);
 
-        skillCoolDown.gameObject.SetActive(true);
+        _skillCoolDown.gameObject.SetActive(true);
 
-        skillCoolDown.fillAmount = 1;
+        _skillCoolDown.fillAmount = 1;
 
         float elapsed = 0f;
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             //skillCoolDown.fillAmount = (1.0f / duration - elapsed);
-            skillCoolDown.fillAmount = 1 - Mathf.Clamp01(elapsed / duration);
+            _skillCoolDown.fillAmount = 1 - Mathf.Clamp01(elapsed / duration);
 
             yield return null;
         }
-        skillCoolDown.gameObject.SetActive(false);
+        _skillCoolDown.gameObject.SetActive(false);
 
         MaxCoolDown = 0;
 
-
-
         IdleSkillButton(true);
-
         SkillCoolDownCoroutine = null;
-
-
-
-
-
-
-        //skillCoolDown.gameObject.SetActive(true);
-
-        //skillCoolDown.fillAmount = 1;
-
-        //float elapsed = 0f;
-        //while (elapsed < duration)
-        //{
-        //    elapsed += Time.deltaTime;
-        //    skillCoolDown.fillAmount = (1.0f / duration - elapsed);
-
-        //    skillCoolDown.fillAmount -= ()
-
-        //    yield return null;
-        //}
-        //skillCoolDown.gameObject.SetActive(false);
-
-
-
-
-        //cooldownSlider.gameObject.SetActive(true); // 슬라이더를 활성화합니다.
-        //float elapsed = 0f;
-        //while (elapsed < duration)
-        //{
-        //    elapsed += Time.deltaTime;
-        //    cooldownSlider.value = Mathf.Clamp01(elapsed / duration);
-        //    yield return null;
-        //}
-        //cooldownSlider.value = 0;
-        //cooldownSlider.gameObject.SetActive(false); // 쿨타임이 끝나면 슬라이더를 비활성화합니다.
-
-        //// 쿨타임이 끝났음을 알리는 이벤트를 발생시킵니다.
-        //EventManager.TriggerCooldownFinished();
     }
 
 
@@ -322,9 +259,8 @@ public class UIManager : MonoBehaviour
             {
                 saved += 1;
                 StageManager.instance.stageTime += 1;
+                waveTimer.text = (StageManager.instance.waveTime).ToString();
             }
-
-
             
             yield return null;
         }
@@ -339,30 +275,6 @@ public class UIManager : MonoBehaviour
 
     Coroutine StageTimeSliderCoroutine = null;
 
-
-    private void Update()
-    {
-        if (StageManager.Sstate == StageState.Play)
-        {
-            if (StageTimeSliderCoroutine == null)
-            {
-                StageTimeSliderCoroutine = StartCoroutine(stageTimer(10f));
-            }
-        }
-
-        else
-        {
-            if(StageTimeSliderCoroutine != null)
-            {
-                StopCoroutine(StageTimeSliderCoroutine);
-                stageTimeSlider.value = 0;
-                StageTimeSliderCoroutine = null;
-            }
-
-
-        }
-        
-    }
 
 
 }

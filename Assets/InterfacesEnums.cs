@@ -47,7 +47,9 @@ public enum PopupType
     SelectCharacter,
     DataIsExist,
     DataIsNotExist,
-    Options
+    Options,
+    Pause,
+    GameOver
 
     //Warning,
     //Confirmation,
@@ -94,5 +96,6 @@ public enum ButtonType
     ResetData,
     Left,
     Right,
-    LoadScene
+    LoadStage,
+    LoadMain
 }

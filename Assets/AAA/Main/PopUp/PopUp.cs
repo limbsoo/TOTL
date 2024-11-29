@@ -12,13 +12,18 @@ public class PopUp : MonoBehaviour
 
     public event Action<PopUp, ButtonType, string> OnPopupEvent; // 버튼 정보 포함
 
-    public ButtonClickEvent[] _buttons;
+    protected ButtonClickEvent[] _buttons;
 
-    protected void OnEnable()
+    void Awake()
     {
         _buttons = GetComponentsInChildren<ButtonClickEvent>();
 
-        if(_buttons.Length != 0)
+    }
+
+    protected virtual void Start()
+    {
+
+        if (_buttons.Length != 0)
         {
             foreach (var button in _buttons)
             {
@@ -27,13 +32,33 @@ public class PopUp : MonoBehaviour
         }
     }
 
-    protected void OnDisable()
+    protected virtual void OnDestroy()
     {
         foreach (var button in _buttons)
         {
             button.OnButtonClicked -= (buttonType, name) => HandleButtonClicked(buttonType, name);
         }
     }
+
+    //protected virtual void OnEnable()
+    //{
+
+    //    if(_buttons.Length != 0)
+    //    {
+    //        foreach (var button in _buttons)
+    //        {
+    //            button.OnButtonClicked += (buttonType, name) => HandleButtonClicked(buttonType, name);
+    //        }
+    //    }
+    //}
+
+    //protected virtual void OnDisable()
+    //{
+    //    foreach (var button in _buttons)
+    //    {
+    //        button.OnButtonClicked -= (buttonType, name) => HandleButtonClicked(buttonType, name);
+    //    }
+    //}
 
     protected virtual void HandleButtonClicked(ButtonType buttonType, string name)
     {

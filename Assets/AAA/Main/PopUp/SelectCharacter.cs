@@ -8,12 +8,12 @@ using static ButtonEvent;
 
 public class SelectCharacter : PopUp
 {
-    int _selectedIndex;
+    public int _selectedIndex;
     public Image portrait;
     public PlayerList playerList;
 
 
-    void Start()
+    protected override void Start()
     {
         _selectedIndex = 0;
 
@@ -21,12 +21,9 @@ public class SelectCharacter : PopUp
         {
             portrait.sprite = playerList.lists[_selectedIndex].sprite;
         }
-    }
 
 
-    void OnEnable()
-    {
-        base.OnEnable();
+        _buttons = GetComponentsInChildren<ButtonClickEvent>();
 
         foreach (var button in _buttons)
         {
@@ -34,20 +31,18 @@ public class SelectCharacter : PopUp
         }
     }
 
-    void OnDisable()
+    protected override void OnDestroy()
     {
         foreach (var button in _buttons)
         {
             button.OnButtonClicked -= (buttonType, name) => HandleButtonClicked(buttonType, name);
         }
 
-        base.OnDisable();
+        //base.OnDisable();
     }
 
     protected override void HandleButtonClicked(ButtonType buttonType, string name)
     {
-        base.HandleButtonClicked(buttonType, name);
-
         switch (buttonType)
         {
             case ButtonType.Left:
@@ -62,13 +57,15 @@ public class SelectCharacter : PopUp
                 portrait.sprite = playerList.lists[_selectedIndex].sprite;
                 break;
 
-            //case ButtonType.LoadScene:
-            //    base.OnPopupEvent?.Invoke(this, buttonType, name);
-            //    break;
+            case ButtonType.LoadStage:
+                base.HandleButtonClicked(buttonType, name);
+                break;
 
             default:
                 Debug.LogWarning($"Unhandled button type in SelectCharacter: {buttonType}");
                 break;
         }
     }
+
+
 }

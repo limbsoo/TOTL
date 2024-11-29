@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using static ButtonController;
 using static UnityEngine.EventSystems.EventTrigger;
 
 public class PopupController : MonoBehaviour

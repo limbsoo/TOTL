@@ -55,23 +55,6 @@ public class MainSceneUIManager : MonoBehaviour
             PopUp popUp = go.GetComponent<PopUp>();
             popUp.OnPopupEvent += HandlePopupEvent;
 
-            //if (popUp != null ) 
-            //{
-            //    popUp.OnPopupEvent += HandlePopupEvent;
-            //}
-
-            //else
-            //{
-            //    SelectCharacter selectCharacter = go.GetComponent<SelectCharacter>();
-
-            //    if (selectCharacter != null)
-            //    {
-            //        selectCharacter.OnPopupEvent += HandlePopupEvent;
-            //    }
-            //}
-
-            
-
             go.SetActive(false);
             dicPopups.Add(PopupSet.popups[i].popupType, go);
         }
@@ -106,6 +89,7 @@ public class MainSceneUIManager : MonoBehaviour
     private void HandleButtonEvent(ButtonType buttonType, string name)
     {
         ActivateEvent(buttonType, name);
+        Debug.Log(string.Format("일반 버튼타입 {0}, name {1}", buttonType.ToString(), name));
     }
 
 
@@ -113,7 +97,9 @@ public class MainSceneUIManager : MonoBehaviour
     {
         ActivateEvent(buttonType, name);
 
-        if(buttonType == ButtonType.Close)
+        Debug.Log(string.Format("팝업 버튼타입 {0}, name {1}", buttonType.ToString(), name));
+
+        if (buttonType == ButtonType.Close)
         {
             popup.gameObject.SetActive(false);
         }
@@ -152,7 +138,7 @@ public class MainSceneUIManager : MonoBehaviour
                 }
                 break;
 
-            case ButtonType.LoadScene:
+            case ButtonType.LoadStage:
                 SceneManager.instance.LoadScene("PlayScene");
                 break;
 
@@ -209,17 +195,17 @@ public class MainSceneUIManager : MonoBehaviour
     }
 
 
-    private void OnEnable()
-    {
-        ButtonController.OnLoadScene += LoadGame;
-    }
+    //private void OnEnable()
+    //{
+    //    ButtonController.OnLoadScene += LoadGame;
+    //}
 
-    private void OnDisable()
-    {
-        ButtonController.OnLoadScene -= LoadGame;
+    //private void OnDisable()
+    //{
+    //    ButtonController.OnLoadScene -= LoadGame;
 
-        //EventManager.instance.OnStageEnd -= EndStage;
-    }
+    //    //EventManager.instance.OnStageEnd -= EndStage;
+    //}
 
 
     //private void Start()

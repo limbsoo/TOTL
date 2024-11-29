@@ -135,7 +135,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonType: 6
-  _button: {fileID: 0}
 --- !u!1 &1377140810620921275
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,7 +270,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonType: 5
-  _button: {fileID: 0}
 --- !u!1 &1377140811110121590
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,7 +418,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonType: 7
-  _button: {fileID: 0}
 --- !u!1 &1377140811229900028
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,7 +564,6 @@ GameObject:
   - component: {fileID: 1377140811230595279}
   - component: {fileID: 1377140811230595277}
   - component: {fileID: 1377140811230595278}
-  - component: {fileID: 3396772930876906335}
   - component: {fileID: 3493531482375360965}
   m_Layer: 5
   m_Name: SelectCharacter
@@ -638,20 +634,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3396772930876906335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1377140811230595280}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f70a8ba290d7d004c9daf013739a0042, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  popupType: 0
-  _buttons: []
 --- !u!114 &3493531482375360965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -666,6 +648,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupType: 0
   _buttons: []
+  _selectedIndex: 0
   portrait: {fileID: 1377140811244601966}
   playerList: {fileID: 11400000, guid: 73add8728bc8c504f8eb2ee5fd0a6311, type: 2}
 --- !u!1 &1377140811244601968

@@ -24,8 +24,8 @@ public class Gold : MonoBehaviour
         {
             if (other.gameObject.tag == "Player")
             {
-                StageManager.instance.gold += value;
-                TextManager.instance.UpdateTexts();
+                StageManager.instance.UpdateGold(value);
+                //TextManager.instance.UpdateTexts();
                 //Player P = other.gameObject.GetComponent<Player>();
                 //P.gold += value;
                 Destroy(gameObject);

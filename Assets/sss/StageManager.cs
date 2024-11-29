@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using static UnityEditor.Experimental.GraphView.GraphView;
 //using static UnityEditor.Experimental.GraphView.GraphView;
 //using static UnityEditor.Progress;
 using static UnityEngine.EventSystems.EventTrigger;
@@ -35,26 +36,28 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         }
     }
 
-
-    public void Init()
-    {
-        //m_player = new GameObject();
-        m_enemies = new List<GameObject>();
-        m_fieldEffects = new List<GameObject>();
-        m_items = new List<GameObject>();
-    }
-
-
-    private GameObject m_player;
-    private List<GameObject> m_enemies;
-    private List<GameObject> m_fieldEffects;
-    private List<GameObject> m_items;
-    private int m_curWave;
-
-
-
     public GameConstructSet GCS;
     public LevelConstructSet LCS;
+
+    GameObject m_player;
+    List<GameObject> m_enemies;
+    List<GameObject> m_fieldEffects;
+    List<GameObject> m_items;
+
+    int m_curWave;
+    int m_gold;
+
+
+
+
+
+    public Action<float> OnPlayerDamaged;
+    public Action<PopupType> OnPopUpOpen;
+
+
+
+
+
 
 
 
@@ -94,8 +97,8 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
     public int waveTime = 0;
     public int stageTime = 0;
-    Coroutine waveTimeCoroutine = null;
-    Coroutine stageTimeCoroutine = null;
+    //Coroutine waveTimeCoroutine = null;
+    //Coroutine stageTimeCoroutine = null;
 
 
     public List<int> goalList;
@@ -107,18 +110,79 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     public bool IsArriveGate = false;
 
 
-    public int gold;
+    //public int gold;
+
+
+    public Action<string, float> OnUpadateText;
+
 
 
     public void Start()
     {
-        LoadLevelSet();
-        DataManager.Instance.LoadGameData();
-        Init();
-        gold = DataManager.Instance.saveData.gold;
-        m_curWave = DataManager.Instance.saveData.curWave;
+        LoadData();
         InitStage();
     }
+
+    public void LoadData()
+    {
+        LCS = GCS.LevelConstructSet[curStage];
+        mapTransform = LCS.map[0].transform;
+        targetScore = LCS.numOfInitkeysRequired;
+        GameData data = DataManager.Instance.LoadData();
+        m_gold = data.gold;
+        m_curWave = data.curWave;
+    }
+
+    public void InitStage()
+    {
+        m_enemies = new List<GameObject>();
+        m_fieldEffects = new List<GameObject>();
+        m_items = new List<GameObject>();
+        goals = new List<GameObject>();
+
+        gridCenters = Function.instance.GenerateGrid(divide, mapTransform);
+
+        for (int i = 0; i < gridCenters.Length; i++)
+        {
+            Vector3 pos = new Vector3(gridCenters[i].x, gridCenters[i].y + 1, gridCenters[i].z);
+            goals.Add(InstantiateObject<Goal>(LCS.Goal[0], pos, LCS.Goal[0].transform.rotation));
+            goals[i].SetActive(false);
+        }
+
+        StageUI.instance.OnDecideBlock = () =>
+        {
+            SetGoals();
+            SpwanObjects();
+        };
+    }
+
+
+    void SetGoals()
+    {
+        goalList.Clear();
+
+        for (int i = 0; i < targetScore; i++)
+        {
+            while (true)
+            {
+                int randNum = UnityEngine.Random.Range(0, 9);
+
+                while (randNum == 4) { randNum = UnityEngine.Random.Range(0, 9); }
+
+                int num = goalList.Find(x => x == randNum);
+
+                if (num == 0)
+                {
+                    goalList.Add(randNum);
+                    goals[randNum].SetActive(true);
+                    break;
+                }
+            }
+        }
+    }
+
+
+
 
     public void Update()
     {
@@ -133,12 +197,14 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
                 {
                     Sstate = StageState.Edit;
                     m_curWave++;
-                    DataManager.Instance.saveData.curWave = m_curWave;
-                    DataManager.Instance.UpdateStageData();
 
+                    //DataManager.Instance.saveData.curWave = m_curWave;
+                    //DataManager.Instance.UpdateStageData();
                     //DataManager.Instance.SaveGameData();
 
                     currentScore = 0;
+
+
                     DestroyObjects(m_enemies);
                     DestroyObjects(m_fieldEffects);
 
@@ -167,35 +233,24 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
     public int GetCurWave() { return m_curWave; }
 
-    public void InitStage()
+
+
+    public void TriggerPlayerDamaged(float f)
     {
-        gridCenters = Function.instance.GenerateGrid(divide, mapTransform);
-
-        goals = new List<GameObject>();
-
-        for (int i = 0; i < gridCenters.Length; i++)
-        {
-            Vector3 pos = new Vector3(gridCenters[i].x, gridCenters[i].y + 1, gridCenters[i].z);
-            goals.Add(InstantiateObject<Goal>(LCS.Goal[0], pos, LCS.Goal[0].transform.rotation));
-            goals[i].SetActive(false);
-        }
-
-
-        UIManager.instance.OnDecideBlock = () => 
-        {
-            SetGoals();
-            SpwanObjects(); 
-        };
+        if (f <= 0) { OnPopUpOpen.Invoke(PopupType.GameOver); }
+        else { OnPlayerDamaged.Invoke(f); }
     }
 
-    public Player p;
 
     public void SpwanObjects()
     {
         if (m_player == null)
         {
             m_player = InstantiateObject<Player>(LCS.player[0], LCS.player[0].transform.position, LCS.player[0].transform.rotation);
-            p = m_player.GetComponent<Player>();
+            Player p = m_player.GetComponent<Player>();
+
+            p.OnPlayerDamaged += TriggerPlayerDamaged;
+
         }
  
         for (int i = 0; i < FieldEffectPopUpManager.instance.blocks.Count; i++)
@@ -237,48 +292,13 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
             m_items.Add(go1);
         }
 
-        //goalList.Clear();
-
-        //for (int i = 0; i < targetScore; i++)
-        //{
-        //    while (true)
-        //    {
-        //        int randNum = UnityEngine.Random.Range(0, 9);
-
-        //        while (randNum == 4)
-        //        {
-        //            randNum = UnityEngine.Random.Range(0, 9);
-        //        }
-
-
-        //        int num = goalList.Find(x => x == randNum);
-
-        //        if (num == 0)
-        //        {
-        //            goalList.Add(randNum);
-        //            goals[randNum].SetActive(true);
-        //            break;
-        //        }
-        //    }
-        //}
-
-
-
-
-
-
-        //int randomnumber = UnityEngine.Random.Range(0, 9);
-
-        //Vector3 newPos = new Vector3(gridCenters[randomnumber].x, LCS.Item[0].transform.position.y, gridCenters[randomnumber].z);
-        //GameObject go1 = Instantiate(LCS.Item[0], newPos, LCS.Item[0].transform.rotation);
-        //m_items.Add(go1);
-
 
         Sstate = StageState.Play;
 
-
-
     }
+
+
+
 
     public GameObject InstantiateObject<T>(GameObject gob, Vector3 pos, UnityEngine.Quaternion rot) where T : UnityEngine.Component, Spawn
     {
@@ -289,13 +309,16 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     }
 
 
+    public Action<float, float> OnEnemyCnt;
+
+
     public List<GameObject> InstantiateEnemies<T>(List<GameObject> list, int cnt)
     {
         int eliteCnt = m_curWave - LCS.endArrage;
         List<GameObject> lgo = new List<GameObject>();
 
 
-        TextManager.instance.UpdateEnemyCnt(cnt, eliteCnt < 0 ? 0 : eliteCnt);
+        //TextManager.instance.UpdateEnemyCnt(cnt, eliteCnt < 0 ? 0 : eliteCnt);
 
         if (eliteCnt > 0) 
         {
@@ -357,47 +380,13 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
             }
         }
 
+        OnEnemyCnt.Invoke(cnt, eliteCnt < 0 ? 0 : eliteCnt);
+
         return lgo;
     }
 
 
 
-
-    void SetGoals()
-    {
-        goalList.Clear();
-
-        for (int i = 0; i < targetScore; i++)
-        {
-            while (true)
-            {
-                int randNum = UnityEngine.Random.Range(0, 9);
-
-                while (randNum == 4)
-                {
-                    randNum = UnityEngine.Random.Range(0, 9);
-                }
-
-                
-                int num = goalList.Find(x => x == randNum);
-
-                if (num == 0)
-                {
-                    goalList.Add(randNum);
-                    goals[randNum].SetActive(true);
-                    break;
-                }
-            }
-        }
-    }
-
-
-    public void LoadLevelSet()
-    {
-        LCS = GCS.LevelConstructSet[curStage];
-        mapTransform = LCS.map[0].transform;
-        targetScore = LCS.numOfInitkeysRequired;
-    }
 
 
 
@@ -406,7 +395,9 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     {
         g.gameObject.SetActive(false);
         currentScore++;
-        TextManager.instance.UpdateTexts();
+        //TextManager.instance.UpdateTexts();
+
+        OnUpadateText.Invoke("curScore", currentScore);
 
         if (currentScore == targetScore)
         {
@@ -422,9 +413,26 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     }
 
 
-    public void ReduceGold()
+
+    public void UseGold(int cost)
     {
-        gold -= LCS.InitrerollCost;
+        m_gold -= cost;
+    }
+
+    public bool IsUnderCost(int cost)
+    {
+        if (m_gold >= cost) { return false; }
+        return true;
+    }
+    
+    public int RetunrGold()
+    {
+        return m_gold;
+    }
+
+    public void UpdateGold(int value)
+    {
+        m_gold += value;
     }
 
 
@@ -447,26 +455,6 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
 
     public UnityEvent OnStageClear;
-
- 
-
-
-
-
-
-    //이벤트----------------------------------------------------------------------------------------//
-
-    private void OnEnable()
-    {
-        //EventManager.instance.OnStageEnd += EndStage;
-    }
-
-    private void OnDisable()
-    {
-        //EventManager.instance.OnStageEnd -= EndStage;
-    }
-
-
 
 }
 

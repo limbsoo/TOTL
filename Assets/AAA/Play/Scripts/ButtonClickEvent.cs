@@ -11,7 +11,7 @@ public class ButtonClickEvent : MonoBehaviour
     public ButtonType buttonType;
     protected Button _button;
 
-    private void OnEnable()
+    private void Start()
     {
         _button = GetComponent<Button>();
 
@@ -21,11 +21,29 @@ public class ButtonClickEvent : MonoBehaviour
         }
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (_button != null)
         {
             _button.onClick.RemoveAllListeners();
         }
     }
+
+    //private void OnEnable()
+    //{
+    //    _button = GetComponent<Button>();
+
+    //    if (_button != null)
+    //    {
+    //        _button.onClick.AddListener(() => OnButtonClicked?.Invoke(buttonType, gameObject.name));
+    //    }
+    //}
+
+    //private void OnDisable()
+    //{
+    //    if (_button != null)
+    //    {
+    //        _button.onClick.RemoveAllListeners();
+    //    }
+    //}
 }
