@@ -9,11 +9,7 @@ public class Goal : MonoBehaviour, Spawn
 
     public void Init(Vector3[] gridCenters, Transform mapTransform)
     {
-        //gameObject.SetActive(false);
         _gridCenters = gridCenters;
         _mapTransform = mapTransform;
     }
-
-
-
 }

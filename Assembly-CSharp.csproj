@@ -97,6 +97,9 @@
     <Compile Include="Assets\AAA\Play\Scripts\FieldEffect.cs" />
     <Compile Include="Assets\AAA\Play\ssss\StageUI.cs" />
     <Compile Include="Assets\AAA\Play\ssss\UIEvent.cs" />
+    <Compile Include="Assets\AAA\Audio\SoundManager.cs" />
+    <Compile Include="Assets\AAA\Audio\TemporarySoundPlayer.cs" />
+    <Compile Include="Assets\AAA\Audio\SoundSlider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -26,24 +26,6 @@ public class FieldEffect : MonoBehaviour, Spawn
     BlockData m_blockData;
 
 
-    //[SerializeField] FieldKinds fieldKinds;
-    //[SerializeField] EffectKinds effectKinds;
-    //[SerializeField] WeightKinds weightKinds;
-    //int startTime;
-    //int endTime;
-    //int weight;
-    //[SerializeField] int value;
-    //[SerializeField] int duration;
-
-    //private int delayEffectAmount = 2;
-    //private int damage = 2;
-    //private int slow = 2;
-    //private int seal = 2;
-    //private float speed = 15f;
-    //private int gridIdx;
-    //public int m_upperIdx;
-    //public int m_downerIdx;
-
     private GameObject EffectRange;
 
     private GameObject EffectTime;
@@ -81,16 +63,6 @@ public class FieldEffect : MonoBehaviour, Spawn
     }
 
 
-    //public int GetValue()
-    //{
-    //    return value;
-    //}
-
-    //public int GetDuration()
-    //{
-    //    return duration;
-    //}
-
     public BlockData GetBlockData()
     {
         return m_blockData;
@@ -100,89 +72,15 @@ public class FieldEffect : MonoBehaviour, Spawn
     public void Init(BlockData bd)
     {
         m_blockData = new BlockData();
-
         m_blockData = bd;
-
-        //fieldKinds = bd.fieldKinds;
-        //effectKinds = bd.effectKinds;
-        //weightKinds = bd.weightKinds;
-        //startTime = bd.start;
-        //endTime = bd.end;
-        //weight = bd.weight;
-        //value = bd.value;
-        //duration = bd.duration;
-        //gridIdx = bd.lineNum;
-
-
-
-
-        //m_upperIdx = upperIdx;
-        //m_downerIdx = downerIdx;
-
-        //startTime = start;
-        //endTime = end;
-        //gridIdx = idx;
     }
 
-
-    //public void Init(int start, int end, int idx, int upperIdx, int downerIdx)
-    //{
-    //    m_upperIdx = upperIdx;
-    //    m_downerIdx = downerIdx;
-
-    //    startTime = start;
-    //    endTime = end;
-    //    gridIdx = idx;
-    //}
 
 
     public Material RangeMaterial;
 
-    //private Vector3 moving;
-
     Coroutine FieldEffectCoroutine = null;
 
-    //private IEnumerator StartEffectTimer(float duration)
-    //{
-    //    float elapsed = 0f;
-    //    while (elapsed < duration)
-    //    {
-    //        elapsed += Time.deltaTime;
-
-    //        EffectTimer.value = Mathf.Clamp01(elapsed / duration);
-    //        yield return null;
-    //    }
-    //    EffectTimer.value = 0;
-    //    //EffectTimer = null;
-
-
-
-    //    elapsed = 0f;
-    //    while (elapsed < 5)
-    //    {
-    //        elapsed += Time.deltaTime;
-
-    //        EffectActiveTimer.value = Mathf.Clamp01(elapsed / duration);
-    //        yield return null;
-    //    }
-    //    EffectActiveTimer.value = 0;
-
-    //}
-
-    //private IEnumerator StartEffectTimerFirst(float duration)
-    //{
-    //    float elapsed = 0f;
-
-    //    while (elapsed < duration)
-    //    {
-    //        elapsed += Time.deltaTime;
-
-    //        EffectActiveTimer.value = Mathf.Clamp01(elapsed / duration);
-    //        yield return null;
-    //    }
-    //    EffectActiveTimer.value = 0;
-
-    //}
 
     public float stack;
 
@@ -392,10 +290,10 @@ public class FieldEffect : MonoBehaviour, Spawn
 
         // 이동 반경 설정
         float radius = 20;
-        float boundaryLeft = StageManager.instance.gridCenters[idx].x - radius;
-        float boundaryRight = StageManager.instance.gridCenters[idx].x + radius;
-        float boundaryTop = StageManager.instance.gridCenters[idx].z + radius;
-        float boundaryBottom = StageManager.instance.gridCenters[idx].z - radius;
+        float boundaryLeft = StageManager.instance.ReturnGridCenters()[idx].x - radius;
+        float boundaryRight = StageManager.instance.ReturnGridCenters()[idx].x + radius;
+        float boundaryTop = StageManager.instance.ReturnGridCenters()[idx].z + radius;
+        float boundaryBottom = StageManager.instance.ReturnGridCenters()[idx].z - radius;
 
         while (end != StageManager.instance.waveTime)
         {

@@ -10,19 +10,19 @@ using static UnityEngine.EventSystems.EventTrigger;
 using static UnityEngine.GraphicsBuffer;
 
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, Spawn
 {
-    //public static Enemy instance { get; private set; }
-    //private void Awake()
-    //{
-    //    if (instance == null)
-    //    {
-    //        instance = this;
-    //        nmAgent = GetComponent<NavMeshAgent>();
-    //        DontDestroyOnLoad(gameObject);
-    //    }
-    //    else Destroy(gameObject);
-    //}
+
+    Vector3[] _gridCenters;
+    Transform _mapTransform;
+
+
+    public void Init(Vector3[] gridCenters, Transform mapTransform)
+    {
+        _gridCenters = gridCenters;
+        _mapTransform = mapTransform;
+    }
+
 
 
     Material[] mat = new Material[2];

@@ -119,18 +119,18 @@ public class MapPlacementBlock : MonoBehaviour, IPointerDownHandler, IBeginDragH
 
     public void RandomLoadFieldEffectBlock()
     {
-        int randNum = UnityEngine.Random.Range(1, StageManager.instance.LCS.FieldBlock.Count + 1);
+        int randNum = UnityEngine.Random.Range(1, StageManager.instance.ReturnLevelSet().FieldBlock.Count + 1);
         blockdata.fieldKinds = (FieldKinds)Enum.GetValues(typeof(FieldKinds)).GetValue(randNum);
 
-        randNum = UnityEngine.Random.Range(1, StageManager.instance.LCS.EffectBlock.Count + 1);
+        randNum = UnityEngine.Random.Range(1, StageManager.instance.ReturnLevelSet().EffectBlock.Count + 1);
         blockdata.effectKinds = (EffectKinds)Enum.GetValues(typeof(EffectKinds)).GetValue(randNum);
 
         //blockdata.weightKinds = WeightKinds.None;
 
         //BlockInfo blockinfo;
 
-        FieldEffectBlock fieldBlock = StageManager.instance.LCS.FieldBlock[(int)blockdata.fieldKinds - 1].GetComponent<FieldEffectBlock>();
-        FieldEffectBlock effectBlock = StageManager.instance.LCS.EffectBlock[(int)blockdata.effectKinds - 1].GetComponent<FieldEffectBlock>();
+        FieldEffectBlock fieldBlock = StageManager.instance.ReturnLevelSet().FieldBlock[(int)blockdata.fieldKinds - 1].GetComponent<FieldEffectBlock>();
+        FieldEffectBlock effectBlock = StageManager.instance.ReturnLevelSet().EffectBlock[(int)blockdata.effectKinds - 1].GetComponent<FieldEffectBlock>();
 
         blockdata.fieldValue = fieldBlock.blockInfo.value;
         blockdata.fieldDuration = fieldBlock.blockInfo.duration;
@@ -143,8 +143,8 @@ public class MapPlacementBlock : MonoBehaviour, IPointerDownHandler, IBeginDragH
 
     public void SetBlockImage()
     {
-        UpperImage.sprite = StageManager.instance.LCS.FieldBlock[(int)blockdata.fieldKinds - 1].GetComponent<SpriteRenderer>().sprite;
-        DownerImage.sprite = StageManager.instance.LCS.EffectBlock[(int)blockdata.effectKinds - 1].GetComponent<SpriteRenderer>().sprite;
+        UpperImage.sprite = StageManager.instance.ReturnLevelSet().FieldBlock[(int)blockdata.fieldKinds - 1].GetComponent<SpriteRenderer>().sprite;
+        DownerImage.sprite = StageManager.instance.ReturnLevelSet().EffectBlock[(int)blockdata.effectKinds - 1].GetComponent<SpriteRenderer>().sprite;
 
         gameObject.name = "";
         gameObject.name += UpperImage.sprite.name;

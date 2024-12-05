@@ -42,6 +42,20 @@ public enum WeightKinds { None = 0, ActiveTime = 1, Value = 2 }
 public enum PlayerSkillKinds { None = 0, Teleport = 1, Decoy = 2 }
 
 
+public enum PlayerEvent
+{
+    Damaged,
+    GetGold,
+    GetKey,
+    ArriveGoal,
+    SkillCoolDownUpdate,
+    Die
+
+
+}
+
+
+
 public enum PopupType
 {
     SelectCharacter,

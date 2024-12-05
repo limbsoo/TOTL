@@ -33,7 +33,7 @@ public class ButtonStateController : MonoBehaviour
     {
         btn = GetComponent<Button>();
         //btn.onClick.AddListener(ActivateButtonAction);
-        m_cost = StageManager.instance.LCS.InitrerollCost;
+        m_cost = StageManager.instance.ReturnLevelSet().InitrerollCost;
         canvasGroup = GetComponent<CanvasGroup>();
         
 

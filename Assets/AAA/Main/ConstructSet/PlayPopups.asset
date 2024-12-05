@@ -17,3 +17,5 @@ MonoBehaviour:
     popup: {fileID: 2052260117484111873, guid: c6d07c67a13e41043898f56a74ace6b3, type: 3}
   - popupType: 5
     popup: {fileID: 5153393004451698009, guid: d427299b145b8c24e92dec0621875689, type: 3}
+  - popupType: 3
+    popup: {fileID: 7960508798196112559, guid: e0f2ed467bad03c4b867dbfccd87dcc0, type: 3}

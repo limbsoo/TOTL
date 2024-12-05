@@ -144,7 +144,9 @@ public class FieldEffectPopUpManager : MonoBehaviour
         string s;
         BlockData bd;
 
-        Cost.text = StageManager.instance.LCS.InitrerollCost.ToString();
+        LevelConstructSet levelConstructSet = StageManager.instance.ReturnLevelSet();
+
+        Cost.text = levelConstructSet.InitrerollCost.ToString();
         GoldCnt.text = StageManager.instance.RetunrGold().ToString();
 
         for (int i = 0; i < slotEffectExplans.Count; i++)
@@ -350,7 +352,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     public void SetBlocks(GameData PlayData)
     {
-        if (!StageManager.instance.IsUnderCost(StageManager.instance.LCS.InitrerollCost))
+        if (!StageManager.instance.IsUnderCost(StageManager.instance.ReturnLevelSet().InitrerollCost))
         {
             Reroll.interactable = true;
         }
@@ -429,7 +431,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
     {
         //wavetime == 10
 
-        if(StageManager.instance.LCS.endArrage >= StageManager.instance.GetCurWave())
+        if(StageManager.instance.ReturnLevelSet().endArrage >= StageManager.instance.GetCurWave())
         {
             GameObject go = Instantiate(block);
             go.transform.SetParent(rectTransform, false);
@@ -545,9 +547,9 @@ public class FieldEffectPopUpManager : MonoBehaviour
     {
         MapPlacementBlock feb = blocks[curBlockIdx].GetComponent<MapPlacementBlock>();
         feb.Reroll();
-        StageManager.instance.UseGold(StageManager.instance.LCS.InitrerollCost);
+        StageManager.instance.UseGold(StageManager.instance.ReturnLevelSet().InitrerollCost);
 
-        if(StageManager.instance.IsUnderCost(StageManager.instance.LCS.InitrerollCost))
+        if(StageManager.instance.IsUnderCost(StageManager.instance.ReturnLevelSet().InitrerollCost))
         {
             Reroll.interactable = false;
         }

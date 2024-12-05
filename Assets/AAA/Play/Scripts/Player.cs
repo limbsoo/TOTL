@@ -12,25 +12,29 @@ using UnityEngine.Events;
 
 public class Player : MonoBehaviour, Spawn
 {
-    //public UnityEvent OnUseTeleport;
-    public UnityEvent OnUseAttack;
-    public UnityEvent OnPlayerUnderAttack;
+    private void Awake()
+    {
+        IsplayerDamaged = false;
+        canUseSkill = true;
+        playerStats = DataManager.Instance.saveData.playerStats;
 
-    //도망치는게임
-    //디코이 : 제자리를 목표 지점으로 두고 일정 시간이 지난 뒤 플레이어를 다시 추적
-
-    //public float health { get; private set; }
-    //public float moveSpeed { get; private set; }
-
-    //public float damamge { get; private set; }
-    //public float coolDown { get; private set; }
-
+        PenealtyTime = 0;
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+    }
 
 
     PlayerStats playerStats;
 
 
-    public static bool useAttack = false;
+
+    public Action<PlayerEvent, float> OnPlayerEvent;
+
+
+
+
+
+    //public static bool useAttack = false;
 
 
     public float teleportLength = 10;
@@ -43,7 +47,7 @@ public class Player : MonoBehaviour, Spawn
     
     public static Rigidbody rb;
 
-    public static bool weakning = false;
+    //public static bool weakning = false;
     
 
     Coroutine attackCoroutine = null;
@@ -71,8 +75,6 @@ public class Player : MonoBehaviour, Spawn
     public GameObject Decoy;
 
 
-    //public int gold;
-
 
     public float stack;
 
@@ -82,26 +84,8 @@ public class Player : MonoBehaviour, Spawn
     }
 
 
-    //public static Player instance { get; private set; }
-    private void Awake()
-    {
-        IsplayerDamaged = false;
-        canUseSkill = true;
-        playerStats = DataManager.Instance.saveData.playerStats;
-
-        PenealtyTime = 0;
-        animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
-    }
-
-    private float attackDuration;
-
 
     private GameObject playerFBX;
-
-
-
-
     Vector3[] _gridCenters;
     Transform _mapTransform;
 
@@ -158,9 +142,7 @@ public class Player : MonoBehaviour, Spawn
     {
         if(StageManager.Sstate == StageState.Play)
         {
-
             HandleInput();
-            
         }
 
         CameraController.Vector3 = transform.position;
@@ -173,19 +155,6 @@ public class Player : MonoBehaviour, Spawn
     }
 
 
-
-    //private IEnumerator Dameged(Enemy e)
-    //{
-    //    //나중에 콤봊ㅁ
-    //    yield return new WaitForSecondsRealtime(1);
-
-    //    e.onceDamaged = false;
-
-    //    //transform.GetChild(0).gameObject.SetActive(false);
-    //}
-
-
-    // 이벤트
     private void OnEnable()
     {
         //EventManager.instance.OnPlayerEnterTheLightRange += changeFigure;
@@ -247,30 +216,7 @@ public class Player : MonoBehaviour, Spawn
         }
 
 
-
-
-        //if (canUseSkill)
-        //{
-        //    switch (psState)
-        //    {
-        //        case PlayerSkillState.Teleport:
-        //            UseTeleport();
-        //            break;
-        //        case PlayerSkillState.Hide:
-
-        //            break;
-        //        case PlayerSkillState.Decoy:
-        //            UseDecoy();
-        //            break;
-        //    }
-
-        //    UIManager.instance.StartCooldown(coolDown);
-        //}
-
     }
-
-
-    //if(pState == PlayerState.Transformed)
 
     private void HandleInput()
     {
@@ -339,30 +285,7 @@ public class Player : MonoBehaviour, Spawn
             //}
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (!useAttack)
-            {
-                useAttack = true;
-                OnUseAttack?.Invoke();
-            }
-        }
-    }
 
-    public void UseAttack()
-    {
-        animator.SetBool("isRotate", true);
-        animator.Play("rotatePlayer");
-        //transform.GetChild(0).gameObject.SetActive(true);
-
-        //animator.SetTrigger("Attack");
-
-
-        if (attackCoroutine != null) StopCoroutine(attackCoroutine);
-        attackCoroutine = StartCoroutine(Function.instance.CountDown(attackDuration, () => { 
-            animator.SetBool("isRotate", false);
-            useAttack = false;
-        }));
     }
 
 
@@ -377,17 +300,14 @@ public class Player : MonoBehaviour, Spawn
             return;
         }
 
-
         if (movement != Vector3.zero)
         {
             //Debug.Log($"movement: {movement}");
-
-
             Vector3 newPos = rb.position + movement * Time.fixedDeltaTime;
-            float width = StageManager.instance.mapTransform.localScale.x * 10f; // Unity 기본 Plane의 크기는 10x10 단위
-            float height = StageManager.instance.mapTransform.localScale.z * 10f;
-            newPos.x = Mathf.Clamp(newPos.x, StageManager.instance.mapTransform.position.x - width / 2, StageManager.instance.mapTransform.position.x + width / 2);
-            newPos.z = Mathf.Clamp(newPos.z, StageManager.instance.mapTransform.position.z - height / 2, StageManager.instance.mapTransform.position.z + height / 2);
+            float width = StageManager.instance.ReturnMapTransform().localScale.x * 10f; // Unity 기본 Plane의 크기는 10x10 단위
+            float height = StageManager.instance.ReturnMapTransform().localScale.z * 10f;
+            newPos.x = Mathf.Clamp(newPos.x, StageManager.instance.ReturnMapTransform().position.x - width / 2, StageManager.instance.ReturnMapTransform().position.x + width / 2);
+            newPos.z = Mathf.Clamp(newPos.z, StageManager.instance.ReturnMapTransform().position.z - height / 2, StageManager.instance.ReturnMapTransform().position.z + height / 2);
             rb.MovePosition(newPos); // 물리적 이동 처리
 
             if (movement != Vector3.zero)
@@ -395,8 +315,6 @@ public class Player : MonoBehaviour, Spawn
                 Quaternion newRotation = Quaternion.LookRotation(movement);
                 rb.MoveRotation(newRotation);
             }
-
-
         }
 
         else
@@ -406,31 +324,8 @@ public class Player : MonoBehaviour, Spawn
         } 
     }
 
-    //void TakeDamage(int damage)
-    //{
-    //    health -= damage;
-    //    if (health <= 0) Die();
-    //}
-
-    //void Die()
-    //{
-    //    Debug.Log("Player Died.");
-    //    EventManager.instance.PlayerDied();
-    //}
-
-
 
     Coroutine runningCoroutine = null;
-
-    public void HandleCollisionResult(GameObject collidedObject)
-    {
-        Debug.Log("Received collision with: " + collidedObject.name);
-
-        if(!IsplayerDamaged)
-        {
-            OnPlayerUnderAttack?.Invoke();
-        }
-    }
 
 
 
@@ -478,88 +373,30 @@ public class Player : MonoBehaviour, Spawn
 
 
 
-
-
-
-
-
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //public void ApplyFieldEffect(FieldEffect fe)
-    //{
-    //    //switch (fe.m_downerIdx)
-    //    //{
-    //    //    case 0: // Damage
-
-    //    //        if (!playerDamaged) underAttack();
-
-
-    //    //        //health -= 1;
-    //    //        break;
-    //    //    case 1: // Seal
-    //    //        StartCoroutine(Weakning());
-    //    //        break;
-    //    //    case 2: // Slow
-
-    //    //        if (slowEffectedCoroutine != null)
-    //    //        {
-    //    //            StopCoroutine(slowEffectedCoroutine);
-    //    //        }
-
-    //    //        slowEffectedCoroutine = StartCoroutine(ApplySlow(5));
-
-
-
-    //    //        break;
-    //    //}
-    //}
-
-
     public bool haveDamaged()
     {
         if(IsplayerDamaged) return true;
         else return false;
     }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //public void underAttack()
-    //{
-    //    playerDamaged = true;
-
-    //    gameObject.GetComponent<MeshRenderer>().material = mat[1];
-
-    //    StageUI.instance.playerDamaged.SetActive(true);
-
-    //    //gameObject.GetComponent<BoxCollider>().enabled = false;
-
-
-    //    StartCoroutine(Function.instance.CountDown(0.5f, () => {
-
-    //        StageUI.instance.playerDamaged.SetActive(false);
-    //    }));
-
-
-    //    playerStats.health--;
-
-    //    TextManager.instance.health.text = playerStats.health.ToString();
-
-    //    StartCoroutine(Function.instance.CountDown(1f, () => {
-
-    //        playerDamaged = false;
-    //        gameObject.GetComponent<MeshRenderer>().material = mat[0];
-    //        //gameObject.GetComponent<BoxCollider>().enabled = true;
-    //    }));
-
-    //    //iskientic으로?
-    //    //transform.position += new Vector3(collidedObject.transform.forward.x * 2, 0, collidedObject.transform.forward.z * 2);
-    //}
-
-
 
     private Coroutine slowEffectedCoroutine;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public Action<float> OnPlayerDamaged;
