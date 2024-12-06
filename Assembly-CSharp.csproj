@@ -57,11 +57,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\GameData.cs" />
+    <Compile Include="Assets\AAA\Audio\SoundSlider.cs" />
     <Compile Include="Assets\ConstructSet\GameConstructSet.cs" />
+    <Compile Include="Assets\AAA\Audio\TemporarySoundPlayer.cs" />
     <Compile Include="Assets\AAA\Main\PopUp\PopupController.cs" />
     <Compile Include="Assets\sss\StageManager.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\Gold.cs" />
     <Compile Include="Assets\ConstructSet\Inventory.cs" />
+    <Compile Include="Assets\AAA\Play\ssss\StageUI.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\EffectSensor.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\MapPlacementBlock.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\Goal.cs" />
@@ -86,8 +89,10 @@
     <Compile Include="Assets\AAA\Play\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\ConstructSet\ItemContainer.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\Enemy\EnemySensor.cs" />
+    <Compile Include="Assets\AAA\Play\ssss\UIEvent.cs" />
     <Compile Include="Assets\ConstructSet\ScriptableItem.cs" />
     <Compile Include="Assets\AAA\Main\New Folder\ButtonEvent.cs" />
+    <Compile Include="Assets\AAA\Audio\SoundManager.cs" />
     <Compile Include="Assets\AAA\Main\New Folder\SceneConstructSet.cs" />
     <Compile Include="Assets\AAA\Main\ConstructSet\ScenePopups.cs" />
     <Compile Include="Assets\Script\ButtonStateController.cs" />
@@ -95,11 +100,6 @@
     <Compile Include="Assets\AAA\Play\Scripts\CameraController.cs" />
     <Compile Include="Assets\AAA\Main\PopUp\SelectCharacter.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\FieldEffect.cs" />
-    <Compile Include="Assets\AAA\Play\ssss\StageUI.cs" />
-    <Compile Include="Assets\AAA\Play\ssss\UIEvent.cs" />
-    <Compile Include="Assets\AAA\Audio\SoundManager.cs" />
-    <Compile Include="Assets\AAA\Audio\TemporarySoundPlayer.cs" />
-    <Compile Include="Assets\AAA\Audio\SoundSlider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

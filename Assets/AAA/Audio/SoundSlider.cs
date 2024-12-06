@@ -8,10 +8,16 @@ public class SoundSlider : MonoBehaviour
     [SerializeField] SoundType soundType;
     [SerializeField] Slider _slider;
 
-    //void Start()
+
+    //private void Awake()
     //{
     //    _slider = GetComponent<Slider>();
     //}
+
+    void Start()
+    {
+        _slider = GetComponent<Slider>();
+    }
 
     public void SLIDER_ModifyVolume()
     {

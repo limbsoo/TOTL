@@ -100,7 +100,7 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     /// <param name="clipName">오디오 클립 이름</param>
     /// <param name="type">오디오 유형(BGM, EFFECT 등.)</param>
-    public void PlaySound2D(string clipName, float delay = 0f, bool isLoop = false, SoundType type = SoundType.Effect)
+    public void PlaySound2D(string clipName, float delay = 0f, bool isLoop = true, SoundType type = SoundType.Effect)
     {
         GameObject obj = new GameObject(clipName);
         TemporarySoundPlayer soundPlayer = obj.AddComponent<TemporarySoundPlayer>();
@@ -149,19 +149,4 @@ public class SoundManager : MonoBehaviour
         mAudioMixer.SetFloat(type.ToString(), value);
     }
 
-    /// <summary>
-    /// 무작위 사운드를 실행하기위해 랜덤 값을 리턴 (included)
-    /// </summary>
-    /// <param name="from">시작하는 인덱스 번호</param>
-    /// <param name="includedTo">끝나는 인덱스 번호(포함)</param>
-    /// <param name="isStartZero">한자리일경우 0으로 시작하는가? 예)01</param>
-    /// <returns></returns>
-    public static string Range(int from, int includedTo, bool isStartZero = false)
-    {
-        if (includedTo > 100 && isStartZero) { Debug.LogWarning("0을 포함한 세자리는 지원하지 않습니다."); }
-
-        int value = UnityEngine.Random.Range(from, includedTo + 1);
-
-        return value < 10 && isStartZero ? '0' + value.ToString() : value.ToString();
-    }
 }
