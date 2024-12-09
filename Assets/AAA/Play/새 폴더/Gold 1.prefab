@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 4658499801916515044}
   - component: {fileID: 7092963339747769641}
   m_Layer: 6
-  m_Name: Gold
+  m_Name: Gold 1
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -180,8 +180,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 138045a46adc87d458789f4a8a315b56, type: 2}
-  - {fileID: 2100000, guid: 085c7824d04beaf4b8420069ba966f43, type: 2}
+  - {fileID: 2100000, guid: cabaf8a90d0ccb84da508881467be830, type: 2}
+  - {fileID: 2100000, guid: ee402c646907e84458715f7b668a08f5, type: 2}
   - {fileID: 2100000, guid: 6e64471ab8ef4ed4588e14283c848793, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -216,8 +216,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df8cb10c48ea3f42a66c700cf6339e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 300
-  lifeCycle: 2
+  value: 200
+  lifeCycle: 1
 --- !u!136 &4658499801916515044
 CapsuleCollider:
   m_ObjectHideFlags: 0

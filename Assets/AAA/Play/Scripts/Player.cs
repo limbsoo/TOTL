@@ -181,6 +181,8 @@ public class Player : MonoBehaviour, Spawn
     {
         if(SkillCoolDownCoroutine == null)
         {
+            SoundManager.instance.Play("Skill", SoundCatecory.Effect, false);
+
             switch (psState)
             {
                 case PlayerSkillState.Teleport:
@@ -258,6 +260,8 @@ public class Player : MonoBehaviour, Spawn
         {
             if (canUseSkill)
             {
+
+
                 switch (psState)
                 {
                     case PlayerSkillState.Teleport:
@@ -411,6 +415,8 @@ public class Player : MonoBehaviour, Spawn
             playerStats.health -= value;
 
             OnPlayerDamaged.Invoke(playerStats.health);
+
+            SoundManager.instance.Play("Damage", SoundCatecory.Effect, false);
 
             StartCoroutine(Function.instance.CountDown(1f, () => {
                 IsplayerDamaged = false;

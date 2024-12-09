@@ -59,7 +59,6 @@
     <Compile Include="Assets\GameData.cs" />
     <Compile Include="Assets\AAA\Audio\SoundSlider.cs" />
     <Compile Include="Assets\ConstructSet\GameConstructSet.cs" />
-    <Compile Include="Assets\AAA\Audio\TemporarySoundPlayer.cs" />
     <Compile Include="Assets\AAA\Main\PopUp\PopupController.cs" />
     <Compile Include="Assets\sss\StageManager.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\Gold.cs" />
@@ -100,6 +99,7 @@
     <Compile Include="Assets\AAA\Play\Scripts\CameraController.cs" />
     <Compile Include="Assets\AAA\Main\PopUp\SelectCharacter.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\FieldEffect.cs" />
+    <Compile Include="Assets\AAA\Main\PopUp\OptionData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

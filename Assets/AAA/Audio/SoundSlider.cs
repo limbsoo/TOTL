@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SoundSlider : MonoBehaviour
 {
-    [SerializeField] SoundType soundType;
+    [SerializeField] SoundCatecory soundCatecory;
     [SerializeField] Slider _slider;
 
 
@@ -21,6 +21,6 @@ public class SoundSlider : MonoBehaviour
 
     public void SLIDER_ModifyVolume()
     {
-        SoundManager.instance.SetVolume(soundType, _slider.value);
+        SoundManager.instance.SetVolume(soundCatecory, _slider.value);
     }
 }

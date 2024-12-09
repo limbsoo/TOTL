@@ -36,7 +36,11 @@ public class SceneManager : MonoBehaviour
     private IEnumerator LoadSceneAsync(string sceneName)
     {
         AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
-        while (!asyncLoad.isDone) yield return null;
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+        
     }
 
 

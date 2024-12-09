@@ -5,18 +5,18 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public static CameraController instance { get; private set; }
+    //public static CameraController instance { get; private set; }
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+    //private void Awake()
+    //{
+    //    if (instance == null)
+    //    {
+    //        instance = this;
+    //        DontDestroyOnLoad(gameObject);
+    //    }
 
-        else Destroy(gameObject);
-    }
+    //    else Destroy(gameObject);
+    //}
 
     public Vector3 playerCameraDistance;
 

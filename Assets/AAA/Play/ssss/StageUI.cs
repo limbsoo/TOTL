@@ -128,7 +128,7 @@ public class StageUI : UIEvent
     }
 
 
-    void UpdateText(string s, float f)
+    public void UpdateText(string s, float f)
     {
         switch (s) 
         {

@@ -59,6 +59,7 @@ public class PlayerCollisionHandler : MonoBehaviour
 
                 case ("Goal"):
                     StageManager.instance.arriveGoal(other.gameObject);
+
                     break;
 
                 case ("Gate"):

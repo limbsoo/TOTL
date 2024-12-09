@@ -49,12 +49,16 @@ public class UIEvent : MonoBehaviour
 
     protected virtual void HandleButtonEvent(ButtonType buttonType, string name)
     {
+        SoundManager.instance.Play("Click", SoundCatecory.Effect, false);
+
         ActivateEvent(buttonType, name);
         Debug.Log(string.Format("일반 버튼타입 {0}, name {1}", buttonType.ToString(), name));
     }
 
     protected virtual void HandlePopupEvent(PopUp popup, ButtonType buttonType, string name)
     {
+        SoundManager.instance.Play("Click", SoundCatecory.Effect, false);
+
         ActivateEvent(buttonType, name);
 
         Debug.Log(string.Format("팝업 버튼타입 {0}, name {1}", buttonType.ToString(), name));

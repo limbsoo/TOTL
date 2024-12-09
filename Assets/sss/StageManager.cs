@@ -60,7 +60,10 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
     void Start()
     {
-        SoundManager.instance.PlaySound2D("Stage");
+        //SoundManager.instance.PlaySound2D("Stage");
+        SoundManager.instance.StopAllSound();
+        SoundManager.instance.Play("PlayScene", SoundCatecory.BGM, true);
+
 
         SetStageFromLevelSet();
         SetStageFromSaveData();
@@ -356,7 +359,11 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
     void TriggerPlayerDamaged(float f)
     {
-        if (f <= 0) { OnPopUpOpen.Invoke(PopupType.GameOver); }
+        if (f <= 0)
+        {
+            SoundManager.instance.Play("GameOver", SoundCatecory.Effect, false);
+            OnPopUpOpen.Invoke(PopupType.GameOver);
+        }
         else { OnPlayerDamaged.Invoke(f); }
     }
 
@@ -387,6 +394,7 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     {
         g.gameObject.SetActive(false);
         currentScore++;
+        SoundManager.instance.Play("eatItem", SoundCatecory.Effect, false);
         //TextManager.instance.UpdateTexts();
 
         OnUpadateText.Invoke("curScore", currentScore);
@@ -409,6 +417,7 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     public void UseGold(int cost)
     {
         _goldCnt -= cost;
+        StageUI.instance.UpdateText("gold", _goldCnt);
     }
 
     public bool IsUnderCost(int cost)
@@ -424,7 +433,9 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
     public void UpdateGold(int value)
     {
+        SoundManager.instance.Play("eatItem", SoundCatecory.Effect, false);
         _goldCnt += value;
+        StageUI.instance.UpdateText("gold", _goldCnt);
     }
 
 

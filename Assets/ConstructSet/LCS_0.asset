@@ -27,7 +27,7 @@ MonoBehaviour:
   - {fileID: 8976493157502958342, guid: 3170ddf3df7400146a5ab54950c1a727, type: 3}
   - {fileID: 8976493157502958342, guid: f2d12433e4b657441a8eedc4a5d5ed15, type: 3}
   Item:
-  - {fileID: 7910582084679339359, guid: bf04ba4c14ac0a44c97cbba389f8edfe, type: 3}
+  - {fileID: 8397477644624834160, guid: 65c4196806cb1af43bced48a6d3ccc68, type: 3}
   - {fileID: 8397477644624834160, guid: a578ac4177aa1f34da5852010d312717, type: 3}
   gate:
   - {fileID: 1150117686112970776, guid: ef238dd02c03efe4d9d9c18f21f86f45, type: 3}

@@ -6,11 +6,11 @@ using UnityEngine;
 using static ButtonEvent;
 using static PopupController;
 
-public class MainSceneUIManager : MonoBehaviour
+public class MainSceneUIManager : UIEvent
 {
     public static MainSceneUIManager instance { get; private set; }
 
-    public ScenePopups PopupSet;
+    //public ScenePopups PopupSet;
 
     private void Awake()
     {
@@ -25,46 +25,56 @@ public class MainSceneUIManager : MonoBehaviour
     }
 
 
-    public Dictionary<PopupType, GameObject> dicPopups;
+    //public Dictionary<PopupType, GameObject> dicPopups;
 
-    private ButtonClickEvent[] _buttons;
+    //private ButtonClickEvent[] _buttons;
 
 
     private void Start()
     {
-        //두번이벤트확인
-        _buttons = GetComponentsInChildren<ButtonClickEvent>();
+        base.Start();
 
-        if (_buttons.Length != 0)
-        {
-            foreach (var button in _buttons)
-            {
-                button.OnButtonClicked += (buttonType, name) => HandleButtonEvent(buttonType, name);
-            }
-        }
+        SoundManager.instance.StopAllSound();
+        SoundManager.instance.Play("MainScene", SoundCatecory.BGM, true);
 
 
-        dicPopups = new Dictionary<PopupType, GameObject>();
-        RectTransform rectTransform = GetComponent<RectTransform>();
 
-        for (int i = 0; i < PopupSet.popups.Count; i++)
-        {
-            GameObject go = Instantiate(PopupSet.popups[i].popup);
-            go.transform.SetParent(rectTransform, false);
 
-            PopUp popUp = go.GetComponent<PopUp>();
-            popUp.OnPopupEvent += HandlePopupEvent;
 
-            go.SetActive(false);
-            dicPopups.Add(PopupSet.popups[i].popupType, go);
-        }
+
+        ////두번이벤트확인
+        //_buttons = GetComponentsInChildren<ButtonClickEvent>();
+
+        //if (_buttons.Length != 0)
+        //{
+        //    foreach (var button in _buttons)
+        //    {
+        //        button.OnButtonClicked += (buttonType, name) => HandleButtonEvent(buttonType, name);
+        //    }
+        //}
+
+
+        //dicPopups = new Dictionary<PopupType, GameObject>();
+        //RectTransform rectTransform = GetComponent<RectTransform>();
+
+        //for (int i = 0; i < PopupSet.popups.Count; i++)
+        //{
+        //    GameObject go = Instantiate(PopupSet.popups[i].popup);
+        //    go.transform.SetParent(rectTransform, false);
+
+        //    PopUp popUp = go.GetComponent<PopUp>();
+        //    popUp.OnPopupEvent += HandlePopupEvent;
+
+        //    go.SetActive(false);
+        //    dicPopups.Add(PopupSet.popups[i].popupType, go);
+        //}
 
     }
 
-    public void ActivatePopup(PopupType PopupType)
-    {
-        dicPopups[PopupType].SetActive(true);
-    }
+    //public void ActivatePopup(PopupType PopupType)
+    //{
+    //    dicPopups[PopupType].SetActive(true);
+    //}
 
 
     //public void RegisterPopup(Popup popup)
@@ -86,66 +96,71 @@ public class MainSceneUIManager : MonoBehaviour
     //}
 
 
-    private void HandleButtonEvent(ButtonType buttonType, string name)
-    {
-        ActivateEvent(buttonType, name);
-        Debug.Log(string.Format("일반 버튼타입 {0}, name {1}", buttonType.ToString(), name));
-    }
+    //private void HandleButtonEvent(ButtonType buttonType, string name)
+    //{
+    //    ActivateEvent(buttonType, name);
+    //    Debug.Log(string.Format("일반 버튼타입 {0}, name {1}", buttonType.ToString(), name));
+    //}
 
 
-    private void HandlePopupEvent(PopUp popup, ButtonType buttonType, string name)
-    {
-        ActivateEvent(buttonType, name);
+    //private void HandlePopupEvent(PopUp popup, ButtonType buttonType, string name)
+    //{
+    //    SoundManager.instance.Play("Click", SoundCatecory.Effect, false);
 
-        Debug.Log(string.Format("팝업 버튼타입 {0}, name {1}", buttonType.ToString(), name));
+    //    ActivateEvent(buttonType, name);
 
-        if (buttonType == ButtonType.Close)
-        {
-            popup.gameObject.SetActive(false);
-        }
-    }
+    //    Debug.Log(string.Format("팝업 버튼타입 {0}, name {1}", buttonType.ToString(), name));
 
-
-
-    void ActivateEvent(ButtonType buttonType, string name)
-    {
-        switch (buttonType)
-        {
-            case ButtonType.StartOrWarn:
-                if (DataManager.Instance.HaveSaveData()) { ActivatePopup(PopupType.DataIsExist); }
-                else { ActivatePopup(PopupType.SelectCharacter); }
-                break;
-
-            case ButtonType.ContinueOrWarn:
-
-                if (DataManager.Instance.HaveSaveData()) 
-                {
-                    SceneManager.instance.LoadScene("PlayScene");
-                }
-                else { ActivatePopup(PopupType.DataIsNotExist); }
-                break;
+    //    if (buttonType == ButtonType.Close)
+    //    {
+    //        popup.gameObject.SetActive(false);
+    //    }
+    //}
 
 
-            case ButtonType.Open:
 
-                foreach(PopupType popupType in dicPopups.Keys) 
-                {
-                    if(name == popupType.ToString())
-                    {
-                        ActivatePopup(popupType); 
-                        break;
-                    }
-                }
-                break;
-
-            case ButtonType.LoadStage:
-                SceneManager.instance.LoadScene("PlayScene");
-                break;
+    //void ActivateEvent(ButtonType buttonType, string name)
+    //{
 
 
-        }
 
-    }
+    //    switch (buttonType)
+    //    {
+    //        case ButtonType.StartOrWarn:
+    //            if (DataManager.Instance.HaveSaveData()) { ActivatePopup(PopupType.DataIsExist); }
+    //            else { ActivatePopup(PopupType.SelectCharacter); }
+    //            break;
+
+    //        case ButtonType.ContinueOrWarn:
+
+    //            if (DataManager.Instance.HaveSaveData()) 
+    //            {
+    //                SceneManager.instance.LoadScene("PlayScene");
+    //            }
+    //            else { ActivatePopup(PopupType.DataIsNotExist); }
+    //            break;
+
+
+    //        case ButtonType.Open:
+
+    //            foreach(PopupType popupType in dicPopups.Keys) 
+    //            {
+    //                if(name == popupType.ToString())
+    //                {
+    //                    ActivatePopup(popupType); 
+    //                    break;
+    //                }
+    //            }
+    //            break;
+
+    //        case ButtonType.LoadStage:
+    //            SceneManager.instance.LoadScene("PlayScene");
+    //            break;
+
+
+    //    }
+
+    //}
 
 
 

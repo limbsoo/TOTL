@@ -1180,7 +1180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae9c82f7d7f37c449b568dcfbb6d9ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundType: 1
+  soundCatecory: 2
   _slider: {fileID: 5548471210855063928}
 --- !u!1 &7681174783067034864
 GameObject:
@@ -1231,6 +1231,7 @@ GameObject:
   - component: {fileID: 3501576370761340720}
   - component: {fileID: 1315407807576928195}
   - component: {fileID: 5978811435664407155}
+  - component: {fileID: 8609929971351778873}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -1313,6 +1314,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupType: 3
+--- !u!114 &8609929971351778873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7960508798196112559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8bfd59d0a05284b8579b3842dcf48b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8515428793698093019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,7 +1442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae9c82f7d7f37c449b568dcfbb6d9ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundType: 0
+  soundCatecory: 0
   _slider: {fileID: 4695359797514682362}
 --- !u!1 &8594564909216284360
 GameObject:
@@ -1547,7 +1560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae9c82f7d7f37c449b568dcfbb6d9ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundType: 0
+  soundCatecory: 1
   _slider: {fileID: 5009617779321299794}
 --- !u!1 &9205935585006489934
 GameObject:
