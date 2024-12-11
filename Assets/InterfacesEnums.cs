@@ -39,7 +39,7 @@ public enum EffectKinds { None = 0, Damage = 1, Slow = 2, Seal = 3 }
 public enum WeightKinds { None = 0, ActiveTime = 1, Value = 2 }
 
 
-public enum PlayerSkillKinds { None = 0, Teleport = 1, Decoy = 2 }
+public enum PlayerSkillKinds { None = 0, Teleport = 1, Decoy = 2, Hide = 3 }
 
 
 public enum PlayerEvent
@@ -111,5 +111,6 @@ public enum ButtonType
     Left,
     Right,
     LoadStage,
-    LoadMain
+    LoadMain,
+    Reroll
 }

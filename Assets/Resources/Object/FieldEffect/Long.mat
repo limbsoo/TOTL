@@ -119,7 +119,7 @@ Material:
     - _Surface: 1
     - _UVSec: 0
     - _ZWrite: 0
-    - _curState: 1
+    - _curState: -0.06
     m_Colors:
     - _BaseColor: {r: 1, g: 0.90592486, b: 0, a: 0.56078434}
     - _Color: {r: 1, g: 0.90592486, b: 0, a: 0.56078434}

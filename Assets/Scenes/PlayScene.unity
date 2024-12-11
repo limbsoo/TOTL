@@ -2001,7 +2001,7 @@ Transform:
   m_GameObject: {fileID: 385092035}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: -108.6, z: 0}
-  m_LocalScale: {x: 5.555556, y: 100, z: 5.555556}
+  m_LocalScale: {x: 3, y: 100, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5399920032893847532}
@@ -4597,8 +4597,8 @@ GameObject:
   - component: {fileID: 828263880}
   - component: {fileID: 828263879}
   - component: {fileID: 828263878}
-  - component: {fileID: 828263881}
   - component: {fileID: 828263882}
+  - component: {fileID: 828263883}
   m_Layer: 5
   m_Name: Reroll
   m_TagString: Untagged
@@ -4672,19 +4672,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 828263879}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1814429437}
-        m_TargetAssemblyTypeName: FieldEffectPopUpManager, Assembly-CSharp
-        m_MethodName: RerollBlock
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &828263879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4723,18 +4711,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 828263876}
   m_CullTransparentMesh: 1
---- !u!114 &828263881
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 828263876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0db633f77f6a8c54096d13e6ed3eb60b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!225 &828263882
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -4747,6 +4723,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &828263883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828263876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccfbaf03f9c63e5419049e92d499686b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonType: 9
 --- !u!1 &849190567
 GameObject:
   m_ObjectHideFlags: 0
@@ -6509,7 +6498,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 2
   m_UseSpriteMesh: 0

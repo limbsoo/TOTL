@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
+using System.Drawing;
 //using UnityEngine.Rendering.VirtualTexturing;
 
 
@@ -17,6 +18,8 @@ public class Player : MonoBehaviour, Spawn
         IsplayerDamaged = false;
         canUseSkill = true;
         playerStats = DataManager.Instance.saveData.playerStats;
+
+
 
         PenealtyTime = 0;
         animator = GetComponent<Animator>();
@@ -104,7 +107,7 @@ public class Player : MonoBehaviour, Spawn
 
 
 
-
+    Material hidingMaterial;
 
 
 
@@ -119,6 +122,13 @@ public class Player : MonoBehaviour, Spawn
         animator = playerFBX.GetComponent<Animator>();
 
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+
+
+        hidingMaterial = playerFBX.transform.GetChild(1).GetComponent<Renderer>().materials[0];
+
+
+        //Renderer renderer = playerFBX.transform.GetChild(1).GetComponent<Renderer>();
+
         //clips[0].
 
         //mat = this.GetComponent<Renderer>().materials;
@@ -177,21 +187,38 @@ public class Player : MonoBehaviour, Spawn
 
     private int DecoyLifeCycle = 3;
 
+
+    public bool tmpUseHide = false;
+
+
+
+
+    public Action<PlayerSkillKinds> OnnnUseSkill;
+
     public void useSkill()
     {
         if(SkillCoolDownCoroutine == null)
         {
             SoundManager.instance.Play("Skill", SoundCatecory.Effect, false);
 
-            switch (psState)
+
+            switch (playerStats.playerSkillKind)
+            //switch (psState)
             {
-                case PlayerSkillState.Teleport:
+                case PlayerSkillKinds.Teleport:
                     UseTeleport();
                     break;
-                case PlayerSkillState.Hide:
+                case PlayerSkillKinds.Hide:
+                    hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 0.5f);
+                    //tmpUseHide = true;
+                    OnnnUseSkill?.Invoke(PlayerSkillKinds.Hide);
 
+                    StartCoroutine(Function.instance.CountDown(2f, () => {
+                        hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 1f);
+                    }));
                     break;
-                case PlayerSkillState.Decoy:
+
+                case PlayerSkillKinds.Decoy:
                     //SkillCoolDownCoroutine = StartCoroutine()
 
                     GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
@@ -204,9 +231,13 @@ public class Player : MonoBehaviour, Spawn
 
             }
 
+
             SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(playerStats.coolDown, () =>
             {
                 SkillCoolDownCoroutine = null;
+
+
+
 
                 ////UIManager.instance.IdleSkillButton(true);
                 ////canUseSkill = !canUseSkill;
@@ -254,42 +285,6 @@ public class Player : MonoBehaviour, Spawn
             animator.SetInteger("Idle", 0);
         }
         
-
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            if (canUseSkill)
-            {
-
-
-                switch (psState)
-                {
-                    case PlayerSkillState.Teleport:
-                        UseTeleport();
-                        break;
-                    case PlayerSkillState.Hide:
-                        
-                        break;
-                    case PlayerSkillState.Decoy:
-                        UseDecoy();
-                        break;
-                }
-
-                //UIManager.instance.StartCooldown(coolDown);
-            }
-
-
-
-
-
-
-            ////if (pState == PlayerState.Original)
-            //{
-            //    //if(canUseSkill) OnUseTeleport?.Invoke();
-            //}
-        }
-
-
     }
 
 

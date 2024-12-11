@@ -87,7 +87,27 @@ public class Enemy : MonoBehaviour, Spawn
         enemyFBX = transform.Find("Enemy").gameObject;
         animator = enemyFBX.GetComponent<Animator>();
 
+
+        //StageManager.instance.OnPlayerUseSkill += OnPlayerUseSkill;
+
     }
+
+
+    //public event Action<PlayerSkillKinds> OnPlayerUseSkill;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public void startEffect()
@@ -127,17 +147,20 @@ public class Enemy : MonoBehaviour, Spawn
         else
         {
             animator.SetInteger("Idle", 1);
+
+            Vector2 forward = new Vector2(transform.position.z, transform.position.x);
+            Vector2 steeringTarget = new Vector2(nmAgent.steeringTarget.z, nmAgent.steeringTarget.x);
+
+            //방향을 구한 뒤, 역함수로 각을 구한다.
+            Vector2 dir = steeringTarget - forward;
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+            //방향 적용
+            transform.eulerAngles = Vector3.up * angle;
+
+
         }
 
-        Vector2 forward = new Vector2(transform.position.z, transform.position.x);
-        Vector2 steeringTarget = new Vector2(nmAgent.steeringTarget.z, nmAgent.steeringTarget.x);
-
-        //방향을 구한 뒤, 역함수로 각을 구한다.
-        Vector2 dir = steeringTarget - forward;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        //방향 적용
-        transform.eulerAngles = Vector3.up * angle;
 
 
 

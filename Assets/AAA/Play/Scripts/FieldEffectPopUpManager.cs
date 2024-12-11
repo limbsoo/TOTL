@@ -24,10 +24,12 @@ public class FieldEffectPopUpManager : MonoBehaviour
     }
 
     public TimeLine[] m_timelines;
-    ButtonEvents m_buttonEvents;
     public int EndPhase;
 
     public GameObject slots;
+
+
+
 
 
 
@@ -37,18 +39,9 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     public Canvas parentCanvas;
 
-
-    //private int idx;
-
-    //public Button[] buttons;
-    //public Color normalColor;
-    //public Color disabledColor;
-
     public GameObject block;
     public Sprite[] idle;
 
-
-    //public GridLayoutGroup slots;
 
 
 
@@ -74,6 +67,8 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     public TMP_Text SelectedBlockNaming;
 
+    ButtonClickEvent[] _buttons;
+
 
 
     private void Start()
@@ -89,26 +84,45 @@ public class FieldEffectPopUpManager : MonoBehaviour
         MapPlacementBlock mpb = blocks[blocks.Count - 1].GetComponent<MapPlacementBlock>();
         mpb.changeSelected();
 
+        RegisterButton();
 
+        //m_buttonEvents = GetComponent<ButtonEvents>();
+        //m_buttonEvents.OnCheckMoney?.Invoke(DataManager.Instance.saveData.gold);
 
-        //if (DataManager.Instance.data.curWave > 1) 
-        //{ 
-        //    SetBlocks(DataManager.Instance.data);
-        //}
+    }
 
+    void RegisterButton()
+    {
+        _buttons = GetComponentsInChildren<ButtonClickEvent>();
 
+        if (_buttons.Length != 0)
+        {
+            foreach (var button in _buttons)
+            {
+                button.OnButtonClicked += (buttonType, name) => HandleButtonEvent(buttonType, name);
+            }
+        }
+    }
 
-        //CreateBlock();
+    protected virtual void HandleButtonEvent(ButtonType buttonType, string name)
+    {
+        SoundManager.instance.Play("Click", SoundCatecory.Effect, false);
 
+        switch (buttonType)
+        {
+            case ButtonType.Reroll:
 
+                MapPlacementBlock feb = blocks[curBlockIdx].GetComponent<MapPlacementBlock>();
+                feb.Reroll();
+                StageManager.instance.UseGold(StageManager.instance.ReturnLevelSet().InitrerollCost);
 
+                if (StageManager.instance.IsUnderCost(StageManager.instance.ReturnLevelSet().InitrerollCost))
+                {
+                    Reroll.interactable = false;
+                }
+                break;
 
-        //if (DataManager.Instance.data.curWave > StageManager.instance.LCS.endArrage) { EnchanceBlock(); }
-        //else { CreateBlock(); }
-
-
-        m_buttonEvents = GetComponent<ButtonEvents>();
-        m_buttonEvents.OnCheckMoney?.Invoke(DataManager.Instance.saveData.gold);
+        }
 
     }
 
@@ -542,24 +556,24 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
 
 
-    //리롤 횟수 제한 추가
-    public void RerollBlock()
-    {
-        MapPlacementBlock feb = blocks[curBlockIdx].GetComponent<MapPlacementBlock>();
-        feb.Reroll();
-        StageManager.instance.UseGold(StageManager.instance.ReturnLevelSet().InitrerollCost);
+    ////리롤 횟수 제한 추가
+    //public void RerollBlock()
+    //{
+    //    MapPlacementBlock feb = blocks[curBlockIdx].GetComponent<MapPlacementBlock>();
+    //    feb.Reroll();
+    //    StageManager.instance.UseGold(StageManager.instance.ReturnLevelSet().InitrerollCost);
 
-        if(StageManager.instance.IsUnderCost(StageManager.instance.ReturnLevelSet().InitrerollCost))
-        {
-            Reroll.interactable = false;
-        }
+    //    if(StageManager.instance.IsUnderCost(StageManager.instance.ReturnLevelSet().InitrerollCost))
+    //    {
+    //        Reroll.interactable = false;
+    //    }
 
-        //if (Player.instance.gold < 50)
-        //{
-        //    Reroll.interactable = false;
-        //}
+    //    //if (Player.instance.gold < 50)
+    //    //{
+    //    //    Reroll.interactable = false;
+    //    //}
 
-    }
+    //}
 }
 
 

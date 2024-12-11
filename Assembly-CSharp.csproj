@@ -75,7 +75,6 @@
     <Compile Include="Assets\AAA\Play\Scripts\FieldEffectPopUpManager.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\Player.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\PlayerCollisionHandler.cs" />
-    <Compile Include="Assets\Script\ButtonEvents.cs" />
     <Compile Include="Assets\AAA\Main\ConstructSet\PlayerList.cs" />
     <Compile Include="Assets\AAA\Main\PopUp\PopUp.cs" />
     <Compile Include="Assets\Script\SceneManager.cs" />
@@ -87,6 +86,7 @@
     <Compile Include="Assets\sss\Function.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\ConstructSet\ItemContainer.cs" />
+    <Compile Include="Assets\AAA\Main\PopUp\OptionData.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\Enemy\EnemySensor.cs" />
     <Compile Include="Assets\AAA\Play\ssss\UIEvent.cs" />
     <Compile Include="Assets\ConstructSet\ScriptableItem.cs" />
@@ -94,12 +94,10 @@
     <Compile Include="Assets\AAA\Audio\SoundManager.cs" />
     <Compile Include="Assets\AAA\Main\New Folder\SceneConstructSet.cs" />
     <Compile Include="Assets\AAA\Main\ConstructSet\ScenePopups.cs" />
-    <Compile Include="Assets\Script\ButtonStateController.cs" />
     <Compile Include="Assets\ConstructSet\LevelConstructSet.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\CameraController.cs" />
     <Compile Include="Assets\AAA\Main\PopUp\SelectCharacter.cs" />
     <Compile Include="Assets\AAA\Play\Scripts\FieldEffect.cs" />
-    <Compile Include="Assets\AAA\Main\PopUp\OptionData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

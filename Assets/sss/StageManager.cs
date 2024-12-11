@@ -202,8 +202,20 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
             playerComponent.OnPlayerDamaged += TriggerPlayerDamaged;
             playerComponent.OnPlayerEvent += PlayerEventHandler;
+            //playerComponent.OnnnUseSkill += PlayerUseSkillHandler;
+
+
+            playerComponent.OnnnUseSkill += skillKind => OnPlayerUseSkill?.Invoke(skillKind);
         }
     }
+
+    //public void PlayerUseSkillHandler(PlayerSkillKinds playerSkillKinds)
+    //{
+    //    OnPlayerUseSkill.Invoke(playerSkillKinds);
+    //}
+
+    public event Action <PlayerSkillKinds> OnPlayerUseSkill;
+
 
     void CreateFieldEffects()
     {
@@ -237,6 +249,9 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         {
             for (int i = 0; i < eliteCnt; i++)
             {
+                //UnityEngine.Quaternion quat = new UnityEngine.Quaternion(_LCS.enemy[1].transform.rotation.x, UnityEngine.Random.Range(-180, 180), _LCS.enemy[1].transform.rotation.z);
+
+                //Vector3 vector3 = new Vector3(_LCS.enemy[1].transform.rotation.x, UnityEngine.Random.Range(-180, 180), _LCS.enemy[1].transform.rotation.z);
                 _enemies.Add(InstantiateObject<Enemy>(_LCS.enemy[1], GetRandomPosBasedOnCenterMap(_LCS.enemy[1]), _LCS.enemy[1].transform.rotation));
             }
 
@@ -246,7 +261,7 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
         for (int i = 0; i < cnt; i++)
         {
-            _enemies.Add(InstantiateObject<Enemy>(_LCS.enemy[0], GetRandomPosBasedOnCenterMap(_LCS.enemy[0]), _LCS.enemy[0].transform.rotation));
+            _enemies.Add(InstantiateObject<Enemy>(_LCS.enemy[0], GetRandomPosBasedOnCenterMap(_LCS.enemy[0]), UnityEngine.Quaternion.Euler(0, UnityEngine.Random.Range(0f, 360f), 0)));
         }
 
         OnEnemyCnt.Invoke(cnt, eliteCnt < 0 ? 0 : eliteCnt);
