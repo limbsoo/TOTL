@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PopupController;
 
 public class UIEvent : MonoBehaviour
 {
@@ -80,13 +81,13 @@ public class UIEvent : MonoBehaviour
         switch (buttonType)
         {
             case ButtonType.StartOrWarn:
-                if (DataManager.Instance.HaveSaveData()) { ActivatePopup(PopupType.DataIsExist); }
+                if (DataManager.Instance.HaveProgressData()) { ActivatePopup(PopupType.DataIsExist); }
                 else { ActivatePopup(PopupType.SelectCharacter); }
                 break;
 
             case ButtonType.ContinueOrWarn:
 
-                if (DataManager.Instance.HaveSaveData())
+                if (DataManager.Instance.HaveProgressData())
                 {
                     SceneManager.instance.LoadScene("PlayScene");
                 }
@@ -112,6 +113,11 @@ public class UIEvent : MonoBehaviour
 
             case ButtonType.LoadMain:
                 SceneManager.instance.LoadScene("MainScene");
+                break;
+
+            case ButtonType.ResetData:
+                DataManager.Instance.ResetProgressData();
+                ActivatePopup(PopupType.SelectCharacter);
                 break;
 
         }

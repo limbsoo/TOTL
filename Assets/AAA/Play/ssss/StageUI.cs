@@ -24,6 +24,7 @@ public class StageUI : UIEvent
 
     public Button _skill;
     Image _skillCoolDown;
+    Image _SkillImage;
     public Slider stageTimeSlider;
     public GameObject fieldEffectPopUp;
     public GameObject damagedPopUp;
@@ -41,6 +42,11 @@ public class StageUI : UIEvent
         InitTexts();
 
         _skillCoolDown = _skill.gameObject.transform.GetChild(0).GetComponent<Image>();
+        _SkillImage = _skill.gameObject.transform.GetChild(1).GetComponent<Image>();
+
+
+        _SkillImage.sprite = Resources.Load<PlayerList>("ConstructSet/PlayerList").lists[DataManager.Instance.saveData.playerCharacterIdx].SkillSprite;
+
 
         StageManager.instance.OnPlayerDamaged += PlayerDamaged;
         StageManager.instance.OnPopUpOpen += OnPopUpOpen;
@@ -195,6 +201,10 @@ public class StageUI : UIEvent
     public void DecideBlock()
     {
         fieldEffectPopUp.SetActive(false);
+
+        DataManager.Instance.UpdateBlockData();
+
+
         OnDecideBlock?.Invoke();
     }
 

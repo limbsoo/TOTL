@@ -8,6 +8,7 @@ using UnityEngine.AI;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
 using System.Drawing;
+using Unity.Mathematics;
 //using UnityEngine.Rendering.VirtualTexturing;
 
 
@@ -18,8 +19,7 @@ public class Player : MonoBehaviour, Spawn
         IsplayerDamaged = false;
         canUseSkill = true;
         playerStats = DataManager.Instance.saveData.playerStats;
-
-
+        playerStats.playerSkillKind = (PlayerSkillKinds)Enum.GetValues(typeof(PlayerSkillKinds)).GetValue(DataManager.Instance.saveData.playerCharacterIdx + 1);
 
         PenealtyTime = 0;
         animator = GetComponent<Animator>();
@@ -201,7 +201,9 @@ public class Player : MonoBehaviour, Spawn
         {
             SoundManager.instance.Play("Skill", SoundCatecory.Effect, false);
 
-
+            
+            
+            //switch (DataManager.Instance.saveData.playerCharacterIdx)
             switch (playerStats.playerSkillKind)
             //switch (psState)
             {

@@ -11,6 +11,7 @@ public class PlayerList : ScriptableObject
     {
         public Sprite sprite;
         public GameObject player;
+        public Sprite SkillSprite;
     }
 
     //public PopupType popupType;

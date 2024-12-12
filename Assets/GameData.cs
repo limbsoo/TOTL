@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+
 [Serializable] // 직렬화
 public class GameData
 {
@@ -11,6 +14,8 @@ public class GameData
     public int maxWave;
     public int gold;
     public int curWave;
+
+
 
     public List<BlockData> blockdata;
 

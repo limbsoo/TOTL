@@ -184,30 +184,30 @@ public class MainSceneUIManager : UIEvent
 
 
 
-    public int playerIdx;
+    //public int playerIdx;
 
-    public void StartGame()
-    {
-        //test.text = "캐릭터 선택";
+    //public void StartGame()
+    //{
+    //    //test.text = "캐릭터 선택";
 
-        DataManager.Instance.InitSelectCharacter(playerIdx);
-        //나중에 게임모드도
+    //    DataManager.Instance.InitSelectCharacter(playerIdx);
+    //    //나중에 게임모드도
 
-        //test.text = "신 로드 시작";
+    //    //test.text = "신 로드 시작";
 
-        SceneManager.instance.LoadScene("PlayScene");
-    }
+    //    SceneManager.instance.LoadScene("PlayScene");
+    //}
 
-    public void LoadGame()
-    {
-        SceneManager.instance.LoadScene("PlayScene");
-    }
+    //public void LoadGame()
+    //{
+    //    SceneManager.instance.LoadScene("PlayScene");
+    //}
 
-    public void ResetData()
-    {
-        DataManager.Instance.ResetStage();
-        //gameObject.transform.parent.gameObject.SetActive(false);
-    }
+    //public void ResetData()
+    //{
+    //    DataManager.Instance.ResetStage();
+    //    //gameObject.transform.parent.gameObject.SetActive(false);
+    //}
 
 
     //private void OnEnable()

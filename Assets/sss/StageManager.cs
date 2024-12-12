@@ -91,6 +91,9 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
                     currentScore = 0;
 
+                    StageUI.instance.UpdateText("curScore",0);
+                    DataManager.Instance.UpdateStageProgress(_goldCnt, _curWave, _player.GetComponent<Player>().GetPlayerStats().health);
+
 
                     DestroyObjects(_enemies);
                     DestroyObjects(_fieldEffects);

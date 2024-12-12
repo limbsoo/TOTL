@@ -383,7 +383,7 @@ public class FieldEffectPopUpManager : MonoBehaviour
                 MapPlacementBlock feb = go.GetComponent<MapPlacementBlock>();
                 //feb.Init(PlayData, blocks.Count - 1);
 
-                feb.Init(PlayData, blocks.Count - 1, PlayData.blockdata[i].lineNum, m_timelines[i].rectTransform.position);
+                feb.Init(PlayData, blocks.Count - 1, PlayData.blockdata[i].lineNum, m_timelines[PlayData.blockdata[i].lineNum].rectTransform.position);
 
                 //feb.movePos(new Vector3(StageManager.instance.gridCenters[PlayData.bd[i].lineNum].x, StageManager.instance.gridCenters[PlayData.bd[i].lineNum].y, StageManager.instance.gridCenters[PlayData.bd[i].lineNum].z));
 

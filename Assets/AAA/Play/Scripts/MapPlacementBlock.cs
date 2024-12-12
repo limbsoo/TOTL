@@ -37,7 +37,7 @@ public class MapPlacementBlock : MonoBehaviour, IPointerDownHandler, IBeginDragH
 
     bool isSet;
 
-    public int lineNum;
+    public int _lineNum;
 
 
 
@@ -177,6 +177,8 @@ public class MapPlacementBlock : MonoBehaviour, IPointerDownHandler, IBeginDragH
 
         rectTransform = GetComponent<RectTransform>();
         rectTransform.position = pos;
+
+        _lineNum = lineNum;
 
         blockdata.lineNum = lineNum;
         blockdata.position = rectTransform.position;

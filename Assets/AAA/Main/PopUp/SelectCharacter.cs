@@ -58,6 +58,7 @@ public class SelectCharacter : PopUp
                 break;
 
             case ButtonType.LoadStage:
+                DataManager.Instance.SelectPlayer(_selectedIndex);
                 base.HandleButtonClicked(buttonType, name);
                 break;
 
