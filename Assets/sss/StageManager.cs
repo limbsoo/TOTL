@@ -40,6 +40,8 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     }
 
     public GameConstructSet GCS;
+    public PlayerList PlayerList;
+
 
     LevelConstructSet _LCS;
 
@@ -97,6 +99,7 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
                     DestroyObjects(_enemies);
                     DestroyObjects(_fieldEffects);
+                    DestroyObjects(_gold);
 
                     IsArriveGate = false;
 
@@ -136,7 +139,11 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         StageUI.instance.OnDecideBlock = () =>
         {
             SetGoals();
-            CreatePlayer(_LCS.player[0]);
+            //CreatePlayer(_LCS.player[0]);
+
+            CreatePlayer(PlayerList.lists[DataManager.Instance.saveData.playerCharacterIdx].player); ;
+
+
             CreateFieldEffects();
             CreateEnemies();
             CreateGolds();

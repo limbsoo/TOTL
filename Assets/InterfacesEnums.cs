@@ -114,3 +114,11 @@ public enum ButtonType
     LoadMain,
     Reroll
 }
+
+
+public enum CharacterUnlock
+{
+    None,
+    Clear10Wave,
+    Clear20Wave
+}

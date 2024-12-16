@@ -3821,7 +3821,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f9e54331cabec1148a30e43c63935dc4, type: 2}
+  - {fileID: 2100000, guid: 648af8c536f430049926e09c465c1bbc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5598,6 +5598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GCS: {fileID: 11400000, guid: 8cdf67968a135ce459ed79354c16e66d, type: 2}
+  PlayerList: {fileID: 11400000, guid: 73add8728bc8c504f8eb2ee5fd0a6311, type: 2}
   curStage: 0
   currentScore: 0
   lifeCycle: 0
@@ -6574,7 +6575,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 1
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 2
   m_UseSpriteMesh: 0

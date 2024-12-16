@@ -109,7 +109,13 @@ public class DataManager : MonoBehaviour
         saveData.playerCharacterIdx = idx;
         LevelConstructSet lcs = gcs.LevelConstructSet[gcs.currentLevel];
 
-        PlayerStat playerStat = lcs.player[idx].GetComponent<PlayerStat>();
+
+        PlayerList playerList = Resources.Load<PlayerList>("ConstructSet/PlayerList");
+
+        PlayerStats playerStat = playerList.lists[idx].Stats;
+
+
+        //PlayerStat playerStat = lcs.player[idx].GetComponent<PlayerStat>();
 
         saveData.playerStats.health = playerStat.health;
         saveData.playerStats.moveSpeed = playerStat.moveSpeed;

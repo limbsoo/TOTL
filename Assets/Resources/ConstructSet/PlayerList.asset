@@ -16,9 +16,24 @@ MonoBehaviour:
   - sprite: {fileID: 21300000, guid: f8224a931076dbb48aa62fafd8f12df4, type: 3}
     player: {fileID: 793001626749674294, guid: 2fc42ea707e8cf24d8292519bc171302, type: 3}
     SkillSprite: {fileID: 21300000, guid: c7d315ee9705ebc4095533257ddfb0d7, type: 3}
+    Stats:
+      health: 11
+      moveSpeed: 30
+      coolDown: 5
+      playerSkillKind: 1
   - sprite: {fileID: 21300000, guid: f70e824af724e84468a09a049ac4d2b9, type: 3}
     player: {fileID: 793001626749674294, guid: 2fc42ea707e8cf24d8292519bc171302, type: 3}
     SkillSprite: {fileID: 21300000, guid: b008d9e30421c7941874343b53387099, type: 3}
+    Stats:
+      health: 12
+      moveSpeed: 32
+      coolDown: 4
+      playerSkillKind: 2
   - sprite: {fileID: 21300000, guid: dd58bb993a882864e87427d70434bdef, type: 3}
     player: {fileID: 793001626749674294, guid: 2fc42ea707e8cf24d8292519bc171302, type: 3}
     SkillSprite: {fileID: 21300000, guid: 80aa1635f8058534594626ca38d2aa7d, type: 3}
+    Stats:
+      health: 15
+      moveSpeed: 35
+      coolDown: 3
+      playerSkillKind: 3
