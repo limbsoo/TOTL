@@ -1276,7 +1276,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"r":3.245537281036377,"g":3.086514711380005,"b":2.770953893661499,"a":1.0}'
+      m_SerializableObject: '{"r":3.5154905319213869,"g":3.5154905319213869,"b":3.5154905319213869,"a":1.0}'
     m_Space: 2147483647
   m_Property:
     name: _Color
@@ -1442,7 +1442,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 3.23
+      m_SerializableObject: 2.43
     m_Space: 2147483647
   m_Property:
     name: _speed
@@ -2824,7 +2824,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"r":4.924577713012695,"g":4.924577713012695,"b":4.924577713012695,"a":0.6823529601097107}'
+      m_SerializableObject: '{"r":2.9960784912109377,"g":2.9960784912109377,"b":2.9960784912109377,"a":0.4313725531101227}'
     m_Space: 2147483647
   m_Property:
     name: _Color

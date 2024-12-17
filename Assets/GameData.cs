@@ -97,6 +97,7 @@ public class PlayerStats
     public float health;
     public float moveSpeed;
     public float coolDown;
+    public float effectValue;
 
     public PlayerSkillKinds playerSkillKind;
 }

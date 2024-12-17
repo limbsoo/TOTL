@@ -19,6 +19,8 @@ public class SelectCharacter : PopUp
 
     public TMP_Text[] texts;
 
+    public Button selectButton;
+
     void UpdateCharacter()
     {
         portrait.sprite = playerList.lists[_selectedIndex].sprite;
@@ -26,8 +28,53 @@ public class SelectCharacter : PopUp
         texts[0].text = playerList.lists[_selectedIndex].sprite.name;
         texts[1].text = playerList.lists[_selectedIndex].Stats.health.ToString();
         texts[2].text = playerList.lists[_selectedIndex].Stats.moveSpeed.ToString();
-        texts[3].text = playerList.lists[_selectedIndex].Stats.moveSpeed.ToString();
+
+        switch (playerList.lists[_selectedIndex].Stats.playerSkillKind)
+        {
+            case PlayerSkillKinds.Teleport:
+                texts[3].text = string.Format("플레이어가 바라보는 방향으로 {0} 만큼 이동합니다.", playerList.lists[_selectedIndex].Stats.effectValue.ToString());
+                break;
+
+            case PlayerSkillKinds.Decoy:
+                texts[3].text = string.Format("플레이어의 현재 위치에 {0}초 간 플레이어 대신 이목을 끌어주는 분신을 생성합니다.", playerList.lists[_selectedIndex].Stats.effectValue.ToString());
+                break;
+
+            case PlayerSkillKinds.Hide:
+                texts[3].text = string.Format("현재 플레이어를 추적하는 적들에게 {0}초 간 보이지 않게 합니다. ", playerList.lists[_selectedIndex].Stats.effectValue.ToString());
+                break;
+        }
+
+
+
+
+
+
+        //texts[3].text = playerList.lists[_selectedIndex].Stats.moveSpeed.ToString();
         texts[4].text = playerList.lists[_selectedIndex].Stats.coolDown.ToString();
+
+        selectButton.interactable = true;
+
+        string unlockcond = "해금 조건 : 없음";
+
+        switch (playerList.lists[_selectedIndex].UnlockCondition)
+        {
+            case CharacterUnlock.Clear10Wave:
+
+                unlockcond = "해금 조건 : 10 wave 이상 클리어";
+
+                if (DataManager.Instance.saveData.maxWave < 10) { selectButton.interactable = false; }
+                    break;
+
+            case CharacterUnlock.Clear20Wave:
+
+                unlockcond = "해금 조건 : 20 wave 이상 클리어";
+
+                if (DataManager.Instance.saveData.maxWave < 20) { selectButton.interactable = false; }
+                break;
+        }
+
+        texts[5].text = unlockcond;
+
     }
 
 
@@ -89,6 +136,10 @@ public class SelectCharacter : PopUp
             case ButtonType.LoadStage:
                 DataManager.Instance.SelectPlayer(_selectedIndex);
                 base.HandleButtonClicked(buttonType, name);
+                break;
+
+            case ButtonType.Close:
+                gameObject.SetActive(false);
                 break;
 
             default:

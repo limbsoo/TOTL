@@ -112,7 +112,8 @@ public enum ButtonType
     Right,
     LoadStage,
     LoadMain,
-    Reroll
+    Reroll,
+    Quit
 }
 
 

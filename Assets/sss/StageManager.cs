@@ -101,6 +101,8 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
                     DestroyObjects(_fieldEffects);
                     DestroyObjects(_gold);
 
+                    lifeCycle = 0;
+
                     IsArriveGate = false;
 
 
@@ -141,7 +143,7 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
             SetGoals();
             //CreatePlayer(_LCS.player[0]);
 
-            CreatePlayer(PlayerList.lists[DataManager.Instance.saveData.playerCharacterIdx].player); ;
+            CreatePlayer(PlayerList.lists[DataManager.Instance.saveData.playerCharacterIdx].player);
 
 
             CreateFieldEffects();
@@ -283,10 +285,15 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
         for (int i = 0; i < _LCS.Item.Count; i++)
         {
-            Vector3 randomPos = Function.instance.GetRandomPositionInMap(_LCS.Item[i], _mapTransform);
-            randomPos.y = _LCS.Item[i].transform.position.y;
-            GameObject go1 = Instantiate(_LCS.Item[i], randomPos, _LCS.Item[i].transform.rotation);
-            _gold.Add(go1);
+            for(int j = 0; j < 3; j++)
+            {
+                Vector3 randomPos = Function.instance.GetRandomPositionInMap(_LCS.Item[i], _mapTransform);
+                randomPos.y = _LCS.Item[i].transform.position.y;
+                GameObject go1 = Instantiate(_LCS.Item[i], randomPos, _LCS.Item[i].transform.rotation);
+                _gold.Add(go1);
+            }
+
+
         }
     }
 

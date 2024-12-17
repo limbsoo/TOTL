@@ -14,6 +14,8 @@ public class PlayerList : ScriptableObject
         public Sprite SkillSprite;
 
         public PlayerStats Stats;
+
+        public CharacterUnlock UnlockCondition;
     }
 
     //public PopupType popupType;

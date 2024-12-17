@@ -30,9 +30,9 @@ MonoBehaviour:
   - {fileID: 8397477644624834160, guid: 65c4196806cb1af43bced48a6d3ccc68, type: 3}
   - {fileID: 8397477644624834160, guid: a578ac4177aa1f34da5852010d312717, type: 3}
   gate:
-  - {fileID: 1150117686112970776, guid: ef238dd02c03efe4d9d9c18f21f86f45, type: 3}
+  - {fileID: 1150117686112970776, guid: af15d88a68874824ca9ab877f26815b2, type: 3}
   numOfInitkeysRequired: 2
-  numOfInitEnemy: 20
+  numOfInitEnemy: 15
   InitrerollCost: 100
   enemyIncreasePerWave: 2
   goldIncreasePerWave: 0
@@ -59,4 +59,5 @@ MonoBehaviour:
     health: 0
     moveSpeed: 0
     coolDown: 0
+    effectValue: 0
     playerSkillKind: 0

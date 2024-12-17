@@ -80,7 +80,7 @@ public class DataManager : MonoBehaviour
 
     public void ResetProgressData()
     {
-        saveData = new GameData();
+        //saveData = new GameData();
 
         saveData.playerCharacterIdx = -1;
         saveData.stageModeIdx = 0;

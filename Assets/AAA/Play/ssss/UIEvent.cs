@@ -117,9 +117,15 @@ public class UIEvent : MonoBehaviour
 
             case ButtonType.ResetData:
                 DataManager.Instance.ResetProgressData();
+
+                _popups[PopupType.DataIsExist].SetActive(false);
                 ActivatePopup(PopupType.SelectCharacter);
                 break;
 
+            case ButtonType.Quit:
+                Application.Quit();
+                break;
+                
         }
 
     }

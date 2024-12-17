@@ -171,91 +171,86 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
         for (int i = 0; i < blocks.Count; i++)
         {
-            s = "";
-
             bd = blocks[i].GetComponent<MapPlacementBlock>().GetBlockData();
 
-            s += bd.start.ToString() + " - ";
-            s += bd.end.ToString();
+            slotEffectExplans[bd.lineNum].text =
 
-            //if (bd.weightKinds == WeightKinds.ActiveTime)
-            //{
-            //    s += SetTextColor("red", bd.end + bd.weight);
-            //}
-
-            //else { s += bd.end.ToString(); }
-
-            s += " 초 동안  ";
-            s += bd.fieldKinds.ToString() + " Field ";
-            s += bd.effectKinds.ToString() + " Effect ";
-
-            slotEffectExplans[bd.lineNum].text = s;
+                string.Format("{2} & {3}   ({0} ~ {1})",
+                //string.Format("{0} ~ {1}초 간 {2} & {3} 효과 발생 구역",
+                bd.start.ToString(), 
+                bd.end.ToString(), 
+                bd.effectKinds.ToString(), 
+                bd.fieldKinds.ToString());
         }
 
-        //까지 
-
-
-
         bd = blocks[curBlockIdx].GetComponent<MapPlacementBlock>().GetBlockData();
-        s = "";
 
-        //s += "필드 시간 " + bd.start.ToString() + "초 부터 ";
-        //s += bd.end.ToString() + "초 까지 ";
-
-
-
-        s += string.Format("필드 시간 {0}초 부터 {1}초 까지", bd.start.ToString(), bd.end.ToString());
+        //selectBlockInformation.text = string.Format("{0} ~ {1}초 간 {2} 효과를 가진 {3} 필드 효과 발생.",
+        //        bd.start.ToString(),
+        //        bd.end.ToString(),
+        //        bd.effectKinds.ToString(),
+        //        bd.fieldKinds.ToString()); ;
 
 
+        selectBlockInformation.text = string.Format("이 블록은 {0}초부터 {1}초까지 활성화됩니다.\n", bd.start.ToString(), bd.end.ToString());
+        selectBlockInformation.text += "\n";
 
-        //s +=  bd.fieldDuration.ToString() /*+ " +(" + bd.weight.ToString() + ")"*/ + " 초 동안  ";
-
-        //if (bd.weightKinds == WeightKinds.ActiveTime)
-        //{
-        //    s += SetTextColor("red", bd.end + bd.weight);
-        //}
-
-        //else { s += bd.end.ToString(); }
-
+        string effectInfo = "";
 
         switch (bd.fieldKinds)
         {
             case FieldKinds.Long:
+                selectBlockInformation.text += "이 구역은 플레이어가 진입하면 즉시 효과를 받습니다.\n";
+
                 break;
             case FieldKinds.Stack:
-                s += "플레이어가 해당구역을 진입하여 ";
-                s += bd.fieldValue.ToString() + " 초 이상 머무를 경우 " /*+ bd.fieldValue.ToString() + " * "*/;
+                selectBlockInformation.text += 
+                    string.Format("플레이어가 이 구역에 {0}초 이상 머무를 경우 효과가 발생합니다.\n",
+                    bd.fieldValue.ToString());
 
                 break;
             case FieldKinds.Move:
-                s += "일정한 속도로 움직이며 " + "플레이어가 해당구역 진입 시 ";
+                selectBlockInformation.text += "이 구역은 일정 속도로 이동하며, 플레이어가 진입 시 효과를 받습니다.\n";
                 break;
         }
 
 
-        s += (bd.effectValue + bd.weight).ToString();
+        selectBlockInformation.text += "\n";
+
+        string effectValue = "";
+
+        float effectValuue = bd.effectValue;
+
+        if (bd.fieldKinds == FieldKinds.Stack) { effectValuue *= bd.fieldValue; }
+
+
+        if (bd.weight > 0) { effectValue += SetTextColor("red", effectValuue + bd.weight); }
+        else { effectValue += (effectValuue + bd.weight).ToString(); }
+
+
+        
 
         switch (bd.effectKinds)
         {
             case EffectKinds.Damage:
-                //s += bd.effectValue.ToString();
-                //s += " +(" + bd.weight.ToString() + ")";
-                s += " 의 데미지를 받는다.";
+                selectBlockInformation.text +=
+                    string.Format("효과 발생 시 {0} 데미지를 받습니다.\n",
+                    effectValue);
                 break;
             case EffectKinds.Slow:
-                //s += bd.effectValue.ToString();
-                //s += " +(" + bd.weight.ToString() + ")";
-                s += " 초 동안 이동속도가 감소한다."; 
+                selectBlockInformation.text +=
+                    string.Format("효과 발생 시 {0}초 동안 이동 속도가 절반으로 감소합니다.\n",
+                    effectValue);
                 break;
             case EffectKinds.Seal:
-                //s += bd.effectValue.ToString();
-                //s += " +(" + bd.weight.ToString() + ")";
-                s += " 초 동안 스킬이 봉인된다.";
+                selectBlockInformation.text +=
+                    string.Format("효과 발생 시 {0}초 동안 스킬이 봉인됩니다.\n",
+                    effectValue);
 
                 break;
         }
 
-        selectBlockInformation.text = s;
+        //selectBlockInformation.text = s;
 
         selectBlockWeight.text = bd.weight.ToString();
 
@@ -279,6 +274,122 @@ public class FieldEffectPopUpManager : MonoBehaviour
         s += "</color>";
         return s;
     }
+
+
+    //public void UpdateTexts()
+    //{
+    //    string s;
+    //    BlockData bd;
+
+    //    LevelConstructSet levelConstructSet = StageManager.instance.ReturnLevelSet();
+
+    //    Cost.text = levelConstructSet.InitrerollCost.ToString();
+    //    GoldCnt.text = StageManager.instance.RetunrGold().ToString();
+
+    //    for (int i = 0; i < slotEffectExplans.Count; i++)
+    //    {
+    //        slotEffectExplans[i].text = "";
+    //    }
+
+
+    //    for (int i = 0; i < blocks.Count; i++)
+    //    {
+    //        s = "";
+
+    //        bd = blocks[i].GetComponent<MapPlacementBlock>().GetBlockData();
+
+    //        s += bd.start.ToString() + " - ";
+    //        s += bd.end.ToString();
+
+    //        //if (bd.weightKinds == WeightKinds.ActiveTime)
+    //        //{
+    //        //    s += SetTextColor("red", bd.end + bd.weight);
+    //        //}
+
+    //        //else { s += bd.end.ToString(); }
+
+    //        s += " 초 동안  ";
+    //        s += bd.fieldKinds.ToString() + " Field ";
+    //        s += bd.effectKinds.ToString() + " Effect ";
+
+    //        slotEffectExplans[bd.lineNum].text = s;
+    //    }
+
+    //    //까지 
+
+
+
+    //    bd = blocks[curBlockIdx].GetComponent<MapPlacementBlock>().GetBlockData();
+    //    s = "";
+
+    //    //s += "필드 시간 " + bd.start.ToString() + "초 부터 ";
+    //    //s += bd.end.ToString() + "초 까지 ";
+
+
+
+    //    s += string.Format("필드 시간 {0}초 부터 {1}초 까지", bd.start.ToString(), bd.end.ToString());
+
+
+
+    //    //s +=  bd.fieldDuration.ToString() /*+ " +(" + bd.weight.ToString() + ")"*/ + " 초 동안  ";
+
+    //    //if (bd.weightKinds == WeightKinds.ActiveTime)
+    //    //{
+    //    //    s += SetTextColor("red", bd.end + bd.weight);
+    //    //}
+
+    //    //else { s += bd.end.ToString(); }
+
+
+    //    switch (bd.fieldKinds)
+    //    {
+    //        case FieldKinds.Long:
+    //            break;
+    //        case FieldKinds.Stack:
+    //            s += "플레이어가 해당구역을 진입하여 ";
+    //            s += bd.fieldValue.ToString() + " 초 이상 머무를 경우 " /*+ bd.fieldValue.ToString() + " * "*/;
+
+    //            break;
+    //        case FieldKinds.Move:
+    //            s += "일정한 속도로 움직이며 " + "플레이어가 해당구역 진입 시 ";
+    //            break;
+    //    }
+
+
+    //    s += (bd.effectValue + bd.weight).ToString();
+
+    //    switch (bd.effectKinds)
+    //    {
+    //        case EffectKinds.Damage:
+    //            //s += bd.effectValue.ToString();
+    //            //s += " +(" + bd.weight.ToString() + ")";
+    //            s += " 의 데미지를 받는다.";
+    //            break;
+    //        case EffectKinds.Slow:
+    //            //s += bd.effectValue.ToString();
+    //            //s += " +(" + bd.weight.ToString() + ")";
+    //            s += " 초 동안 이동속도가 감소한다.";
+    //            break;
+    //        case EffectKinds.Seal:
+    //            //s += bd.effectValue.ToString();
+    //            //s += " +(" + bd.weight.ToString() + ")";
+    //            s += " 초 동안 스킬이 봉인된다.";
+
+    //            break;
+    //    }
+
+    //    selectBlockInformation.text = s;
+
+    //    selectBlockWeight.text = bd.weight.ToString();
+
+
+    //    //s = "";
+
+    //    //s += string.Format("{0} + {1} Block", bd.fieldKinds.ToString(), bd.effectKinds.ToString());
+
+    //    SelectedBlockNaming.text = string.Format("{0} + {1}", bd.fieldKinds.ToString(), bd.effectKinds.ToString());
+
+    //}
 
 
     //public void UpdateTexts()

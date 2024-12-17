@@ -1403,7 +1403,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 88.8
+  orthographic size: 98.63
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -8813,8 +8813,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8827,7 +8827,7 @@ MonoBehaviour:
   m_wordSpacing: 0
   m_lineSpacing: 15
   m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
+  m_paragraphSpacing: -25
   m_charWidthMaxAdj: 0
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
@@ -9717,10 +9717,7 @@ MonoBehaviour:
   slots: {fileID: 1966056061}
   parentCanvas: {fileID: 1931976769}
   block: {fileID: 6186121196424915999, guid: 36d159428f7586e4d9a4a3124663a904, type: 3}
-  idle:
-  - {fileID: 21300000, guid: 8330f1a22e9a5fb4a9ac94aec41e37a3, type: 3}
-  - {fileID: 21300000, guid: 4390ec999c787974882bf90b344fd0b1, type: 3}
-  - {fileID: 21300000, guid: 5bbf02aecdcad234aa7436ab41248bdc, type: 3}
+  idle: []
   isSelected: 0
   slotEffectExplans:
   - {fileID: 1299036259}

@@ -44,7 +44,8 @@ public class EffectSensor : MonoBehaviour
                     {
                         if(fe.stack > blockdata.fieldValue)
                         {
-                            SetEffectPerField(p, blockdata.effectKinds, blockdata.fieldValue * (blockdata.effectValue + blockdata.weight));
+                            SetEffectPerField(p, blockdata.effectKinds, (blockdata.fieldValue * blockdata.effectValue) + blockdata.weight);
+                            //SetEffectPerField(p, blockdata.effectKinds, blockdata.fieldValue * (blockdata.effectValue + blockdata.weight));
                             //fe.stack = 0;
                         }
 
