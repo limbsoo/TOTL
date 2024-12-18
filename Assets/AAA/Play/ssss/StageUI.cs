@@ -41,8 +41,8 @@ public class StageUI : UIEvent
 
         InitTexts();
 
-        _skillCoolDown = _skill.gameObject.transform.GetChild(0).GetComponent<Image>();
-        _SkillImage = _skill.gameObject.transform.GetChild(1).GetComponent<Image>();
+        _skillCoolDown = _skill.gameObject.transform.GetChild(1).GetComponent<Image>();
+        _SkillImage = _skill.gameObject.transform.GetChild(0).GetComponent<Image>();
 
 
         _SkillImage.sprite = Resources.Load<PlayerList>("ConstructSet/PlayerList").lists[DataManager.Instance.saveData.playerCharacterIdx].SkillSprite;

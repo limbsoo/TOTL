@@ -211,12 +211,16 @@ public class Player : MonoBehaviour, Spawn
                     UseTeleport();
                     break;
                 case PlayerSkillKinds.Hide:
-                    hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 0.5f);
+                    //hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 0.5f);
+
+                    hidingMaterial.color = new UnityEngine.Color(255, 255, 255, 1);
                     //tmpUseHide = true;
                     OnnnUseSkill?.Invoke(PlayerSkillKinds.Hide);
 
                     StartCoroutine(Function.instance.CountDown(2f, () => {
-                        hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 1f);
+                        //hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 1f);
+
+                        hidingMaterial.color = new UnityEngine.Color(0, 0, 0, 1);
                     }));
                     break;
 

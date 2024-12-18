@@ -113,6 +113,7 @@ public class UIEvent : MonoBehaviour
 
             case ButtonType.LoadMain:
                 SceneManager.instance.LoadScene("MainScene");
+                StageManager.Sstate = StageState.Edit;
                 break;
 
             case ButtonType.ResetData:
