@@ -127,6 +127,8 @@ public class Player : MonoBehaviour, Spawn
         hidingMaterial = playerFBX.transform.GetChild(1).GetComponent<Renderer>().materials[0];
 
 
+        curIdle = 0;
+
         //Renderer renderer = playerFBX.transform.GetChild(1).GetComponent<Renderer>();
 
         //clips[0].
@@ -211,16 +213,16 @@ public class Player : MonoBehaviour, Spawn
                     UseTeleport();
                     break;
                 case PlayerSkillKinds.Hide:
-                    //hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 0.5f);
+                    hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 0.8f);
 
-                    hidingMaterial.color = new UnityEngine.Color(255, 255, 255, 1);
+                    //hidingMaterial.color = new UnityEngine.Color(1, 1, 1, 1);
                     //tmpUseHide = true;
                     OnnnUseSkill?.Invoke(PlayerSkillKinds.Hide);
 
-                    StartCoroutine(Function.instance.CountDown(2f, () => {
-                        //hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 1f);
+                    StartCoroutine(Function.instance.CountDown(0.3f, () => {
+                        hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 1f);
 
-                        hidingMaterial.color = new UnityEngine.Color(0, 0, 0, 1);
+                        //hidingMaterial.color = new UnityEngine.Color(0, 0, 0, 1);
                     }));
                     break;
 
@@ -257,6 +259,8 @@ public class Player : MonoBehaviour, Spawn
 
     }
 
+    int curIdle;
+
     private void HandleInput()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
@@ -283,12 +287,25 @@ public class Player : MonoBehaviour, Spawn
         if (movement != Vector3.zero)
         {
             lastRotation = Quaternion.LookRotation(movement);
-            animator.SetInteger("Idle", 1);
+
+            if(curIdle == 0)
+            {
+                animator.SetInteger("Idle", 1);
+                curIdle = 1;
+            }
+
+            
         }
 
         else
         {
-            animator.SetInteger("Idle", 0);
+            if(curIdle == 1)
+            {
+                animator.SetInteger("Idle", 0);
+                curIdle = 0;
+            }
+
+            
         }
         
     }

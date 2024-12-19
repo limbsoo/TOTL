@@ -88,6 +88,8 @@ public class Enemy : MonoBehaviour, Spawn
         animator = enemyFBX.GetComponent<Animator>();
 
 
+        curIdle = 0;
+
         //StageManager.instance.OnPlayerUseSkill += OnPlayerUseSkill;
 
     }
@@ -137,16 +139,30 @@ public class Enemy : MonoBehaviour, Spawn
 
     }
 
+    int curIdle;
+
     public void Update()
     {
         if(curTarget == "" && Math.Abs(nmAgent.destination.x - transform.position.x) <= 1 && Math.Abs(nmAgent.destination.z - transform.position.z) <= 1 )
         {
-            animator.SetInteger("Idle", 0);
+            if(curIdle == 1)
+            {
+                animator.SetInteger("Idle", 0);
+                curIdle = 0;
+            }
+
+            
         }
 
         else
         {
-            animator.SetInteger("Idle", 1);
+            if(curIdle == 0)
+            {
+                animator.SetInteger("Idle", 1);
+                curIdle = 1;
+            }
+
+            
 
             Vector2 forward = new Vector2(transform.position.z, transform.position.x);
             Vector2 steeringTarget = new Vector2(nmAgent.steeringTarget.z, nmAgent.steeringTarget.x);

@@ -89,24 +89,31 @@ public class EnemySensor : MonoBehaviour
 
                 if(playerUseHide)
                 {
-                    if(enemy.curTarget != "")
+                    if (enemy.curTarget != "" && enemy.chasing == null)
                     {
                         enemy.updateDesitnationPos(enemy.transform.position);
                         enemy.curTarget = "";
                         BackOriginPos();
                     }
 
+                    //if(enemy.curTarget != "")
+                    //{
+                    //    enemy.updateDesitnationPos(enemy.transform.position);
+                    //    enemy.curTarget = "";
+                    //    BackOriginPos();
+                    //}
 
 
-                    ////enemy.updateDesitnationPos(enemy.transform.position);
-                    //enemy.curTarget = "";
-
-                    ////enemy.chasing = null;
-                    //enemy.chasingPlayer(enemy.transform);
                 }
 
                 else
                 {
+
+                    if (enemy.chasing != null)
+                    {
+                        StopCoroutine(enemy.chasing);
+                    }
+
 
                     switch (other.gameObject.tag)
                     {

@@ -395,6 +395,7 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         {
             SoundManager.instance.Play("GameOver", SoundCatecory.Effect, false);
             OnPopUpOpen.Invoke(PopupType.GameOver);
+            DataManager.Instance.ResetProgressData();
         }
         else { OnPlayerDamaged.Invoke(f); }
     }

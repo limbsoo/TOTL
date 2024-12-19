@@ -50,7 +50,9 @@ public class SelectCharacter : PopUp
 
 
         //texts[3].text = playerList.lists[_selectedIndex].Stats.moveSpeed.ToString();
-        texts[4].text = playerList.lists[_selectedIndex].Stats.coolDown.ToString();
+        //texts[4].text = playerList.lists[_selectedIndex].Stats.coolDown.ToString();
+
+        texts[4].text = string.Format("{0} 초", playerList.lists[_selectedIndex].Stats.coolDown.ToString());
 
         selectButton.interactable = true;
 
@@ -74,7 +76,7 @@ public class SelectCharacter : PopUp
         }
 
         texts[5].text = unlockcond;
-
+        texts[6].text = string.Format("최고 기록 wave : {0} ", DataManager.Instance.saveData.maxWave.ToString());
     }
 
 
