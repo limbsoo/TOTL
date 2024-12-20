@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CoverageReport scope="Summary">
+  <Summary>
+    <Generatedon>2024-12-20 - 오후 4:22:03</Generatedon>
+    <Parser>MultiReportParser (2x OpenCoverParser)</Parser>
+    <Assemblies>1</Assemblies>
+    <Classes>32</Classes>
+    <Files>30</Files>
+    <Coveredlines>982</Coveredlines>
+    <Uncoveredlines>958</Uncoveredlines>
+    <Coverablelines>1940</Coverablelines>
+    <Totallines>7235</Totallines>
+    <Linecoverage>50.6</Linecoverage>
+    <Coveredbranches>0</Coveredbranches>
+    <Totalbranches>0</Totalbranches>
+    <Coveredmethods>149</Coveredmethods>
+    <Totalmethods>245</Totalmethods>
+    <Methodcoverage>60.8</Methodcoverage>
+  </Summary>
+  <Coverage>
+    <Assembly name="Assembly-CSharp" classes="32" coverage="50.6" coveredlines="982" coverablelines="1940" totallines="7540" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="149" totalmethods="245" methodcoverage="60.8">
+      <Class name="ButtonClickEvent" coverage="100" coveredlines="13" coverablelines="13" totallines="49" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="2" totalmethods="2" methodcoverage="100" />
+      <Class name="ButtonEvent" coverage="0" coveredlines="0" coverablelines="3" totallines="278" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+      <Class name="CameraController" coverage="100" coveredlines="12" coverablelines="12" totallines="151" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="4" totalmethods="4" methodcoverage="100" />
+      <Class name="DataManager" coverage="31.7" coveredlines="41" coverablelines="129" totallines="333" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="5" totalmethods="15" methodcoverage="33.3" />
+      <Class name="EffectSensor" coverage="18.7" coveredlines="6" coverablelines="32" totallines="67" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="2" methodcoverage="50" />
+      <Class name="Enemy" coverage="53.4" coveredlines="47" coverablelines="88" totallines="492" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="6" totalmethods="10" methodcoverage="60" />
+      <Class name="EnemySensor" coverage="64.7" coveredlines="46" coverablelines="71" totallines="268" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="5" totalmethods="6" methodcoverage="83.3" />
+      <Class name="FieldEffect" coverage="34.5" coveredlines="48" coverablelines="139" totallines="507" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="7" totalmethods="13" methodcoverage="53.8" />
+      <Class name="FieldEffectPopUpManager" coverage="46.9" coveredlines="86" coverablelines="183" totallines="691" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="11" totalmethods="15" methodcoverage="73.3" />
+      <Class name="Function" coverage="59.7" coveredlines="43" coverablelines="72" totallines="175" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="7" totalmethods="10" methodcoverage="70" />
+      <Class name="GameOver" coverage="0" coveredlines="0" coverablelines="9" totallines="42" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="Goal" coverage="0" coveredlines="0" coverablelines="4" totallines="15" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+      <Class name="Gold" coverage="56.2" coveredlines="9" coverablelines="16" totallines="38" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="2" totalmethods="2" methodcoverage="100" />
+      <Class name="Inventory" coverage="0" coveredlines="0" coverablelines="6" totallines="16" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+      <Class name="JoyStickController" coverage="25.7" coveredlines="9" coverablelines="35" totallines="132" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="3" totalmethods="7" methodcoverage="42.8" />
+      <Class name="MainSceneUIManager" coverage="0" coveredlines="0" coverablelines="16" totallines="245" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="4" methodcoverage="0" />
+      <Class name="MapPlacementBlock" coverage="44.1" coveredlines="64" coverablelines="145" totallines="1061" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="9" totalmethods="21" methodcoverage="42.8" />
+      <Class name="OptionData" coverage="82.3" coveredlines="42" coverablelines="51" totallines="123" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="5" totalmethods="6" methodcoverage="83.3" />
+      <Class name="Options" coverage="0" coveredlines="0" coverablelines="5" totallines="123" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+      <Class name="Player" coverage="61.1" coveredlines="118" coverablelines="193" totallines="506" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="15" totalmethods="22" methodcoverage="68.1" />
+      <Class name="PlayerCollisionHandler" coverage="41.3" coveredlines="12" coverablelines="29" totallines="262" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="3" methodcoverage="33.3" />
+      <Class name="PopUp" coverage="42.8" coveredlines="9" coverablelines="21" totallines="68" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="2" totalmethods="4" methodcoverage="50" />
+      <Class name="PopupController" coverage="73.6" coveredlines="14" coverablelines="19" totallines="46" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="2" totalmethods="2" methodcoverage="100" />
+      <Class name="SceneManager" coverage="52.3" coveredlines="11" coverablelines="21" totallines="292" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="3" totalmethods="5" methodcoverage="60" />
+      <Class name="SelectCharacter" coverage="0" coveredlines="0" coverablelines="64" totallines="154" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="4" methodcoverage="0" />
+      <Class name="SoundClip" coverage="94.1" coveredlines="16" coverablelines="17" totallines="182" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="4" totalmethods="5" methodcoverage="80" />
+      <Class name="SoundManager" coverage="73.7" coveredlines="45" coverablelines="61" totallines="182" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="8" totalmethods="10" methodcoverage="80" />
+      <Class name="SoundSlider" coverage="50" coveredlines="3" coverablelines="6" totallines="26" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="2" methodcoverage="50" />
+      <Class name="StageManager" coverage="63.5" coveredlines="138" coverablelines="217" totallines="488" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="24" totalmethods="35" methodcoverage="68.5" />
+      <Class name="StageUI" coverage="61.5" coveredlines="104" coverablelines="169" totallines="328" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="17" totalmethods="21" methodcoverage="80.9" />
+      <Class name="TimeLine" coverage="100" coveredlines="22" coverablelines="22" totallines="55" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="3" totalmethods="3" methodcoverage="100" />
+      <Class name="UIEvent" coverage="33.3" coveredlines="24" coverablelines="72" totallines="145" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="2" totalmethods="6" methodcoverage="33.3" />
+    </Assembly>
+  </Coverage>
+</CoverageReport>

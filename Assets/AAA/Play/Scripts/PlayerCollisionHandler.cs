@@ -46,10 +46,16 @@ public class PlayerCollisionHandler : MonoBehaviour
     {
         if (StageManager.Sstate == StageState.Play)
         {
+            //if (other.CompareTag("Enemy"))
+            //{
+
+            //}
+
+
             switch (other.gameObject.tag)
             {
                 case ("Enemy"):
-                    if (gameObject.tag == "Player")
+                    if (gameObject.CompareTag("Player"))
                     {
                         Player p = gameObject.GetComponent<Player>();
                         p.Damaged(1);

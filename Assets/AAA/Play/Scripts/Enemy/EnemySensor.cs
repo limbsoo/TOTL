@@ -43,7 +43,7 @@ public class EnemySensor : MonoBehaviour
     {
         if (gameObject != null && StageManager.Sstate == StageState.Play)
         {
-            if(other.gameObject.tag == "Player")
+            if(other.CompareTag("Player"))
             {
                 StageManager.instance.OnPlayerUseSkill -= HandlePlayerUseSkill;
 
@@ -83,7 +83,9 @@ public class EnemySensor : MonoBehaviour
     {
         if (gameObject != null && StageManager.Sstate == StageState.Play)
         {
-            if (other.gameObject.tag == "Player" || other.gameObject.tag == "Decoy")
+
+            if (other.CompareTag("Player") || other.CompareTag("Decoy"))
+            //if (other.gameObject.tag == "Player" || other.gameObject.tag == "Decoy")
             {
                 //Player p = other.gameObject.transform.GetComponent<Player>();
 
@@ -114,6 +116,28 @@ public class EnemySensor : MonoBehaviour
                         StopCoroutine(enemy.chasing);
                     }
 
+
+                    //if (other.CompareTag("Decoy")) // 충돌한 객체가 Decoy 태그를 가졌을 때
+                    //{
+                    //    enemy.chasingPlayer(other.gameObject.transform); // 적이 플레이어를 쫓는 함수
+                    //    enemy.curTarget = "Decoy"; // 적의 현재 타겟을 디코이로 설정
+                    //    if (enemy.chasing != null) enemy.chasing = null;
+                    //}
+                    //else if (other.CompareTag("Player")) // 충돌한 객체가 Player 태그를 가졌을 때
+                    //{
+                    //    // 적이 현재 디코이를 추적 중이지 않을 때만 플레이어를 추적하도록 함
+                    //    if (enemy.curTarget == "Decoy")
+                    //    {
+                    //        enemy.curTarget = "Player"; // 타겟을 플레이어로 설정
+                    //    }
+                    //    else
+                    //    {
+                    //        enemy.curTarget = "Player"; // 타겟을 플레이어로 설정
+                    //        enemy.chasingPlayer(other.gameObject.transform); // 적이 플레이어를 쫓음
+                    //    }
+
+                    //    if (enemy.chasing != null) enemy.chasing = null;
+                    //}
 
                     switch (other.gameObject.tag)
                     {

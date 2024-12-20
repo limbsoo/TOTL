@@ -14,14 +14,17 @@ public class MainSceneUIManager : UIEvent
 
     private void Awake()
     {
-        if (this.name == "MainScene")
-        {
-            if (instance == null)
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-        }
+        if (instance == null) { instance = this; }
+        else Destroy(gameObject);
+
+        //if (this.name == "MainScene")
+        //{
+        //    if (instance == null)
+        //    {
+        //        instance = this;
+        //        DontDestroyOnLoad(gameObject);
+        //    }
+        //}
     }
 
 

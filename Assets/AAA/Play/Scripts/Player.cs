@@ -278,6 +278,8 @@ public class Player : MonoBehaviour, Spawn
 
         movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * playerStats.moveSpeed;
 
+
+
         //Debug.Log($"Horizontal: {moveHorizontal}, Vertical: {moveVertical}");
 
         // 이동 중 여부를 체크
@@ -324,13 +326,25 @@ public class Player : MonoBehaviour, Spawn
 
         if (movement != Vector3.zero)
         {
+            //_mapTransform
+
             //Debug.Log($"movement: {movement}");
             Vector3 newPos = rb.position + movement * Time.fixedDeltaTime;
-            float width = StageManager.instance.ReturnMapTransform().localScale.x * 10f; // Unity 기본 Plane의 크기는 10x10 단위
-            float height = StageManager.instance.ReturnMapTransform().localScale.z * 10f;
-            newPos.x = Mathf.Clamp(newPos.x, StageManager.instance.ReturnMapTransform().position.x - width / 2, StageManager.instance.ReturnMapTransform().position.x + width / 2);
-            newPos.z = Mathf.Clamp(newPos.z, StageManager.instance.ReturnMapTransform().position.z - height / 2, StageManager.instance.ReturnMapTransform().position.z + height / 2);
+            float width = _mapTransform.localScale.x * 10f; // Unity 기본 Plane의 크기는 10x10 단위
+            float height = _mapTransform.localScale.z * 10f;
+            newPos.x = Mathf.Clamp(newPos.x, _mapTransform.position.x - width / 2, _mapTransform.position.x + width / 2);
+            newPos.z = Mathf.Clamp(newPos.z, _mapTransform.position.z - height / 2, _mapTransform.position.z + height / 2);
             rb.MovePosition(newPos); // 물리적 이동 처리
+
+
+
+            ////Debug.Log($"movement: {movement}");
+            //Vector3 newPos = rb.position + movement * Time.fixedDeltaTime;
+            //float width = StageManager.instance.ReturnMapTransform().localScale.x * 10f; // Unity 기본 Plane의 크기는 10x10 단위
+            //float height = StageManager.instance.ReturnMapTransform().localScale.z * 10f;
+            //newPos.x = Mathf.Clamp(newPos.x, StageManager.instance.ReturnMapTransform().position.x - width / 2, StageManager.instance.ReturnMapTransform().position.x + width / 2);
+            //newPos.z = Mathf.Clamp(newPos.z, StageManager.instance.ReturnMapTransform().position.z - height / 2, StageManager.instance.ReturnMapTransform().position.z + height / 2);
+            //rb.MovePosition(newPos); // 물리적 이동 처리
 
             if (movement != Vector3.zero)
             {

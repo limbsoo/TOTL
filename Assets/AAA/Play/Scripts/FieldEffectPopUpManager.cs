@@ -15,12 +15,15 @@ public class FieldEffectPopUpManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        if (instance == null) { instance = this; }
         else Destroy(gameObject);
+
+        //if (instance == null)
+        //{
+        //    instance = this;
+        //    DontDestroyOnLoad(gameObject);
+        //}
+        //else Destroy(gameObject);
     }
 
     public TimeLine[] m_timelines;

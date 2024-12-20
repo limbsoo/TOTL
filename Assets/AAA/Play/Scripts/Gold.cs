@@ -22,7 +22,7 @@ public class Gold : MonoBehaviour
     {
         if (gameObject != null && StageManager.Sstate == StageState.Play)
         {
-            if (other.gameObject.tag == "Player")
+            if (other.CompareTag("Player"))
             {
                 StageManager.instance.UpdateGold(value);
                 //TextManager.instance.UpdateTexts();
