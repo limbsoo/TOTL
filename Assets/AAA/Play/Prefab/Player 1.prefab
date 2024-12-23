@@ -4858,7 +4858,7 @@ GameObject:
   - component: {fileID: 4958785796597739967}
   - component: {fileID: 1268986859203612386}
   - component: {fileID: -2778467645997503564}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: Player 1
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -5669,7 +5669,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5066076847328161919}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a47490ba4a8cf594fb8367f07e7f560b, type: 3}
   m_Name: 

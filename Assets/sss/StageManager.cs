@@ -106,6 +106,8 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
                     IsArriveGate = false;
 
 
+                    OnStageOver?.Invoke();
+
 
                     OnStageEnd?.Invoke();
                 }
@@ -205,6 +207,9 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
         }
     }
 
+
+
+
     void CreatePlayer(GameObject go)
     {
         if (_player == null)
@@ -217,7 +222,9 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
             //playerComponent.OnnnUseSkill += PlayerUseSkillHandler;
 
 
-            playerComponent.OnnnUseSkill += skillKind => OnPlayerUseSkill?.Invoke(skillKind);
+            playerComponent.OnSkillEffect += (skillKind, value, coolDown) => OnPlayerUseSkill?.Invoke(skillKind, value, coolDown);
+
+            OnStageOver += playerComponent.InitPlayerState;
         }
     }
 
@@ -226,7 +233,9 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     //    OnPlayerUseSkill.Invoke(playerSkillKinds);
     //}
 
-    public event Action <PlayerSkillKinds> OnPlayerUseSkill;
+    public event Action OnStageOver;
+
+    public event Action <PlayerSkillKinds, float, float> OnPlayerUseSkill;
 
 
     void CreateFieldEffects()

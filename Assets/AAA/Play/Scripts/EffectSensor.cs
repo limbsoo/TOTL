@@ -31,7 +31,8 @@ public class EffectSensor : MonoBehaviour
     {
         if (gameObject != null && StageManager.Sstate == StageState.Play)
         {
-            if (other.gameObject.tag == "Player")
+            if (other.CompareTag("Player"))
+            //if (other.gameObject.tag == "Player")
             {
                 FieldEffect fe = gameObject.transform.parent.GetComponent<FieldEffect>();
 

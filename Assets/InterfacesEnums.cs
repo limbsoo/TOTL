@@ -123,3 +123,11 @@ public enum CharacterUnlock
     Clear10Wave,
     Clear20Wave
 }
+
+
+public enum Chase
+{
+    None,
+    Player,
+    Decoy
+}

@@ -157,12 +157,14 @@ public class Player : MonoBehaviour, Spawn
             HandleInput();
         }
 
-        CameraController.Vector3 = transform.position;
+        //CameraController.Vector3 = transform.position;
 
     }
     void FixedUpdate()
     {
         Move();
+        CameraController.Vector3 = transform.position;
+
         //Debug.Log($"Movement: {movement}, LastRotation: {lastRotation.eulerAngles}");
     }
 
@@ -187,6 +189,44 @@ public class Player : MonoBehaviour, Spawn
     }
 
 
+
+
+
+
+    public void InitPlayerState()
+    {
+        if (SkillCoolDownCoroutine != null)
+        {
+            //switch (playerStats.playerSkillKind)
+            //{
+            //    case PlayerSkillKinds.Hide:
+
+            //        hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 1f);
+            //        break;
+
+            //    case PlayerSkillKinds.Decoy:
+
+            //        summonDecoy = !summonDecoy;
+            //        //Destroy(go);
+            //        break;
+
+            //}
+
+            SkillCoolDownCoroutine = null;
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
     private int DecoyLifeCycle = 3;
 
 
@@ -195,7 +235,7 @@ public class Player : MonoBehaviour, Spawn
 
 
 
-    public Action<PlayerSkillKinds> OnnnUseSkill;
+    public Action<PlayerSkillKinds, float, float> OnSkillEffect;
 
     public void useSkill()
     {
@@ -203,23 +243,20 @@ public class Player : MonoBehaviour, Spawn
         {
             SoundManager.instance.Play("Skill", SoundCatecory.Effect, false);
 
-            
-            
-            //switch (DataManager.Instance.saveData.playerCharacterIdx)
+            //playerStats
+
             switch (playerStats.playerSkillKind)
-            //switch (psState)
             {
                 case PlayerSkillKinds.Teleport:
                     UseTeleport();
                     break;
+
                 case PlayerSkillKinds.Hide:
                     hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 0.8f);
 
-                    //hidingMaterial.color = new UnityEngine.Color(1, 1, 1, 1);
-                    //tmpUseHide = true;
-                    OnnnUseSkill?.Invoke(PlayerSkillKinds.Hide);
+                    OnSkillEffect?.Invoke(PlayerSkillKinds.Hide, playerStats.effectValue, playerStats.coolDown);
 
-                    StartCoroutine(Function.instance.CountDown(0.3f, () => {
+                    StartCoroutine(Function.instance.CountDown(playerStats.effectValue, () => {
                         hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 1f);
 
                         //hidingMaterial.color = new UnityEngine.Color(0, 0, 0, 1);
@@ -227,11 +264,12 @@ public class Player : MonoBehaviour, Spawn
                     break;
 
                 case PlayerSkillKinds.Decoy:
-                    //SkillCoolDownCoroutine = StartCoroutine()
+                    OnSkillEffect?.Invoke(PlayerSkillKinds.Decoy, playerStats.effectValue, playerStats.coolDown);
 
                     GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
                     summonDecoy = true;
-                    StartCoroutine(Function.instance.CountDown(DecoyLifeCycle, () => {
+
+                    StartCoroutine(Function.instance.CountDown(playerStats.effectValue, () => {
                         summonDecoy = !summonDecoy;
                         Destroy(go);
                     }));

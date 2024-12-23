@@ -67,8 +67,14 @@ public class Enemy : MonoBehaviour, Spawn
 
     private GameObject enemyFBX;
 
+
+    public Chase chase;
+
+
     private void Start()
     {
+        chase = Chase.None;
+
         psystem = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>();
         //psystem = GetComponentInChildren<ParticleSystem>();
         health = 2;
@@ -143,7 +149,7 @@ public class Enemy : MonoBehaviour, Spawn
 
     public void Update()
     {
-        if(curTarget == "" && Math.Abs(nmAgent.destination.x - transform.position.x) <= 1 && Math.Abs(nmAgent.destination.z - transform.position.z) <= 1 )
+        if(curTarget == "" && Math.Abs(nmAgent.destination.x - transform.position.x) <= 5 && Math.Abs(nmAgent.destination.z - transform.position.z) <= 1 )
         {
             if(curIdle == 1)
             {

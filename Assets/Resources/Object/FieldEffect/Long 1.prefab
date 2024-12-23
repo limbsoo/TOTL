@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5361630534717435055}
   - component: {fileID: 1210768643532663529}
   - component: {fileID: 1262962907332605960}
-  m_Layer: 6
+  m_Layer: 13
   m_Name: EffectRange
   m_TagString: EffectRange
   m_Icon: {fileID: 0}
@@ -140,6 +140,42 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1964684274486709701
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 4026453564578296545, guid: 177034c820eed894f8b3031dc4360042, type: 3}
+  m_PrefabInstance: {fileID: 561588951574724290}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8688370750918947354}
+  m_Layer: 0
+  m_Name: 'EffectCoolDownUI (Missing Prefab with guid: 177034c820eed894f8b3031dc4360042)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8688370750918947354
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 9176190924216061144, guid: 177034c820eed894f8b3031dc4360042, type: 3}
+  m_PrefabInstance: {fileID: 561588951574724290}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964684274486709701}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3253219690253866161}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8976493157502958342
 GameObject:
   m_ObjectHideFlags: 0
@@ -416,8 +452,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 177034c820eed894f8b3031dc4360042, type: 3}
---- !u!224 &8688370750918947354 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 9176190924216061144, guid: 177034c820eed894f8b3031dc4360042, type: 3}
-  m_PrefabInstance: {fileID: 561588951574724290}
-  m_PrefabAsset: {fileID: 0}

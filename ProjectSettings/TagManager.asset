@@ -38,9 +38,9 @@ TagManager:
   - wall
   - effect
   - minimap
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - EffectRange
   - 
   - 
   - 

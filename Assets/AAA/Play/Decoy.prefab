@@ -49,9 +49,9 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2226314678258573347}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -95,9 +95,8 @@ GameObject:
   - component: {fileID: 2625513284966907913}
   - component: {fileID: 1471272607338752805}
   - component: {fileID: 8184518942248862574}
-  - component: {fileID: 7558947962021203583}
   - component: {fileID: 7948472909438443495}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: Decoy
   m_TagString: Decoy
   m_Icon: {fileID: 0}
@@ -178,23 +177,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7556202531076509471}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7558947962021203583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7556202531076509471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a47490ba4a8cf594fb8367f07e7f560b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &7948472909438443495
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -203,7 +190,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7556202531076509471}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.0000001
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0

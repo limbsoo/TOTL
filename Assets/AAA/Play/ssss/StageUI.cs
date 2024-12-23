@@ -175,6 +175,8 @@ public class StageUI : UIEvent
 
     public void CompleteStage()
     {
+        IdleSkillButton(true);
+
         fieldEffectPopUp.SetActive(true);
         OnInitializeUI?.Invoke();
     }

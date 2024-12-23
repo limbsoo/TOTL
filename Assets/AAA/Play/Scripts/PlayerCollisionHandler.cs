@@ -4,9 +4,21 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class PlayerCollisionHandler : MonoBehaviour
 {
+
+    Player player;
+
+    private void Start()
+    {
+        player = gameObject.transform.GetComponent<Player>();
+    }
+
+
+
+
     // Collider 컴포넌트의 is Trigger가 false인 상태로 충돌을 시작했을 때
     private void OnCollisionEnter(Collision collision)
     {
@@ -55,11 +67,13 @@ public class PlayerCollisionHandler : MonoBehaviour
             switch (other.gameObject.tag)
             {
                 case ("Enemy"):
-                    if (gameObject.CompareTag("Player"))
-                    {
-                        Player p = gameObject.GetComponent<Player>();
-                        p.Damaged(1);
-                    }
+                    player.Damaged(1);
+
+                    //if (gameObject.CompareTag("Player"))
+                    //{
+                    //    Player p = gameObject.GetComponent<Player>();
+                    //    p.Damaged(1);
+                    //}
                     break;
 
 

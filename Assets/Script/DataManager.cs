@@ -121,6 +121,7 @@ public class DataManager : MonoBehaviour
         saveData.playerStats.moveSpeed = playerStat.moveSpeed;
         saveData.playerStats.playerSkillKind = playerStat.playerSkillKind;
         saveData.playerStats.coolDown = playerStat.coolDown;
+        saveData.playerStats.effectValue = playerStat.effectValue;
 
         SaveFile();
 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5341335187881395413}
   - component: {fileID: 809508860069613257}
   - component: {fileID: 3483600398684649872}
-  m_Layer: 6
+  m_Layer: 13
   m_Name: EffectRange
   m_TagString: EffectRange
   m_Icon: {fileID: 0}
