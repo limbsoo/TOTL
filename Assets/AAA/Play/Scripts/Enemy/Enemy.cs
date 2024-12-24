@@ -37,27 +37,17 @@ public class Enemy : MonoBehaviour, Spawn
     public string curTarget;
 
 
-    ////private GameObject obj;
-    public float health;
-    //public string name { get; private set; }
-
     [SerializeField]
     NavMeshAgent nmAgent;
     [SerializeField]
     Transform target;
-    private Collider colliderrrr;
 
-    //private void Awake()
-    //{
-    //    health = 2;
-    //    nmAgent = GetComponent<NavMeshAgent>();
-    //}
 
     public Vector3 originPos;
 
 
 
-    private ParticleSystem psystem;
+
 
 
     public Coroutine chasing;
@@ -71,13 +61,14 @@ public class Enemy : MonoBehaviour, Spawn
     public Chase chase;
 
 
+    PlayerSkillKinds _playerUsedSkill;
+
     private void Start()
     {
         chase = Chase.None;
 
-        psystem = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>();
-        //psystem = GetComponentInChildren<ParticleSystem>();
-        health = 2;
+
+
         nmAgent = GetComponent<NavMeshAgent>();
         //target = Player.instance.transform;
 
@@ -96,46 +87,250 @@ public class Enemy : MonoBehaviour, Spawn
 
         curIdle = 0;
 
-        //StageManager.instance.OnPlayerUseSkill += OnPlayerUseSkill;
+        _playerUsedSkill = PlayerSkillKinds.None;
 
+
+        StageManager.instance.OnPlayerUseSkill += HandlePlayerUseSkill;
     }
 
 
-    //public event Action<PlayerSkillKinds> OnPlayerUseSkill;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void startEffect()
+    public void UpdateDetectedList(GameObject go, bool isAdd)
     {
-        psystem.Play();
+        if(isAdd)
+        {
+            detectedList.Add(go);
+
+
+            if (chasingTarget == null)
+            {
+                chasingTarget = go;
+            }
+
+            else
+            {
+                if(go.CompareTag("Decoy"))
+                {
+                    chasingTarget = go;
+                }
+            }
+
+        }
+
+        else
+        {
+            detectedList.Remove(go);
+            detectedList.RemoveAll(gameobject => gameobject == null);
+
+
+            if (detectedList.Count > 0)
+            {
+                chasingTarget = detectedList[0];
+            }
+
+            else
+            {
+                chasingTarget = null;
+            }
+        }
+
+
     }
 
 
 
-    public void setNullNMagent()
+    private float ChaseUpdateInterval = 0.2f; // 재추적 주기 (초)
+    private float timeSinceLastUpdate = 0f;
+
+    public List<GameObject> detectedList = new List<GameObject>();
+    public GameObject chasingTarget;
+
+    public void Update()
     {
-        nmAgent = null;
-        Destroy(this.gameObject);
+        // 타겟 포지션 업데이트 되면 업데이트?
+
+
+
+        timeSinceLastUpdate += Time.deltaTime;
+
+        if (timeSinceLastUpdate >= ChaseUpdateInterval)
+        {
+            if (chasingTarget != null)
+            {
+                if (_playerUsedSkill == PlayerSkillKinds.Hide)
+                {
+                    updateDesitnationPos(originPos);
+                }
+
+                else
+                {
+                    updateDesitnationPos(chasingTarget.transform.position);
+                }
+
+                
+            }
+
+            else
+            {
+                if (detectedList.Count > 0)
+                {
+                    detectedList.RemoveAll(gameobject => gameobject == null);
+
+                    if (detectedList.Count > 0)
+                    {
+                        chasingTarget = detectedList[0];
+                        updateDesitnationPos(chasingTarget.transform.position);
+                    }
+                }
+
+                else
+                {
+                    updateDesitnationPos(originPos);
+                }
+            }
+
+            UpdateViewDirection();
+
+            timeSinceLastUpdate = 0f;
+        }
+
     }
+
+    void UpdateViewDirection()
+    {
+        Vector2 forward = new Vector2(transform.position.z, transform.position.x);
+        Vector2 steeringTarget = new Vector2(nmAgent.steeringTarget.z, nmAgent.steeringTarget.x);
+
+        //방향을 구한 뒤, 역함수로 각을 구한다.
+        Vector2 dir = steeringTarget - forward;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        //방향 적용
+        transform.eulerAngles = Vector3.up * angle;
+
+    }
+
+
+
+    /// <summary>
+    /// 0 : Stay
+    /// 1 : Run
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+
+
+    void ChagngeMotion(int a, int b)
+    {
+        if (curIdle == a)
+        {
+            animator.SetInteger("Idle", b);
+            curIdle = b;
+        }
+    }
+
+
+
+    void HandlePlayerUseSkill(PlayerSkillKinds playerSkillKinds, float effectValue, float coolDown)
+    {
+        switch (playerSkillKinds)
+        {
+            case (PlayerSkillKinds.Hide):
+
+                _playerUsedSkill = PlayerSkillKinds.Hide;
+
+                StartCoroutine(Function.instance.CountDown(effectValue, () =>
+                {
+                    _playerUsedSkill = PlayerSkillKinds.None;
+                }));
+
+                break;
+
+            //case (PlayerSkillKinds.Decoy):
+
+            //    StartCoroutine(Function.instance.CountDown(effectValue, () =>
+            //    {
+            //        if (enemy.curTarget == "Decoy" || enemy.curTarget == "")
+            //        {
+            //            //StageManager.instance.OnPlayerUseSkill -= HandlePlayerUseSkill;
+            //            BackOriginPos();
+
+            //        }
+            //    }));
+
+            //    break;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //private ParticleSystem psystem;
+    //public void startEffect()
+    //{
+    //    psystem = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>();
+    //    psystem.Play();
+    //}
+
+
+
+    //public void setNullNMagent()
+    //{
+    //    nmAgent = null;
+    //    Destroy(this.gameObject);
+    //}
 
 
     public void updateDesitnationPos(Vector3 pos)
     {
         if (StageManager.Sstate == StageState.Play)
         {
+            if (Math.Abs(nmAgent.destination.x - transform.position.x) <= 1 && Math.Abs(nmAgent.destination.z - transform.position.z) <= 1)
+            {
+                ChagngeMotion(1, 0);
+            }
+
+            else
+            {
+                ChagngeMotion(0, 1);
+            }
+
             if (this.nmAgent == null) return;
 
             nmAgent.SetDestination(pos);
@@ -147,56 +342,41 @@ public class Enemy : MonoBehaviour, Spawn
 
     int curIdle;
 
-    public void Update()
-    {
-        if(curTarget == "" && Math.Abs(nmAgent.destination.x - transform.position.x) <= 5 && Math.Abs(nmAgent.destination.z - transform.position.z) <= 1 )
-        {
-            if(curIdle == 1)
-            {
-                animator.SetInteger("Idle", 0);
-                curIdle = 0;
-            }
+    //public void Update()
+    //{
+    //    if(curTarget == "" && Math.Abs(nmAgent.destination.x - transform.position.x) <= 5 && Math.Abs(nmAgent.destination.z - transform.position.z) <= 1 )
+    //    {
+    //        if(curIdle == 1)
+    //        {
+    //            animator.SetInteger("Idle", 0);
+    //            curIdle = 0;
+    //        }
 
             
-        }
+    //    }
 
-        else
-        {
-            if(curIdle == 0)
-            {
-                animator.SetInteger("Idle", 1);
-                curIdle = 1;
-            }
+    //    else
+    //    {
+    //        if(curIdle == 0)
+    //        {
+    //            animator.SetInteger("Idle", 1);
+    //            curIdle = 1;
+    //        }
 
             
 
-            Vector2 forward = new Vector2(transform.position.z, transform.position.x);
-            Vector2 steeringTarget = new Vector2(nmAgent.steeringTarget.z, nmAgent.steeringTarget.x);
+    //        Vector2 forward = new Vector2(transform.position.z, transform.position.x);
+    //        Vector2 steeringTarget = new Vector2(nmAgent.steeringTarget.z, nmAgent.steeringTarget.x);
 
-            //방향을 구한 뒤, 역함수로 각을 구한다.
-            Vector2 dir = steeringTarget - forward;
-            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+    //        //방향을 구한 뒤, 역함수로 각을 구한다.
+    //        Vector2 dir = steeringTarget - forward;
+    //        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-            //방향 적용
-            transform.eulerAngles = Vector3.up * angle;
+    //        //방향 적용
+    //        transform.eulerAngles = Vector3.up * angle;
+    //    }
 
-
-        }
-
-
-
-
-
-        //if(nmAgent.destination == transform.position)
-        //{
-        //    animator.SetInteger("Idle", 0);
-        //}
-
-        //else
-        //{
-        //    animator.SetInteger("Idle", 1);
-        //}
-    }
+    //}
 
 
 
@@ -206,10 +386,6 @@ public class Enemy : MonoBehaviour, Spawn
         if (StageManager.Sstate == StageState.Play)
         {
             if (this.nmAgent == null) return;
-            //if (tf == null) return;
-            //if(this == null) return;
-
-            //Debug.Log("transform : " + tf.position.x + ",  " + tf.position.y + ",  " + tf.position.z);
 
             if (tf.position.y > 1)
             {
@@ -217,282 +393,42 @@ public class Enemy : MonoBehaviour, Spawn
             }
 
             else nmAgent.SetDestination(tf.position);
-
         }
-
-
     }
 
-    //private void OnEnable()
-    //{
-    //    EventManager.instance.OnPlayerDetectedMonster += chasePlayer;
-    //}
 
-    //private void OnDisable()
-    //{
-    //    EventManager.instance.OnPlayerDetectedMonster -= chasePlayer;
-    //}
 
-    //public void chasePlayer(GameObject detectObject)
+    //public void damaged(float damamge, Vector3 forward)
     //{
-    //    if(StageManager.Sstate == StageState.Play)
+    //    if(health - damamge <= 0)
     //    {
-
-    //        Enemy enemy = detectObject.transform.parent.GetComponent<Enemy>();
-
-    //        if()
-
-
-
-
-
-
-    //        //if (StageManager.instance.player == null) return;
-    //        //enemy.updateDestination(StageManager.instance.player.transform);
+    //        StageManager.instance.currentScore++;
+    //        setNullNMagent();
     //    }
 
-
-    //}
- 
-
-
-    public void damaged(float damamge, Vector3 forward)
-    {
-        if(health - damamge <= 0)
-        {
-            StageManager.instance.currentScore++;
-            setNullNMagent();
-        }
-
-        else
-        {
-            startEffect();
-            health -= damamge;
-            transform.position += new Vector3(forward.x * 2, 0, forward.z * 2);
-            updateDestination(transform);
-            onceDamaged = true;
-
-            gameObject.GetComponent<MeshRenderer>().material = mat[1];
-
-            StartCoroutine(Function.instance.CountDown(1f, () =>
-            {
-                onceDamaged = false;
-                gameObject.GetComponent<MeshRenderer>().material = mat[0];
-            }));
-        }
-    }
-
-
-    public void chasingPlayer(Transform tr)
-    {
-        updateDestination(tr);
-
-        //if (this.nmAgent == null) return;
-
-        //if (detectObject == null) return;
-
-        //Enemy enemy = detectObject.transform.parent.GetComponent<Enemy>();
-
-
-
-        //if (enemy == null) return;
-
-        //if (enemy.onceDamaged) return;
-
-
-
-        //if (StageManager.currentPlayerIdx != 0) return;
-
-
-
-        //Rigidbody rb = StageManager.instance.player.GetComponent<Rigidbody>();
-        //enemy.updateDestination(rb.transform);
-
-
-        //if (StageManager.instance.player == null) return;
-        //enemy.updateDestination(StageManager.instance.player.transform);
-
-
-
-    }
-
-
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if (StageManager.Sstate == StageState.Play)
+    //    else
     //    {
-    //        switch (collision.collider.tag)
+    //        startEffect();
+    //        health -= damamge;
+    //        transform.position += new Vector3(forward.x * 2, 0, forward.z * 2);
+    //        updateDestination(transform);
+    //        onceDamaged = true;
+
+    //        gameObject.GetComponent<MeshRenderer>().material = mat[1];
+
+    //        StartCoroutine(Function.instance.CountDown(1f, () =>
     //        {
-    //            case ("Player"):
-    //                chasingPlayer();
-    //                //EventManager.instance.playerCollisionEnemy(collision.gameObject);
-    //                break;
-
-    //                //case ("Goal"):
-    //                //    StageManager.instance.arriveGoal(collision.gameObject);
-    //                //    break;
-    //        }
-
-    //    }
-
-
-    //}
-
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    if (StageManager.Sstate == StageState.Play)
-    //    {
-    //        switch (other.gameObject.tag)
-    //        {
-    //            case ("EnemySensor"):
-    //                if (other.transform.parent != null)
-    //                {
-    //                    if(gameObject.tag == "Player")
-    //                    {
-    //                        chasingPlayer();
-
-    //                    }
-
-    //                    if (Player.instance.summonDecoy)
-    //                    {
-    //                        if (gameObject.tag == "Decoy")
-    //                        {
-    //                            chasingPlayer();
-    //                            //EventManager.instance.playerDetectedMonster(other.gameObject);
-    //                        }
-
-
-    //                    }
-
-    //                    //else
-    //                    //{
-
-
-    //                    //    chasingPlayer(); //EventManager.instance.playerDetectedMonster(other.gameObject); chasingPlayer();
-    //                    //}
-                        
-
-    //                }
-    //                break;
-    //        }
-    //    }
-
-
-
-
-    //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //public List<GameObject> enemies;
-
-
-    //void Start()
-    //{
-    //    createEnemy(StageManager.enemyCnt);
-    //}
-
-    //public void createEnemy(int enemyCnt)
-    //{
-    //    Vector3 mapSize = GetMapSize();
-
-    //    for (int i = 0; i < enemyCnt; i++)
-    //    {
-    //        Vector3 randomPosition = GetRandomPositionInMap(mapSize);
-    //        enemies.Add(Instantiate(enemies[0], randomPosition, Quaternion.identity));
+    //            onceDamaged = false;
+    //            gameObject.GetComponent<MeshRenderer>().material = mat[0];
+    //        }));
     //    }
     //}
 
-    //Vector3 GetMapSize()
+
+    //public void chasingPlayer(Transform tr)
     //{
-    //    Transform transform = StageManager.transform;
-
-    //    // Plane의 크기를 계산
-    //    float width = transform.localScale.x * 10f; // Plane의 너비 (Unity 기본 Plane의 크기는 10x10 단위)
-    //    float height = transform.localScale.z * 10f; // Plane의 높이
-    //    return new Vector3(width, 0, height);
-    //}
-
-    //Vector3 GetRandomPositionInMap(Vector3 mapSize)
-    //{
-    //    Transform transform = StageManager.transform;
-
-    //    // 맵의 크기를 기준으로 랜덤한 위치 생성
-    //    float x = UnityEngine.Random.Range(-mapSize.x / 2, mapSize.x / 2) + transform.position.x;
-    //    float z = UnityEngine.Random.Range(-mapSize.z / 2, mapSize.z / 2) + transform.position.z;
-    //    return new Vector3(x, 1, z);
+    //    updateDestination(tr);
     //}
 
 }
 
-
-
-//    public class Enemy : MonoBehaviour
-//    {
-//        public GameObject map;
-
-//        public GameObject enemyPrefab;
-//        public GameObject currentObject;
-
-//        public List<GameObject> enemies;
-//        public GameConstructSet gcs;
-
-//        //private void Awake()
-//        //{
-//        //    if (GameSet.enemyInstance == null) GameSet.enemyInstance = this;
-//        //}
-
-//        void Start()
-//        {
-//            //GameConstructSet gcs = GetComponent<GameConstructSet>();
-
-//            createEnemy(gcs.levelConstructSets[gcs.targetIdx].enemyCnt);
-//        }
-
-
-
-//        public void createEnemy(int enemyCnt)
-//        {
-//            Vector3 mapSize = GetMapSize();
-
-//            // 지정된 개수만큼 오브젝트를 생성
-//            for (int i = 0; i < enemyCnt; i++)
-//            {
-//                Vector3 randomPosition = GetRandomPositionInMap(mapSize);
-//                //Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
-
-//                enemies.Add(Instantiate(enemyPrefab, randomPosition, Quaternion.identity));
-//            }
-
-
-//        }
-
-//        Vector3 GetMapSize()
-//        {
-//            // Plane의 크기를 계산
-//            float width = map.transform.localScale.x * 10f; // Plane의 너비 (Unity 기본 Plane의 크기는 10x10 단위)
-//            float height = map.transform.localScale.z * 10f; // Plane의 높이
-//            return new Vector3(width, 0, height);
-//        }
-
-//        Vector3 GetRandomPositionInMap(Vector3 mapSize)
-//        {
-//            // 맵의 크기를 기준으로 랜덤한 위치 생성
-//            float x = UnityEngine.Random.Range(-mapSize.x / 2, mapSize.x / 2) + map.transform.position.x;
-//            float z = UnityEngine.Random.Range(-mapSize.z / 2, mapSize.z / 2) + map.transform.position.z;
-//            return new Vector3(x, map.transform.position.y + 1, z);
-//        }
-
-//    }

@@ -224,7 +224,7 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
 
             playerComponent.OnSkillEffect += (skillKind, value, coolDown) => OnPlayerUseSkill?.Invoke(skillKind, value, coolDown);
 
-            OnStageOver += playerComponent.InitPlayerState;
+            OnStageOver += playerComponent.InitState;
         }
     }
 
@@ -232,6 +232,8 @@ public class StageManager : MonoBehaviour //해당 스테이지 판단하고 레벨 컨스트럭
     //{
     //    OnPlayerUseSkill.Invoke(playerSkillKinds);
     //}
+
+    public Action OnClickSkillButton;
 
     public event Action OnStageOver;
 

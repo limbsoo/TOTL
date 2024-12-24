@@ -183,15 +183,15 @@ public class StageUI : UIEvent
 
 
 
-    public Action OnUseSkill;
+    //public Action OnUseSkill;
 
 
 
-    public void UseSkill()
-    {
+    //public void UseSkill()
+    //{
 
-        OnUseSkill?.Invoke();
-    }
+    //    OnUseSkill?.Invoke();
+    //}
 
 
 
@@ -321,6 +321,29 @@ public class StageUI : UIEvent
 
 
     Coroutine StageTimeSliderCoroutine = null;
+
+
+
+    public void ResetSkillButtonCanUse()
+    {
+        if (SkillCoolDownCoroutine != null)
+        {
+            StopCoroutine(SkillCoolDownCoroutine);
+            SkillCoolDownCoroutine = null;
+        }
+
+        _skillCoolDown.gameObject.SetActive(false);
+        IdleSkillButton(true);
+    }
+
+
+
+
+
+
+
+
+
 
 
 

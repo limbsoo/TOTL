@@ -126,7 +126,14 @@ public class UIEvent : MonoBehaviour
             case ButtonType.Quit:
                 Application.Quit();
                 break;
-                
+
+            case ButtonType.UseSkill:
+                StageManager.instance.OnClickSkillButton.Invoke();
+
+
+                //Application.Quit();
+                break;
+
         }
 
     }

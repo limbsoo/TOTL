@@ -22,21 +22,4 @@ public class GameOver : PopUp
                 break;
         }
     }
-
-
-    //private void OnEnable()
-    //{
-
-    //}
-
-
-    //protected override void OnDestroy()
-    //{
-    //    foreach (var button in _buttons)
-    //    {
-    //        button.OnButtonClicked -= (buttonType, name) => HandleButtonClicked(buttonType, name);
-    //    }
-
-    //    //base.OnDisable();
-    //}
 }

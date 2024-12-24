@@ -8290,6 +8290,7 @@ GameObject:
   - component: {fileID: 1464739596}
   - component: {fileID: 1464739595}
   - component: {fileID: 1464739597}
+  - component: {fileID: 1464739598}
   m_Layer: 0
   m_Name: Skill
   m_TagString: Untagged
@@ -8400,19 +8401,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1023011659}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1426601297}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: UseSkill
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &1464739598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464739593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccfbaf03f9c63e5419049e92d499686b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonType: 11
 --- !u!1 &1567322066
 GameObject:
   m_ObjectHideFlags: 0

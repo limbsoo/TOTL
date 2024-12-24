@@ -9,295 +9,186 @@ using UnityEngine.UIElements;
 using UnityEngine.Events;
 using System.Drawing;
 using Unity.Mathematics;
+using UnityEngine.Playables;
 //using UnityEngine.Rendering.VirtualTexturing;
 
 
 public class Player : MonoBehaviour, Spawn
 {
-    private void Awake()
-    {
-        IsplayerDamaged = false;
-        canUseSkill = true;
-        playerStats = DataManager.Instance.saveData.playerStats;
-        playerStats.playerSkillKind = (PlayerSkillKinds)Enum.GetValues(typeof(PlayerSkillKinds)).GetValue(DataManager.Instance.saveData.playerCharacterIdx + 1);
+    PlayerStats Stats;
+    PlayerStats OriginStats;
 
-        PenealtyTime = 0;
-        animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
-    }
-
-
-    PlayerStats playerStats;
-
-
-
-    public Action<PlayerEvent, float> OnPlayerEvent;
-
-
-
-
-
-    //public static bool useAttack = false;
-
-
-    public float teleportLength = 10;
-
-    public static bool canUseSkill; // 스킬 사용 가능 여부
-
-    public static bool IsplayerDamaged;
-
-    private Vector3 movement;
-    
-    public static Rigidbody rb;
-
-    //public static bool weakning = false;
-    
-
-    Coroutine attackCoroutine = null;
-
-    private PlayerState pState;
-
-    
-
-
-    public float PenealtyTime { get; private set; }
-
-
-    public Animator animator;
-
-    //Material[] mat = new Material[2];
-
-    //prePlayer꺼
-
-    PlayerSkillState psState;
-
-
-    public static float inputThreshold = 0.1f; // 임계값 설정
-
-
-    public GameObject Decoy;
-
-
-
-    public float stack;
-
-    public PlayerStats GetPlayerStats()
-    {
-        return playerStats;
-    }
-
-
-
-    private GameObject playerFBX;
     Vector3[] _gridCenters;
     Transform _mapTransform;
+    float inputThreshold = 0.1f;
+    bool isMoving;
+    Quaternion lastRotation;
 
+    public Animator animator;
+    public static Rigidbody rb;
+    public GameObject Decoy;
+    GameObject DecoyObject;
 
-
-
-    public void Init(Vector3[] gridCenters, Transform mapTransform)
-    {
-        _gridCenters = gridCenters;
-        _mapTransform = mapTransform;
-    }
-
-
-
-
-
-
+    public Action<PlayerEvent, float> OnPlayerEvent;
+    public float teleportLength = 10;
+    public static bool IsplayerDamaged;
+    private Vector3 movement;
+    public float stack;
 
     Material hidingMaterial;
 
+    public Action<PlayerSkillKinds, float, float> OnSkillEffect;
+
+    int curIdle;
+
+    //Coroutine slowEffectedCoroutine;
+
+    public Action<float> OnPlayerDamaged;
+
+    Coroutine SkillCoolDown;
+    Coroutine SkillEffectDuration;
+
+    Coroutine DamageCoolDown;
+    Coroutine SlowEffectDuration;
+    Coroutine SealEffectDuration;
 
 
-
-
-    private void Start()
+    private void Awake()
     {
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+
+        Stats = DataManager.Instance.saveData.playerStats;
+        Stats.playerSkillKind = (PlayerSkillKinds)Enum.GetValues(typeof(PlayerSkillKinds)).GetValue(DataManager.Instance.saveData.playerCharacterIdx + 1);
+
+        OriginStats = new PlayerStats();
+        OriginStats.moveSpeed = Stats.moveSpeed;
+
+        StageManager.instance.OnClickSkillButton += SkillChangeState;
+
+        IsplayerDamaged = false;
+    }
+
+    void Start()
+    {
+        GameObject go = transform.Find("Player").gameObject;
+        animator = go.GetComponent<Animator>();
+        hidingMaterial = go.transform.GetChild(1).GetComponent<Renderer>().materials[0];
+
         stack = 0;
-
-        playerFBX = transform.Find("Player").gameObject;
-
-        animator = playerFBX.GetComponent<Animator>();
-
-        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
-
-
-        hidingMaterial = playerFBX.transform.GetChild(1).GetComponent<Renderer>().materials[0];
-
-
         curIdle = 0;
-
-        //Renderer renderer = playerFBX.transform.GetChild(1).GetComponent<Renderer>();
-
-        //clips[0].
-
-        //mat = this.GetComponent<Renderer>().materials;
-
-        ////gameObject.GetComponent<MeshRenderer>().material = mat[1];
-        //AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
-
-        //foreach (AnimationClip clip in clips)
-        //{
-        //    if (clip.name == "Attack")
-        //    {
-        //        attackDuration = clip.length;
-        //        break;
-        //    }
-        //}
-
-
     }
 
     void Update()
     {
-        if(StageManager.Sstate == StageState.Play)
-        {
-            HandleInput();
-        }
-
-        //CameraController.Vector3 = transform.position;
-
+        if (StageManager.Sstate == StageState.Play) { HandleInput(); }
     }
     void FixedUpdate()
     {
         Move();
         CameraController.Vector3 = transform.position;
-
-        //Debug.Log($"Movement: {movement}, LastRotation: {lastRotation.eulerAngles}");
     }
 
 
-    private void OnEnable()
+    public PlayerStats GetPlayerStats()
     {
-        //EventManager.instance.OnPlayerEnterTheLightRange += changeFigure;
-        //EventManager.instance.OnCollisionResult += HandleCollisionResult;
-        //EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
-
-        StageUI.instance.OnUseSkill += useSkill;
-        //JoyStickController.instance.JoyStickMove += Move;
-    }
-
-    private void OnDisable()
-    {
-        //EventManager.instance.OnPlayerEnterTheLightRange -= changeFigure;
-        //EventManager.instance.OnCollisionResult -= HandleCollisionResult;
-        //EventManager.instance.OnEnemyInAttackRange += destoryEnemy;
-
-        StageUI.instance.OnUseSkill -= useSkill;
+        return Stats;
     }
 
 
 
 
-
-
-    public void InitPlayerState()
+    public void SkillChangeState()
     {
-        if (SkillCoolDownCoroutine != null)
-        {
-            //switch (playerStats.playerSkillKind)
-            //{
-            //    case PlayerSkillKinds.Hide:
-
-            //        hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 1f);
-            //        break;
-
-            //    case PlayerSkillKinds.Decoy:
-
-            //        summonDecoy = !summonDecoy;
-            //        //Destroy(go);
-            //        break;
-
-            //}
-
-            SkillCoolDownCoroutine = null;
-
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-    private int DecoyLifeCycle = 3;
-
-
-    public bool tmpUseHide = false;
-
-
-
-
-    public Action<PlayerSkillKinds, float, float> OnSkillEffect;
-
-    public void useSkill()
-    {
-        if(SkillCoolDownCoroutine == null)
+        if (SkillCoolDown == null)
         {
             SoundManager.instance.Play("Skill", SoundCatecory.Effect, false);
 
-            //playerStats
-
-            switch (playerStats.playerSkillKind)
+            switch (Stats.playerSkillKind)
             {
                 case PlayerSkillKinds.Teleport:
-                    UseTeleport();
+                    Vector3 teleportPosition = rb.position + rb.transform.forward * teleportLength;
+                    rb.MovePosition(teleportPosition);
                     break;
 
                 case PlayerSkillKinds.Hide:
                     hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 0.8f);
-
-                    OnSkillEffect?.Invoke(PlayerSkillKinds.Hide, playerStats.effectValue, playerStats.coolDown);
-
-                    StartCoroutine(Function.instance.CountDown(playerStats.effectValue, () => {
-                        hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 1f);
-
-                        //hidingMaterial.color = new UnityEngine.Color(0, 0, 0, 1);
+                    SkillEffectDuration = StartCoroutine(Function.instance.CountDown(Stats.effectValue, () =>
+                    {
+                        ResetSkillEffect();
                     }));
                     break;
 
                 case PlayerSkillKinds.Decoy:
-                    OnSkillEffect?.Invoke(PlayerSkillKinds.Decoy, playerStats.effectValue, playerStats.coolDown);
-
-                    GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
-                    summonDecoy = true;
-
-                    StartCoroutine(Function.instance.CountDown(playerStats.effectValue, () => {
-                        summonDecoy = !summonDecoy;
-                        Destroy(go);
+                    DecoyObject = Instantiate(Decoy, transform.position, transform.rotation);
+                    SkillEffectDuration = StartCoroutine(Function.instance.CountDown(Stats.effectValue, () =>
+                    {
+                        ResetSkillEffect();
                     }));
                     break;
 
             }
 
+            OnSkillEffect?.Invoke(Stats.playerSkillKind, Stats.effectValue, Stats.coolDown);
+            StageUI.instance.StartCooldown(Stats.coolDown);
 
-            SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(playerStats.coolDown, () =>
+            SkillCoolDown = StartCoroutine(Function.instance.CountDown(Stats.coolDown, () =>
             {
-                SkillCoolDownCoroutine = null;
-
-
-
-
-                ////UIManager.instance.IdleSkillButton(true);
-                ////canUseSkill = !canUseSkill;
-                //summonDecoy = !summonDecoy;
-                //Destroy(go);
+                ResetSkillUse();
             }));
-
-            StageUI.instance.StartCooldown(playerStats.coolDown);
         }
-
-
     }
 
-    int curIdle;
+    void ResetSkillEffect()
+    {
+        if (SkillEffectDuration != null) 
+        {
+            StopCoroutine(SkillEffectDuration);
+            SkillEffectDuration = null;
+        }
+
+        switch (Stats.playerSkillKind)
+        {
+            case PlayerSkillKinds.Hide:
+                hidingMaterial.color = new UnityEngine.Color(hidingMaterial.color.r, hidingMaterial.color.g, hidingMaterial.color.b, 1f);
+                break;
+
+            case PlayerSkillKinds.Decoy:
+                Destroy(DecoyObject);
+                break;
+        }
+    }
+
+    void ResetSkillUse()
+    {
+        if (SkillCoolDown != null)
+        {
+            StopCoroutine(SkillCoolDown);
+            SkillCoolDown = null;
+        }
+
+        StageUI.instance.ResetSkillButtonCanUse();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private void HandleInput()
     {
@@ -314,7 +205,7 @@ public class Player : MonoBehaviour, Spawn
         if (Mathf.Abs(moveHorizontal) < inputThreshold) moveHorizontal = 0;
         if (Mathf.Abs(moveVertical) < inputThreshold) moveVertical = 0;
 
-        movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * playerStats.moveSpeed;
+        movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * Stats.moveSpeed;
 
 
 
@@ -351,9 +242,6 @@ public class Player : MonoBehaviour, Spawn
     }
 
 
-    private bool isMoving;
-    private Quaternion lastRotation;
-
     public void Move()
     {
         if (StageManager.Sstate == StageState.Edit)
@@ -374,16 +262,6 @@ public class Player : MonoBehaviour, Spawn
             newPos.z = Mathf.Clamp(newPos.z, _mapTransform.position.z - height / 2, _mapTransform.position.z + height / 2);
             rb.MovePosition(newPos); // 물리적 이동 처리
 
-
-
-            ////Debug.Log($"movement: {movement}");
-            //Vector3 newPos = rb.position + movement * Time.fixedDeltaTime;
-            //float width = StageManager.instance.ReturnMapTransform().localScale.x * 10f; // Unity 기본 Plane의 크기는 10x10 단위
-            //float height = StageManager.instance.ReturnMapTransform().localScale.z * 10f;
-            //newPos.x = Mathf.Clamp(newPos.x, StageManager.instance.ReturnMapTransform().position.x - width / 2, StageManager.instance.ReturnMapTransform().position.x + width / 2);
-            //newPos.z = Mathf.Clamp(newPos.z, StageManager.instance.ReturnMapTransform().position.z - height / 2, StageManager.instance.ReturnMapTransform().position.z + height / 2);
-            //rb.MovePosition(newPos); // 물리적 이동 처리
-
             if (movement != Vector3.zero)
             {
                 Quaternion newRotation = Quaternion.LookRotation(movement);
@@ -399,99 +277,21 @@ public class Player : MonoBehaviour, Spawn
     }
 
 
-    Coroutine runningCoroutine = null;
-
-
-
-    public bool summonDecoy = false;
-
-
-    public void UseDecoy()
-    {
-        GameObject go = Instantiate(Decoy, transform.position, transform.rotation);
-
-        canUseSkill = false;
-        summonDecoy = true;
-
-        StageUI.instance.IdleSkillButton(false);
-
-        StartCoroutine(Function.instance.CountDown(playerStats.coolDown, () => {
-            StageUI.instance.IdleSkillButton(true);
-            canUseSkill = !canUseSkill;
-            summonDecoy = !summonDecoy;
-            Destroy(go);
-        }));
-    }
-
-    public void UseTeleport()
-    {
-        Vector3 teleportPosition = rb.position + rb.transform.forward * teleportLength;
-        rb.MovePosition(teleportPosition);
-
-        Debug.Log("Teleport used!");
-
-        canUseSkill = false;
-        StartCoroutine(Function.instance.CountDown(playerStats.coolDown, () => { canUseSkill = !canUseSkill; }));
-        //Function.instance.ChangeStateAndDelay(ref canUseSkill, coolDown, () => { canUseSkill = !canUseSkill;});
-    }
-
-
-
-    public Coroutine SkillCoolDownCoroutine;
-
-
-
-
-
-
-
-
-
-    public bool haveDamaged()
-    {
-        if(IsplayerDamaged) return true;
-        else return false;
-    }
-
-
-    private Coroutine slowEffectedCoroutine;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public Action<float> OnPlayerDamaged;
-
 
 
     public void Damaged(float value)
     {
-        if(IsplayerDamaged == false)
+        if (DamageCoolDown == null)
         {
-            IsplayerDamaged = true;
-            playerStats.health -= value;
-
-            OnPlayerDamaged.Invoke(playerStats.health);
-
             SoundManager.instance.Play("Damage", SoundCatecory.Effect, false);
 
-            StartCoroutine(Function.instance.CountDown(1f, () => {
-                IsplayerDamaged = false;
+            Stats.health -= value;
+
+            DamageCoolDown = StartCoroutine(Function.instance.CountDown(1, () => {
+                DamageCoolDown = null;
             }));
 
+            OnPlayerDamaged.Invoke(Stats.health);
         }
     }
 
@@ -499,60 +299,103 @@ public class Player : MonoBehaviour, Spawn
 
     public void Sealed(float value)
     {
-        if (SkillCoolDownCoroutine != null)
+        if(SealEffectDuration != null)
         {
             if (StageUI.instance.CheckCoolDown(value))
             {
-                StopCoroutine(SkillCoolDownCoroutine);
+                StopCoroutine(SealEffectDuration);
 
-                SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(value, () =>
+                SealEffectDuration = StartCoroutine(Function.instance.CountDown(value, () =>
                 {
-                    SkillCoolDownCoroutine = null;
+                    SealEffectDuration = null;
                 }));
             }
         }
 
         else
         {
-            SkillCoolDownCoroutine = StartCoroutine(Function.instance.CountDown(value, () =>
+            SealEffectDuration = StartCoroutine(Function.instance.CountDown(value, () =>
             {
-                SkillCoolDownCoroutine = null;
+                SealEffectDuration = null;
             }));
 
             StageUI.instance.StartCooldown(value);
         }
+
     }
 
 
     public void Slowed(float value)
     {
-        if (slowEffectedCoroutine != null)
+        if (SlowEffectDuration != null)
         {
-            StopCoroutine(slowEffectedCoroutine);
+            StopCoroutine(SlowEffectDuration);
         }
 
-        slowEffectedCoroutine = StartCoroutine(Slow(value));
+        SlowEffectDuration = StartCoroutine(Slow(OriginStats.moveSpeed / 2, OriginStats.moveSpeed));
 
     }
 
 
 
-    public IEnumerator Slow(float value) //딜레이는 시간도 더 길게 패널티를 주자
+    public IEnumerator Slow(float value, float originValue) //딜레이는 시간도 더 길게 패널티를 주자
     {
-        playerStats.moveSpeed = 15f;
+        Stats.moveSpeed = OriginStats.moveSpeed / 2;
 
-        //playerStats.moveSpeed = DataManager.Instance.saveData.playerStats.moveSpeed  - 15f;
-        //yield return new WaitForSecondsRealtime(1);
+        Debug.Log("move speed " + Stats.moveSpeed.ToString());
+
+
         yield return new WaitForSecondsRealtime(0.1f);
+        Stats.moveSpeed = OriginStats.moveSpeed;
 
-        playerStats.moveSpeed = 30f;
 
-        //playerStats.moveSpeed = DataManager.Instance.saveData.playerStats.moveSpeed;
+
+        //Stats.moveSpeed = 15f;
+
+        ////playerStats.moveSpeed = DataManager.Instance.saveData.playerStats.moveSpeed  - 15f;
+        ////yield return new WaitForSecondsRealtime(1);
+        //yield return new WaitForSecondsRealtime(0.1f);
+
+        //Stats.moveSpeed = 30f;
+
+        ////playerStats.moveSpeed = DataManager.Instance.saveData.playerStats.moveSpeed;
     }
 
 
 
 
+
+    public void Init(Vector3[] gridCenters, Transform mapTransform)
+    {
+        _gridCenters = gridCenters;
+        _mapTransform = mapTransform;
+    }
+
+    public void InitState()
+    {
+        Stats.moveSpeed = OriginStats.moveSpeed;
+
+        ResetSkillEffect();
+        ResetSkillUse();
+
+        if (DamageCoolDown != null)
+        {
+            StopCoroutine(DamageCoolDown);
+            DamageCoolDown = null;
+        }
+
+        if (SlowEffectDuration != null)
+        {
+            StopCoroutine(SlowEffectDuration);
+            SlowEffectDuration = null;
+        }
+
+        if (SealEffectDuration != null)
+        {
+            StopCoroutine(SealEffectDuration);
+            SealEffectDuration = null;
+        }
+    }
 
 }
 

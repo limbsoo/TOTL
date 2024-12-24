@@ -113,7 +113,8 @@ public enum ButtonType
     LoadStage,
     LoadMain,
     Reroll,
-    Quit
+    Quit,
+    UseSkill
 }
 
 
