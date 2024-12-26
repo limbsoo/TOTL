@@ -4958,12 +4958,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d569676ded9df4441af392b98af575d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teleportLength: 10
   animator: {fileID: 0}
   Decoy: {fileID: 7556202531076509471, guid: a0ca2608fb4d52747a426aff3a759807, type: 3}
+  teleportLength: 10
   stack: 0
-  tmpUseHide: 0
-  summonDecoy: 0
 --- !u!114 &4958785796597739967
 MonoBehaviour:
   m_ObjectHideFlags: 0
